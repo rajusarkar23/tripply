@@ -29,3 +29,20 @@ body {
   animation: float 6s ease-in-out infinite;
 }
 
+
+.ProseMirror {
+  padding: 16px;
+  border: 1px solid #ccc;
+  background-color: rgba(251, 251, 251, 0.9);
+  color: black;
+  border-radius: 8px;
+  min-height: 150px;
+  outline: none;
+}
+
+ul, li {
+  list-style-type: disc;
+  margin-left: 20px;
+}
+
+
