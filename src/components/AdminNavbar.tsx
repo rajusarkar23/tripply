@@ -7,6 +7,7 @@ export default function AdminNavbar() {
   const pathname = usePathname();
 
   const addPath = "/admin/add-new-tour";
+  const tours = "/admin/tours"
 
   return (
     <div className="bg-white border-b-black/20 border shadow-md h-14 flex justify-between items-center px-4">
@@ -15,16 +16,26 @@ export default function AdminNavbar() {
           Admin panel
         </Link>
       </div>
-      <div>
+      <div className="space-x-2">
         <Link
           href={"/admin/add-new-tour"}
           className={`${
             pathname === addPath
               ? "font-bold text-white p-1  rounded-full px-2 transition-all bg-black"
-              : "font-bold text-blue-600 border p-1 rounded-full px-2 border-black/60 hover:bg-black hover:text-white transition-all"
+              : "font-bold text-black border p-1 rounded-full px-2 border-black/60 hover:bg-black hover:text-white transition-all"
           }`}
         >
           Add new tour
+        </Link>
+        <Link
+          href={"/admin/tours"}
+          className={`${
+            pathname === tours
+              ? "font-bold text-white p-1  rounded-full px-2 transition-all bg-black"
+              : "font-bold text-black border p-1 rounded-full px-2 border-black/60 hover:bg-black hover:text-white transition-all"
+          }`}
+        >
+          Tours
         </Link>
       </div>
     </div>

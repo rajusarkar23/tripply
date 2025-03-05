@@ -5,6 +5,7 @@ import { Form } from "@heroui/form";
 import { Input } from "@heroui/input";
 import { useState } from "react";
 import RichTextEditor from "./RichTextEditor";
+import { redirect } from "next/navigation";
 
 export default function AddNewTour() {
   const [content, setContent] = useState("");
@@ -34,13 +35,19 @@ export default function AddNewTour() {
       return
     }
 
-    await fetch("/api/tour", {
+    const res = await fetch("/api/tour", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ data, content }),
     });
+
+    const response = await res.json()
+
+    if (response.success === true) {
+      redirect("/admin/tours")
+    }
   };
 
   return (
