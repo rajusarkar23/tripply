@@ -1,8 +1,11 @@
+import AddNewTour from '@/components/AddNewTour'
 import React from 'react'
 
 const AddNew = () => {
   return (
-    <div>AddNew</div>
+    <div>
+      <AddNewTour />
+    </div>
   )
 }
 
