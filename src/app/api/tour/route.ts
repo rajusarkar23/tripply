@@ -18,7 +18,7 @@ export async function POST(req: NextRequest) {
         message: "unable to add new tour",
       });
     }
-    
+
     return NextResponse.json({
       success: true,
       message: "New tour added.",
@@ -30,4 +30,27 @@ export async function POST(req: NextRequest) {
       message: "Something went wrong, while adding new tour",
     });
   }
+}
+
+export async function GET(){
+    //TODO: fetch according to the user
+
+    try {
+        const getTours = await db.select().from(tour)
+        if (getTours.length === 0) {
+            return NextResponse.json({
+                success: false,
+                message: "No tour found"
+            })
+        }
+
+        return NextResponse.json({success: true, message: "Tours fetched successfully", tours: getTours})
+        
+    } catch (error) {
+        console.log(error);
+        return NextResponse.json({
+            success: false,
+            message: "Something went wrong, while fetching tour",
+          });
+    }
 }

@@ -8,6 +8,7 @@
         "@heroui/form": "^2.1.14",
         "@heroui/input": "^2.4.15",
         "@heroui/react": "^2.7.4",
+        "@heroui/spinner": "^2.2.12",
         "@tiptap/extension-image": "^2.11.5",
         "@tiptap/react": "^2.11.5",
         "@tiptap/starter-kit": "^2.11.5",

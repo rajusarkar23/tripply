@@ -5,12 +5,16 @@ import { Form } from "@heroui/form";
 import { Input } from "@heroui/input";
 import { useState } from "react";
 import RichTextEditor from "./RichTextEditor";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
+import { Spinner } from "@heroui/spinner";
 
 export default function AddNewTour() {
   const [content, setContent] = useState("");
-  const [error, setError] = useState(false)
-  const [errorMessage, setErrorMessage] = useState("")
+  const [error, setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const router = useRouter()
 
   // slugify the tour name
   function slugify(str: any) {
@@ -23,30 +27,40 @@ export default function AddNewTour() {
     return str;
   }
   const onsubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    setError(false)
     e.preventDefault();
+
+    setError(false);
     const data = Object.fromEntries(new FormData(e.currentTarget));
     const slug = slugify(data.tourName);
     data.slug = slug;
 
     if (content.length < 20) {
-      setError(true)
-      setErrorMessage("The description is not siffiecient")
-      return
+      setError(true);
+      setErrorMessage("The description is not siffiecient");
+      return;
     }
 
-    const res = await fetch("/api/tour", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ data, content }),
-    });
+    try {
+      setLoading(true);
 
-    const response = await res.json()
+      const res = await fetch("/api/tour", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ data, content }),
+      });
 
-    if (response.success === true) {
-      redirect("/admin/tours")
+      const response = await res.json();
+
+      if (response.success === true) {
+        return router.push("/admin/tours");
+      } else{
+        setLoading(false)
+      }
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
     }
   };
 
@@ -97,9 +111,19 @@ export default function AddNewTour() {
             </div>
 
             <div className="flex justify-center">
-              <Button type="submit" color="primary">
-                Submit
-              </Button>
+              {loading ? (
+                <Button disabled className="w-full">
+                  <Spinner color="current"/>
+                </Button>
+              ) : (
+                <Button
+                  type="submit"
+                  
+                  className="w-full font-bold bg-black text-white text-xl"
+                >
+                  Submit
+                </Button>
+              )}
             </div>
           </div>
         </Form>
