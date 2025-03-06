@@ -1,5 +1,6 @@
 "use client";
 import { Skeleton } from "@heroui/react";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
 interface Tours {
@@ -53,12 +54,16 @@ export default function FetchTourInAdmin() {
 
   return (
     <div className="max-w-7xl mx-auto w-full">
-      <div>
+      <div className="grid grid-cols-3 gap-3">
         {tours.map((items) => (
-          <div key={items.id}>
+          <Link
+            href={`/admin/tours/${items.id}`}
+            key={items.id}
+            className="bg-gray-300 flex justify-center"
+          >
             <p>{items.tourName}</p>
             <p>{items.id}</p>
-          </div>
+          </Link>
         ))}
       </div>
     </div>

@@ -17,7 +17,7 @@ export default function AddNewTour() {
   const router = useRouter()
 
   // slugify the tour name
-  function slugify(str: any) {
+  function slugify(str: string) {
     str = str.replace(/^\s+|\s+$/g, ""); // trim leading/trailing white space
     str = str.toLowerCase(); // convert string to lowercase
     str = str
@@ -31,6 +31,9 @@ export default function AddNewTour() {
 
     setError(false);
     const data = Object.fromEntries(new FormData(e.currentTarget));
+    if (typeof data.tourName !== "string") {
+      return
+    }
     const slug = slugify(data.tourName);
     data.slug = slug;
 
