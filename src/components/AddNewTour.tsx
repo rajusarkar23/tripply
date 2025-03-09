@@ -43,6 +43,9 @@ export default function AddNewTour() {
       return;
     }
 
+    console.log(data);
+    // return
+
     try {
       setLoading(true);
 
@@ -131,6 +134,7 @@ export default function AddNewTour() {
                     return "Please enter a price";
                   }
                 }}
+                type="number"
                 label="Please enter price."
                 name="standardPackagePrice"
                 className="w-full"
@@ -142,6 +146,7 @@ export default function AddNewTour() {
                     return "Please enter a Total available slots";
                   }
                 }}
+                type="number"
                 label="Enter total available slots."
                 name="standardPackageSlots"
                 className="w-full"
@@ -174,6 +179,7 @@ export default function AddNewTour() {
                     return "Please enter a price";
                   }
                 }}
+                type="number"
                 label="Please enter price."
                 name="premiumPackagePrice"
                 className="w-full"
@@ -185,6 +191,7 @@ export default function AddNewTour() {
                     return "Please enter a Total available slots";
                   }
                 }}
+                type="number"
                 label="Enter total available slots."
                 name="premiumPackageSlots"
                 className="w-full"

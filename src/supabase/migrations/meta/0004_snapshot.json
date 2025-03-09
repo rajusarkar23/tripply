@@ -1,9 +1,52 @@
 {
-  "id": "364db178-caef-4d9e-ae13-03e608154e17",
+  "id": "70b41281-14f8-4e81-a2fc-9efe35963d13",
   "prevId": "27c100f2-1553-40bc-97a7-8ab9b687890d",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
+    "public.admin": {
+      "name": "admin",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "email": {
+          "name": "email",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "password": {
+          "name": "password",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "verification_otp": {
+          "name": "verification_otp",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
     "public.tour": {
       "name": "tour",
       "schema": "",
@@ -36,7 +79,7 @@
           "name": "tour_category",
           "type": "jsonb",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "created_at": {
           "name": "created_at",

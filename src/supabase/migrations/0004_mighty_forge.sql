@@ -1,1 +1,0 @@
-ALTER TABLE "tour" ADD COLUMN "tour_category" jsonb;
