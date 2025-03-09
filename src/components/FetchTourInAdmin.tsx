@@ -28,8 +28,6 @@ interface Tours {
 
 export default function FetchTourInAdmin() {
   const [tours, setTours] = useState<Tours[]>([]);
-  console.log(tours);
-
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -92,16 +90,16 @@ export default function FetchTourInAdmin() {
                 </div>
               </CardHeader>
               <CardBody className="overflow-visible py-2 space-y-0.5">
-                <Chip className="font-bold text-md bg-black text-white">
-                  Seats are empty for booking:{" "}
+                <Chip className="font-bold text-md" color="primary" variant="bordered">
+                  Seats are empty for booking:
                   {items.tourCategory.premium.slotsAvailable +
                     items.tourCategory.standard.slotsAvailable}
                 </Chip>
-                <Chip className="text-white text-md bg-black" variant="solid">
+                <Chip className="text-md" color="primary" variant="bordered">
                   Booked on premium category:
                   {items.tourCategory.premium.slotsBooked}
                 </Chip>
-                <Chip className="text-white text-md bg-black" variant="solid">
+                <Chip className="text-md" color="primary" variant="bordered">
                   Booked on standard category:
                   {items.tourCategory.standard.slotsBooked}
                 </Chip>
