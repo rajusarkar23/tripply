@@ -68,7 +68,10 @@ export async function GET() {
     const getTours = await db.select({
       id: tour.id,
       tourName: tour.tourName,
-      createdAt: tour.createdAt
+      tourImageUrl: tour.tourPrimaryImage,
+      tourCategory: tour.tourCategory,
+      createdAt: tour.createdAt,
+      updatedAt: tour.updatedAt
     }).from(tour);
     if (getTours.length === 0) {
       return NextResponse.json({
