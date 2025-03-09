@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@heroui/button";
+import { Spinner } from "@heroui/spinner";
 import Image from "next/image";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -40,6 +41,14 @@ export default function ToursById() {
 
     getTourById();
   }, []);
+
+  if (loading) {
+    return(
+      <div className="flex justify-center items-center min-h-[90vh]">
+        <Spinner />
+      </div>
+    )
+  }
 
   return (
     <div className="flex flex-col justify-center mt-20">
