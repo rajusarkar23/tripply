@@ -12,7 +12,6 @@ export async function GET(req: NextRequest) {
       .select({
         id: tour.id,
         tourName: tour.tourName,
-        tourOverview: tour.tourOverView,
         tourImageUrl: tour.tourPrimaryImage,
       })
       .from(tour)
