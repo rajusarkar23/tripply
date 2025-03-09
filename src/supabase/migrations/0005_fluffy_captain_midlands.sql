@@ -1,0 +1,1 @@
+ALTER TABLE "tour" ADD COLUMN "tour_primary_image" text;
