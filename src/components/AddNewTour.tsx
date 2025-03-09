@@ -14,7 +14,7 @@ export default function AddNewTour() {
   const [errorMessage, setErrorMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const router = useRouter()
+  const router = useRouter();
 
   // slugify the tour name
   function slugify(str: string) {
@@ -32,7 +32,7 @@ export default function AddNewTour() {
     setError(false);
     const data = Object.fromEntries(new FormData(e.currentTarget));
     if (typeof data.tourName !== "string") {
-      return
+      return;
     }
     const slug = slugify(data.tourName);
     data.slug = slug;
@@ -58,8 +58,8 @@ export default function AddNewTour() {
 
       if (response.success === true) {
         return router.push("/admin/tours");
-      } else{
-        setLoading(false)
+      } else {
+        setLoading(false);
       }
     } catch (error) {
       console.log(error);
@@ -106,6 +106,91 @@ export default function AddNewTour() {
                 className="w-full"
               />
             </div>
+            <div className="space-y-2">
+              <label
+                htmlFor="standardPakage"
+                className="font-semibold text-green-700"
+              >
+                Standard package:
+              </label>
+              <Input
+                isRequired
+                errorMessage={({ validationDetails }) => {
+                  if (validationDetails.valueMissing) {
+                    return "Please enter a package title";
+                  }
+                }}
+                label="Please enter package title"
+                name="standardPackageTitle"
+                className="w-full"
+              />
+              <Input
+                isRequired
+                errorMessage={({ validationDetails }) => {
+                  if (validationDetails.valueMissing) {
+                    return "Please enter a price";
+                  }
+                }}
+                label="Please enter price."
+                name="standardPackagePrice"
+                className="w-full"
+              />
+              <Input
+                isRequired
+                errorMessage={({ validationDetails }) => {
+                  if (validationDetails.valueMissing) {
+                    return "Please enter a Total available slots";
+                  }
+                }}
+                label="Enter total available slots."
+                name="standardPackageSlots"
+                className="w-full"
+              />
+             
+            </div>
+
+            <div className="space-y-2">
+              <label
+                htmlFor="tourName"
+                className="font-semibold text-green-700"
+              >
+                Premium package:
+              </label>
+              <Input
+                isRequired
+                errorMessage={({ validationDetails }) => {
+                  if (validationDetails.valueMissing) {
+                    return "Please enter a package title";
+                  }
+                }}
+                label="Please enter package title"
+                name="premiumPackageTitle"
+                className="w-full"
+              />
+              <Input
+                isRequired
+                errorMessage={({ validationDetails }) => {
+                  if (validationDetails.valueMissing) {
+                    return "Please enter a price";
+                  }
+                }}
+                label="Please enter price."
+                name="premiumPackagePrice"
+                className="w-full"
+              />
+              <Input
+                isRequired
+                errorMessage={({ validationDetails }) => {
+                  if (validationDetails.valueMissing) {
+                    return "Please enter a Total available slots";
+                  }
+                }}
+                label="Enter total available slots."
+                name="premiumPackageSlots"
+                className="w-full"
+              />
+             
+            </div>
 
             <div>
               <label className="font-semibold">Detailed description:</label>
@@ -116,12 +201,11 @@ export default function AddNewTour() {
             <div className="flex justify-center">
               {loading ? (
                 <Button disabled className="w-full">
-                  <Spinner color="current"/>
+                  <Spinner color="current" />
                 </Button>
               ) : (
                 <Button
                   type="submit"
-                  
                   className="w-full font-bold bg-black text-white text-xl"
                 >
                   Submit
