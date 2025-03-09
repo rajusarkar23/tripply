@@ -10,6 +10,10 @@ import { Spinner } from "@heroui/spinner";
 
 export default function AddNewTour() {
   const [content, setContent] = useState("");
+  const [standardPackageDescription, setStandarPackageDescription] =
+    useState("");
+  const [premiumPackageDescription, setPremiumPackageDescription] =
+    useState("");
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [loading, setLoading] = useState(false);
@@ -54,7 +58,12 @@ export default function AddNewTour() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ data, content }),
+        body: JSON.stringify({
+          data,
+          content,
+          standardPackageDescription,
+          premiumPackageDescription,
+        }),
       });
 
       const response = await res.json();
@@ -78,7 +87,10 @@ export default function AddNewTour() {
         <Form onSubmit={onsubmit} className="w-full">
           <div className="w-full space-y-3">
             <div>
-              <label htmlFor="tourName" className="font-semibold">
+              <label
+                htmlFor="tourName"
+                className="font-semibold text-green-700"
+              >
                 Tour name:
               </label>
               <Input
@@ -94,7 +106,10 @@ export default function AddNewTour() {
               />
             </div>
             <div>
-              <label htmlFor="tourName" className="font-semibold">
+              <label
+                htmlFor="tourName"
+                className="font-semibold text-green-700"
+              >
                 Overview:
               </label>
               <Input
@@ -151,7 +166,21 @@ export default function AddNewTour() {
                 name="standardPackageSlots"
                 className="w-full"
               />
-             
+
+              <div>
+                <div>
+                  <label className="font-semibold">
+                    Standar package description:
+                  </label>
+                  {error && (
+                    <p className="text-sm text-red-500">{errorMessage}</p>
+                  )}
+                  <RichTextEditor
+                    content={standardPackageDescription}
+                    setContent={setStandarPackageDescription}
+                  />
+                </div>
+              </div>
             </div>
 
             <div className="space-y-2">
@@ -196,11 +225,27 @@ export default function AddNewTour() {
                 name="premiumPackageSlots"
                 className="w-full"
               />
-             
+
+              <div>
+                <div>
+                  <label className="font-semibold">
+                    Premium package description:
+                  </label>
+                  {error && (
+                    <p className="text-sm text-red-500">{errorMessage}</p>
+                  )}
+                  <RichTextEditor
+                    content={premiumPackageDescription}
+                    setContent={setPremiumPackageDescription}
+                  />
+                </div>
+              </div>
             </div>
 
             <div>
-              <label className="font-semibold">Detailed description:</label>
+              <label className="font-semibold text-green-700">
+                Detailed description:
+              </label>
               {error && <p className="text-sm text-red-500">{errorMessage}</p>}
               <RichTextEditor content={content} setContent={setContent} />
             </div>

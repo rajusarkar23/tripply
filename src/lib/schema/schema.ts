@@ -1,15 +1,10 @@
-import {
-  jsonb,
-  pgTable,
-  serial,
-  text,
-  timestamp,
-} from "drizzle-orm/pg-core";
+import { jsonb, pgTable, serial, text, timestamp } from "drizzle-orm/pg-core";
 
 type TourPlans = {
   title: string;
   price: number;
   totalSlots: number;
+  description: string;
   slotsBooked: number;
   slotsAvailable: number;
 };
@@ -38,4 +33,4 @@ export const admin = pgTable("admin", {
   email: text("email").notNull(),
   password: text("password").notNull(),
   verificationOTP: text("verification_otp").notNull(),
-})
+});

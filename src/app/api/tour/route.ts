@@ -3,7 +3,12 @@ import { tour } from "@/lib/schema/schema";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
-  const { data, content } = await req.json();
+  const {
+    data,
+    content,
+    standardPackageDescription,
+    premiumPackageDescription,
+  } = await req.json();
 
   try {
     const addTour = await db
@@ -14,6 +19,7 @@ export async function POST(req: NextRequest) {
         tourName: data.tourName,
         tourCategory: {
           standard: {
+            description: standardPackageDescription,
             title: data.standardPackageTitle,
             price: Number(data.standardPackagePrice),
             totalSlots: Number(data.standardPackageSlots),
@@ -21,6 +27,7 @@ export async function POST(req: NextRequest) {
             slotsBooked: 0,
           },
           premium: {
+            description: premiumPackageDescription,
             title: data.premiumPackageTitle,
             price: Number(data.premiumPackagePrice),
             totalSlots: Number(data.premiumPackageSlots),
@@ -39,7 +46,6 @@ export async function POST(req: NextRequest) {
     }
 
     console.log(addTour);
-    
 
     return NextResponse.json({
       success: true,
