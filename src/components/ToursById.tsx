@@ -3,6 +3,13 @@
 import { useParams } from "next/navigation";
 import { useEffect } from "react";
 
+
+interface tours {
+  id: number,
+  tourName: string,
+  
+}
+
 export default function ToursById() {
   const id = useParams().toursId;
 

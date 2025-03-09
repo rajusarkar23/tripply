@@ -17,6 +17,7 @@ export async function POST(req: NextRequest) {
         description: content,
         slug: data.slug,
         tourName: data.tourName,
+        
         tourCategory: {
           standard: {
             description: standardPackageDescription,

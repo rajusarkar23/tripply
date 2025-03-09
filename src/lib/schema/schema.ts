@@ -17,6 +17,7 @@ type Tours = {
 export const tour = pgTable("tour", {
   id: serial("id").primaryKey(),
   tourName: text("tour_name").notNull(),
+  tourOverView: text("tour_overview"),
   slug: text("slug").notNull(),
   description: text("description").notNull(),
   tourCategory: jsonb("tour_category").$type<Tours>().notNull(),
