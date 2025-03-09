@@ -1,17 +1,21 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 
-interface tours {
+interface Tours {
   id: number,
   tourName: string,
-  
+  tourOverview: string,
+  tourImageUrl: string
 }
 
 export default function ToursById() {
   const id = useParams().toursId;
+
+
+  const [tours, setTourse] = useState<Tours[]>([])
 
   useEffect(() => {
     const getTourById = async () => {

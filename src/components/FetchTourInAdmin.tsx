@@ -7,7 +7,7 @@ interface Tours {
   id: number;
   tourName: string;
   description: string;
-  updatedAt: string;
+  createdAt: string;
 }
 
 export default function FetchTourInAdmin() {
@@ -24,6 +24,8 @@ export default function FetchTourInAdmin() {
         });
 
         const response = await res.json();
+        console.log(response);
+        
 
         if (response.success === true) {
           setTours(response.tours);

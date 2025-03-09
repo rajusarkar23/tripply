@@ -9,7 +9,12 @@ export async function GET(req: NextRequest) {
 
   try {
     const findTourById = await db
-      .select()
+      .select({
+        id: tour.id,
+        tourName: tour.tourName,
+        tourOverview: tour.tourOverView,
+        tourImageUrl: tour.tourPrimaryImage,
+      })
       .from(tour)
       .where(eq(tour.id, Number(id)));
 

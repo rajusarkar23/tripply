@@ -65,7 +65,11 @@ export async function GET() {
   //TODO: fetch according to the user
 
   try {
-    const getTours = await db.select().from(tour);
+    const getTours = await db.select({
+      id: tour.id,
+      tourName: tour.tourName,
+      createdAt: tour.createdAt
+    }).from(tour);
     if (getTours.length === 0) {
       return NextResponse.json({
         success: false,
