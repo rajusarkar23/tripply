@@ -1,4 +1,4 @@
-import { jsonb, pgTable, serial, text, timestamp } from "drizzle-orm/pg-core";
+import { boolean, jsonb, pgTable, serial, text, timestamp } from "drizzle-orm/pg-core";
 
 type TourPlans = {
   title: string;
@@ -35,4 +35,7 @@ export const admin = pgTable("admin", {
   email: text("email").notNull(),
   password: text("password").notNull(),
   verificationOTP: text("verification_otp").notNull(),
+  isVerified: boolean("is_verfied").default(false).notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").$onUpdate(() => new Date()).notNull()
 });

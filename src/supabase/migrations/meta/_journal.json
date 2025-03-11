@@ -50,6 +50,13 @@
       "when": 1741514153038,
       "tag": "0006_rainy_ezekiel",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1741722587790,
+      "tag": "0007_salty_lenny_balinger",
+      "breakpoints": true
     }
   ]
 }
