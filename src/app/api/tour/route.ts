@@ -3,6 +3,7 @@ import { tour } from "@/lib/schema/schema";
 import { eq } from "drizzle-orm";
 import { NextRequest, NextResponse } from "next/server";
 
+// create a single entry
 export async function POST(req: NextRequest) {
   const {
     data,
@@ -61,7 +62,7 @@ export async function POST(req: NextRequest) {
     });
   }
 }
-
+// get all entries from db
 export async function GET() {
   //TODO: fetch according to the user
 
@@ -96,7 +97,7 @@ export async function GET() {
     });
   }
 }
-
+// delete one specific entry, TODO: move this func to by-id folder
 export async function DELETE(req: NextRequest) {
   const params = req.nextUrl.searchParams;
   const id = params.get("id");

@@ -3,6 +3,7 @@ import { tour } from "@/lib/schema/schema";
 import { eq } from "drizzle-orm";
 import { NextRequest, NextResponse } from "next/server";
 
+// get specific entry bt id
 export async function GET(req: NextRequest) {
   const params = req.nextUrl.searchParams;
   const id = params.get("id");
