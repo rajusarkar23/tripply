@@ -1,20 +1,6 @@
 "use client";
-import {
-  Card,
-  CardBody,
-  CardHeader,
-  Chip,
-  getKeyValue,
-  Skeleton,
-  Spinner,
-  Table,
-  TableBody,
-  TableCell,
-  TableColumn,
-  TableHeader,
-  TableRow,
-} from "@heroui/react";
-import { CircleDot, CornerDownRight } from "lucide-react";
+import { Button, Card, Spinner } from "@heroui/react";
+import { CornerDownRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -40,48 +26,6 @@ interface Tours {
   createdAt: string;
   updatedAt: string;
 }
-
-const columns = [
-  {
-    key: "name",
-    label: "NAME",
-  },
-  {
-    key: "role",
-    label: "ROLE",
-  },
-  {
-    key: "status",
-    label: "STATUS",
-  },
-];
-
-const rows = [
-  {
-    key: "1",
-    name: "Tony Reichert",
-    role: "CEO",
-    status: "Active",
-  },
-  {
-    key: "2",
-    name: "Zoey Lang",
-    role: "Technical Lead",
-    status: "Paused",
-  },
-  {
-    key: "3",
-    name: "Jane Fisher",
-    role: "Senior Developer",
-    status: "Active",
-  },
-  {
-    key: "4",
-    name: "William Howard",
-    role: "Community Manager",
-    status: "Vacation",
-  },
-];
 
 export default function FetchTourInAdmin() {
   const [tours, setTours] = useState<Tours[]>([]);
@@ -127,7 +71,7 @@ export default function FetchTourInAdmin() {
       <div className="grid grid-cols-2 gap-3 mx-auto max-w-7xl w-full py-3">
         {tours.map((tour) => (
           <Link href={`/admin/tours/${tour.id}`} key={tour.id}>
-            <Card className="p-4 max-w-4xl w-full mx-auto hover:bg-gray-100">
+            <Card className="p-4 hover:bg-gray-100">
               <div className="flex gap-3">
                 <div className="flex items-center">
                   <Image
@@ -172,6 +116,20 @@ export default function FetchTourInAdmin() {
                   </div>
                   <div>
                     <h2>Created on {tour.createdAt}</h2>
+                  </div>
+                  <div className="space-y-2">
+                    <div className="flex space-x-2">
+                      <Button color="danger" className="font-bold w-full">
+                        Delete
+                      </Button>
+                      <Button color="primary" className="font-bold w-full">
+                        Edit
+                      </Button>
+                    </div>
+
+                    <Button className="w-full font-bold" color="success">
+                      View
+                    </Button>
                   </div>
                 </div>
               </div>
