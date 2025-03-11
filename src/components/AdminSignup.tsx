@@ -1,0 +1,68 @@
+"use client";
+
+import { Button } from "@heroui/button";
+import { Form } from "@heroui/form";
+import { Input } from "@heroui/input";
+import Link from "next/link";
+import { useState } from "react";
+
+export default function AdminSignup() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const errors: string[] = [];
+
+  // Password validation
+  if (password.length < 4) {
+    errors.push("Password must be 4 character or more.");
+  }
+  if ((password.match(/[A-Z]/g) || []).length < 1) {
+    errors.push("Password must include atleast one uppercase letter.");
+  }
+  if ((password.match(/[^a-z]/gi) || []).length < 1) {
+    errors.push("Password must include atleast one symbol.");
+  }
+
+  return (
+    <Form className="max-w-md mx-auto w-full flex items-center justify-center min-h-[90vh]">
+      <div className="border max-w-md mx-auto w-full px-6 py-10 rounded-lg shadow-xl space-y-10">
+        <div className="pb-6">
+          <h2 className="text-center text-2xl font-bold">Signup</h2>
+          <p className="text-center font-semibold text-gray-600">
+            Please create your account below.
+          </p>
+        </div>
+        <Input
+          isRequired
+          errorMessage="Please enter a valid email"
+          label="Email"
+          labelPlacement="outside"
+          name="email"
+          placeholder="Enter your email"
+          type="email"
+          value={email}
+          onValueChange={setEmail}
+        />
+        <Input
+          errorMessage={() => (
+            <ul>
+              {errors.map((error, index) => (
+                <li key={index}>{error}</li>
+              ))}
+            </ul>
+          )}
+          isInvalid={errors.length > 0}
+          label="Password"
+          labelPlacement="outside"
+          placeholder="Please enter a password"
+          value={password}
+          onValueChange={setPassword}
+        />
+
+        <Button type="submit" color="primary" className="w-full font-bold">
+          Signup
+        </Button>
+        <p className="text-center font-semibold text-gray-600">Have account? <Link href={"/authentication/admin/signin"} className="text-blue-600">Signin</Link></p>
+      </div>
+    </Form>
+  );
+}

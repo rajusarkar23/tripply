@@ -102,6 +102,13 @@ export async function DELETE(req: NextRequest) {
   const params = req.nextUrl.searchParams;
   const id = params.get("id");
 
+  if (!id || isNaN(Number(id))) {
+    return NextResponse.json({
+      success: false,
+      message: "The id is not valid or undefined",
+    });
+  }
+
   try {
     const deleteTour = await db
       .delete(tour)
