@@ -1,5 +1,20 @@
 "use client";
-import { Card, CardBody, CardHeader, Chip, Skeleton } from "@heroui/react";
+import {
+  Card,
+  CardBody,
+  CardHeader,
+  Chip,
+  getKeyValue,
+  Skeleton,
+  Spinner,
+  Table,
+  TableBody,
+  TableCell,
+  TableColumn,
+  TableHeader,
+  TableRow,
+} from "@heroui/react";
+import { CircleDot, CornerDownRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -26,6 +41,48 @@ interface Tours {
   updatedAt: string;
 }
 
+const columns = [
+  {
+    key: "name",
+    label: "NAME",
+  },
+  {
+    key: "role",
+    label: "ROLE",
+  },
+  {
+    key: "status",
+    label: "STATUS",
+  },
+];
+
+const rows = [
+  {
+    key: "1",
+    name: "Tony Reichert",
+    role: "CEO",
+    status: "Active",
+  },
+  {
+    key: "2",
+    name: "Zoey Lang",
+    role: "Technical Lead",
+    status: "Paused",
+  },
+  {
+    key: "3",
+    name: "Jane Fisher",
+    role: "Senior Developer",
+    status: "Active",
+  },
+  {
+    key: "4",
+    name: "William Howard",
+    role: "Community Manager",
+    status: "Vacation",
+  },
+];
+
 export default function FetchTourInAdmin() {
   const [tours, setTours] = useState<Tours[]>([]);
   const [loading, setLoading] = useState(false);
@@ -39,12 +96,10 @@ export default function FetchTourInAdmin() {
         });
 
         const response = await res.json();
-        // console.log(response);
 
         if (response.success === true) {
           setTours(response.tours);
           setLoading(false);
-          // setIsLoaded(true)
         } else {
           console.log(response);
           setLoading(false);
@@ -60,50 +115,66 @@ export default function FetchTourInAdmin() {
 
   if (loading) {
     return (
-      <div>
-        <Skeleton className="rounded-lg">
-          <div className="h-24 rounded-lg bg-secondary" />
-        </Skeleton>
+      <div className="flex justify-center items-center min-h-[90vh]">
+        <Spinner />
       </div>
     );
   }
 
   return (
-    <div className="max-w-7xl mx-auto w-full flex justify-center mt-8 px-8">
-      <div className="grid grid-cols-3 gap-3">
-        {tours.map((items) => (
-          <Link href={`/admin/tours/${items.id}`} key={items.id}>
-            <Card className="py-4 w-96">
-              <CardHeader className="pb-0 pt-2 px-4 flex-col items-start space-y-1">
-                <p className="text-lg font-bold">
-                  {items.tourName}
-                </p>
-
-                <div>
+    <div>
+      <h2 className="text-5xl text-center py-3 font-bold">All tours.</h2>
+      <div className="grid grid-cols-2 gap-3 mx-auto max-w-7xl w-full py-3">
+        {tours.map((tour) => (
+          <Link href={`/admin/tours/${tour.id}`} key={tour.id}>
+            <Card className="p-4 max-w-4xl w-full mx-auto hover:bg-gray-100">
+              <div className="flex gap-3">
+                <div className="flex items-center">
                   <Image
-                    src={items.tourImageUrl}
-                    alt={items.tourName}
-                    width={400}
+                    src={tour.tourImageUrl}
+                    alt={tour.tourName}
+                    width={600}
                     height={400}
-                    className="rounded"
+                    className="rounded-lg"
                   />
                 </div>
-              </CardHeader>
-              <CardBody className="overflow-visible py-2 space-y-0.5">
-                <Chip className="font-bold text-md" color="primary" variant="bordered">
-                  Seats are empty for booking:
-                  {items.tourCategory.premium.slotsAvailable +
-                    items.tourCategory.standard.slotsAvailable}
-                </Chip>
-                <Chip className="text-md" color="primary" variant="bordered">
-                  Booked on premium category:
-                  {items.tourCategory.premium.slotsBooked}
-                </Chip>
-                <Chip className="text-md" color="primary" variant="bordered">
-                  Booked on standard category:
-                  {items.tourCategory.standard.slotsBooked}
-                </Chip>
-              </CardBody>
+                <div>
+                  <h2 className="text-xl font-bold">{tour.tourName}</h2>
+                  <div>
+                    <div>
+                      <h3 className="font-bold text-green-600">
+                        Total available seats:
+                      </h3>
+                      <p className="flex text-blue-600 font-bold items-center">
+                        <CornerDownRight size={16} className=" mr-1" />
+                        {tour.tourCategory.standard.slotsAvailable +
+                          tour.tourCategory.premium.slotsAvailable}
+                      </p>
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-green-600">
+                        Premium seats booked:
+                      </h3>
+                      <p className="flex text-blue-600 font-bold items-center">
+                        <CornerDownRight size={16} className=" mr-1" />
+                        {tour.tourCategory.premium.slotsBooked}
+                      </p>
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-green-600">
+                        Standard seats booked:
+                      </h3>
+                      <p className="flex text-blue-600 font-bold items-center">
+                        <CornerDownRight size={16} className=" mr-1" />
+                        {tour.tourCategory.standard.slotsBooked}
+                      </p>
+                    </div>
+                  </div>
+                  <div>
+                    <h2>Created on {tour.createdAt}</h2>
+                  </div>
+                </div>
+              </div>
             </Card>
           </Link>
         ))}
