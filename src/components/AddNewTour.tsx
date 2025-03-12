@@ -3,10 +3,11 @@
 import { Button } from "@heroui/button";
 import { Form } from "@heroui/form";
 import { Input } from "@heroui/input";
-import { useState } from "react";
+import { ChangeEvent, useState } from "react";
 import RichTextEditor from "./RichTextEditor";
 import { useRouter } from "next/navigation";
 import { Spinner } from "@heroui/spinner";
+import { CircleCheckBig, LoaderCircle } from "lucide-react";
 
 export default function AddNewTour() {
   const [content, setContent] = useState("");
@@ -17,6 +18,14 @@ export default function AddNewTour() {
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [loading, setLoading] = useState(false);
+
+  // file states
+  const [imageUrl, setImageUrl] = useState("");
+  const [isUploadError, setIsUploadError] = useState(false);
+  const [uploadErrorMessage, setUploadErrorMessage] = useState("");
+  const [isUploading, setIsUploading] = useState(false);
+  const [isUploaded, setIsUploaded] = useState(false);
+  const [isFileNotAvailable, setIsFileNotAvailable] = useState(false);
 
   const router = useRouter();
 
@@ -33,6 +42,11 @@ export default function AddNewTour() {
   const onsubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    if (!isUploaded) {
+      setIsFileNotAvailable(true);
+      return;
+    }
+
     setError(false);
     const data = Object.fromEntries(new FormData(e.currentTarget));
     if (typeof data.tourName !== "string") {
@@ -47,9 +61,6 @@ export default function AddNewTour() {
       return;
     }
 
-    console.log(data);
-    // return
-
     try {
       setLoading(true);
 
@@ -61,6 +72,7 @@ export default function AddNewTour() {
         body: JSON.stringify({
           data,
           content,
+          imageUrl,
           standardPackageDescription,
           premiumPackageDescription,
         }),
@@ -72,10 +84,53 @@ export default function AddNewTour() {
         return router.push("/admin/tours");
       } else {
         setLoading(false);
+        console.log(response);
+        
       }
     } catch (error) {
       console.log(error);
       setLoading(false);
+    }
+  };
+
+  // file uplaod
+  const handleFileUpload = async (e: ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault();
+
+    setIsUploading(true);
+    setIsUploaded(false);
+    setIsUploadError(false);
+    // extract the file
+    const fileSelected = e.target.files?.[0];
+    // check
+    if (!fileSelected) {
+      return <p>Please select a file</p>;
+    }
+    // create a new form data
+    const formData = new FormData();
+    // append it with the selected file
+    formData.append("file", fileSelected);
+
+    // send http req
+    try {
+      const res = await fetch("/api/tour/upload-media", {
+        method: "POST",
+        body: formData,
+      });
+
+      const response = await res.json();
+
+      if (response.success) {
+        setImageUrl(response.url);
+        setIsUploaded(true);
+        setIsUploading(false);
+      } else {
+        setIsUploading(false);
+        setIsUploadError(true);
+        setUploadErrorMessage(response.message);
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -104,6 +159,36 @@ export default function AddNewTour() {
                 name="tourName"
                 className="w-full"
               />
+            </div>
+            <div>
+              <label
+                htmlFor="primaryImage"
+                className="font-semibold text-green-700"
+              >
+                Upload primary image:
+              </label>
+              <div>
+                {isUploading && (
+                  <p className="font-semibold text-blue-600 flex text-sm">
+                    Uploading....{" "}
+                    <LoaderCircle className="animate-spin" size={20} />
+                  </p>
+                )}
+                {isUploaded && (
+                  <p className="font-semibold text-blue-600 flex text-sm  gap-1">
+                    Uploaded <CircleCheckBig size={15} />
+                  </p>
+                )}
+                {isUploadError && (
+                  <p className="font-bold text-sm text-red-600">
+                    {uploadErrorMessage}
+                  </p>
+                )}
+                {
+                  isFileNotAvailable && (<p className="text-sm font-bold text-red-600">Please upload a image.</p>)
+                }
+              </div>
+              <Input id="file" type="file" onChange={handleFileUpload} />
             </div>
             <div>
               <label

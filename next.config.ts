@@ -1,9 +1,18 @@
-import type { NextConfig } from "next";
-
-const nextConfig: NextConfig = {
-  images: {
-    domains: ["pub-367a5b1b28f9415dae5b51f69d042dff.r2.dev", "images.pexels.com"]
-  }
+module.exports = {
+  experimental: {
+    serverActions: {
+      bodySizeLimit: "10mb",
+    },
+  },
 };
 
-export default nextConfig;
+module.exports = {
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "pub-367a5b1b28f9415dae5b51f69d042dff.r2.dev",
+      },
+    ],
+  },
+};

@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.758.0",
     "@heroui/button": "^2.2.15",
     "@heroui/form": "^2.1.14",
     "@heroui/input": "^2.4.15",

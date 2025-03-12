@@ -9,12 +9,15 @@ export async function POST(req: NextRequest) {
   const {
     data,
     content,
+    imageUrl,
     standardPackageDescription,
     premiumPackageDescription,
   } = await req.json();
 
   // get id from cookie
-  const idFromCookie = jwtVerifyOTPSession();
+  const idFromCookie = await jwtVerifyOTPSession();
+  console.log(idFromCookie);
+
   // check
   if (typeof idFromCookie !== "number") {
     return NextResponse.json({
@@ -30,6 +33,7 @@ export async function POST(req: NextRequest) {
         description: content,
         slug: data.slug,
         tourName: data.tourName,
+        tourPrimaryImage: imageUrl,
         createdBy: idFromCookie,
         tourCategory: {
           standard: {

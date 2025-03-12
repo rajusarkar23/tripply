@@ -1,0 +1,1 @@
+ALTER TABLE "tour" ALTER COLUMN "tour_primary_image" SET NOT NULL;

@@ -21,7 +21,7 @@ export const tour = pgTable("tour", {
   slug: text("slug").notNull(),
   description: text("description").notNull(),
   tourCategory: jsonb("tour_category").$type<Tours>().notNull(),
-  tourPrimaryImage: text("tour_primary_image"),
+  tourPrimaryImage: text("tour_primary_image").notNull(),
   createdBy: integer("created_by").references(() => admin.id).notNull(),
   createdAt: timestamp("created_at").notNull().defaultNow(),
   updatedAt: timestamp("updated_at")
