@@ -2,6 +2,7 @@
 - Black
 - blue-600
 - green-600
+- red-600
 - hover: gray-100
 - gray-600
 ### Text

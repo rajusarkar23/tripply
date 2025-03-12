@@ -3,6 +3,8 @@
 import { Button } from "@heroui/button";
 import { Form } from "@heroui/form";
 import { Input } from "@heroui/input";
+import { Spinner } from "@heroui/spinner";
+import { OctagonX } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
@@ -10,9 +12,12 @@ import { FormEvent, useState } from "react";
 export default function AdminSignup() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [isError, setIsError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
   const errors: string[] = [];
 
-  const router = useRouter()
+  const router = useRouter();
 
   // Password validation
   if (password.length < 6) {
@@ -26,40 +31,59 @@ export default function AdminSignup() {
   }
 
   const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
+    e.preventDefault();
 
     const data = {
       email,
-      password
-    }
+      password,
+    };
 
     try {
+      setIsLoading(true);
+      setIsError(false);
       const res = await fetch("/api/authentication/admin/signup", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify({data})
-      })
-      const response = await res.json()
+        body: JSON.stringify({ data }),
+      });
+      const response = await res.json();
 
       if (response.success) {
-        router.push("/authentication/admin/email-otp-verification")
+        router.push("/authentication/admin/email-otp-verification");
+      } else {
+        setIsLoading(false);
+        setIsError(true);
+        setErrorMessage(response.message);
       }
     } catch (error) {
       console.log(error);
-      
+      setIsLoading(false);
+      setIsError(true);
+      setErrorMessage("Something went wrong, try again..");
     }
-  }
+  };
 
   return (
-    <Form className="max-w-md mx-auto w-full flex items-center justify-center min-h-[90vh]" onSubmit={onSubmit}>
+    <Form
+      className="max-w-md mx-auto w-full flex items-center justify-center min-h-[90vh]"
+      onSubmit={onSubmit}
+    >
       <div className="border max-w-md mx-auto w-full px-6 py-10 rounded-lg shadow-xl space-y-10">
         <div className="pb-6">
           <h2 className="text-center text-2xl font-bold">Signup</h2>
           <p className="text-center font-semibold text-gray-600">
             Please create your account below.
           </p>
+          <div className="flex justify-center">
+            {isError && (
+              <p className="font-bold text-red-600 flex items-center">
+                <OctagonX size={20} className="mr-1" />
+                {errorMessage}
+              </p>
+            )}
+          </div>
         </div>
         <Input
           isRequired
@@ -89,9 +113,15 @@ export default function AdminSignup() {
           onValueChange={setPassword}
         />
 
-        <Button type="submit" color="primary" className="w-full font-bold">
-          Signup
-        </Button>
+        {isLoading ? (
+          <Button isDisabled className="w-full">
+            <Spinner />
+          </Button>
+        ) : (
+          <Button type="submit" color="primary" className="w-full font-bold">
+            Signup
+          </Button>
+        )}
         <p className="text-center font-semibold text-gray-600">
           Have account?{" "}
           <Link href={"/authentication/admin/signin"} className="text-blue-600">

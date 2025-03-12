@@ -71,10 +71,10 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    // fire the mail
+    // send the otp verify mail
     otpVerifyEmail(otp, data.email);
 
-    // create a jwt
+    // create jwt
     const jwt_token = jwt.sign(
       { id: createEntry[0].id },
       `${process.env.OTP_VERIFY_SESSION_JWT_SECRET}`

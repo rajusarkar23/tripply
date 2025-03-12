@@ -17,7 +17,7 @@ export async function otpVerifyEmail(otp: string, email: string) {
       from: sender,
       to: email,
       replyTo: sender,
-      subject: `Your email verification OTP`,
+      subject: `Tripply verification OTP`,
       html: `
         <div style="font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 0; margin: 0; width: 100%; height: 100%;">
        <table align="center" border="0" cellpadding="0" cellspacing="0" style="width: 100%; height: 100%; background-color: #f4f4f4; text-align: center;">
