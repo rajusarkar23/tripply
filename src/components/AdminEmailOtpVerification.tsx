@@ -32,7 +32,12 @@ export default function AdminEmailOtpVerification() {
         setIsError(true);
         setErrorMessage(response.message);
       }
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+      setIsLoading(false)
+      setIsError(true)
+      setErrorMessage("Something went wrong, try again..")
+    }
   };
 
   return (

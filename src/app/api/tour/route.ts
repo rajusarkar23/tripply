@@ -1,3 +1,4 @@
+import { jwtVerifyOTPSession } from "@/lib/auth/jwt-verify-for-otp-verification";
 import { db } from "@/lib/db/db";
 import { tour } from "@/lib/schema/schema";
 import { eq } from "drizzle-orm";
@@ -12,6 +13,16 @@ export async function POST(req: NextRequest) {
     premiumPackageDescription,
   } = await req.json();
 
+  // get id from cookie
+  const idFromCookie = jwtVerifyOTPSession();
+  // check
+  if (typeof idFromCookie !== "number") {
+    return NextResponse.json({
+      success: false,
+      message: "Invalid session, please login again",
+    });
+  }
+
   try {
     const addTour = await db
       .insert(tour)
@@ -19,7 +30,7 @@ export async function POST(req: NextRequest) {
         description: content,
         slug: data.slug,
         tourName: data.tourName,
-
+        createdBy: idFromCookie,
         tourCategory: {
           standard: {
             description: standardPackageDescription,
