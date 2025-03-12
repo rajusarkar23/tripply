@@ -123,7 +123,7 @@ export default function AdminSignup() {
           </Button>
         )}
         <p className="text-center font-semibold text-gray-600">
-          Have account?{" "}
+          Have account?
           <Link href={"/authentication/admin/signin"} className="text-blue-600">
             Signin
           </Link>
