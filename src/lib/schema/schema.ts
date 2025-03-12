@@ -1,4 +1,4 @@
-import { boolean, jsonb, pgTable, serial, text, timestamp } from "drizzle-orm/pg-core";
+import { boolean, integer, jsonb, pgTable, serial, text, timestamp } from "drizzle-orm/pg-core";
 
 type TourPlans = {
   title: string;
@@ -22,7 +22,7 @@ export const tour = pgTable("tour", {
   description: text("description").notNull(),
   tourCategory: jsonb("tour_category").$type<Tours>().notNull(),
   tourPrimaryImage: text("tour_primary_image"),
-  // createdBy:
+  createdBy: integer("created_by").references(() => admin.id).notNull(),
   createdAt: timestamp("created_at").notNull().defaultNow(),
   updatedAt: timestamp("updated_at")
     .notNull()

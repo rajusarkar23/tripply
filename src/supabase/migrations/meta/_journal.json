@@ -57,6 +57,13 @@
       "when": 1741722587790,
       "tag": "0007_salty_lenny_balinger",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1741804009803,
+      "tag": "0008_tidy_hawkeye",
+      "breakpoints": true
     }
   ]
 }
