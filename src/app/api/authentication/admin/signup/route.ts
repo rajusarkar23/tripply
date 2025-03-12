@@ -50,6 +50,8 @@ export async function POST(req: NextRequest) {
     // encrypt the password and otp
     const hashedPassword = bcrypt.hashSync(data.password, 10);
     const otp = generateOTP(6);
+    console.log(otp);
+    
     const hashedOTP = bcrypt.hashSync(otp, 10);
 
     // create entry in the db
