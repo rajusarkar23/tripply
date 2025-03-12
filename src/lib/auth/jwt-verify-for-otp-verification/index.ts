@@ -1,8 +1,16 @@
-import { NextRequest } from "next/server";
+import { cookies } from "next/headers";
+import jwt from "jsonwebtoken"
+export async function jwtVerifyOTPSession() {
+  const cookie = (await cookies()).get("vsession")?.value;
 
-function jwtVerifyOTPSession(req: NextRequest) {
-  const cookies = req.cookies;
-  return cookies
+  if (!cookie) {
+    return "No cookie available"
+  }
   
+  const decodeCookie = jwt.verify(cookie, `${process.env.OTP_VERIFY_SESSION_JWT_SECRET}`);
+  
+  //@ts-expect-error, id available assume
+  const id = decodeCookie.id
+
+  return id
 }
-console.log(jwtVerifyOTPSession);

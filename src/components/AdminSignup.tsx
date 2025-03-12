@@ -21,8 +21,8 @@ export default function AdminSignup() {
   if ((password.match(/[A-Z]/g) || []).length < 1) {
     errors.push("Password must include atleast one uppercase letter.");
   }
-  if ((password.match(/[^a-z]/gi) || []).length < 1) {
-    errors.push("Password must include atleast one symbol.");
+  if ((password.match(/[\W_]/) || []).length < 1) {
+    errors.push("Password must include atleast one special character.");
   }
 
   const onSubmit = async (e: FormEvent<HTMLFormElement>) => {

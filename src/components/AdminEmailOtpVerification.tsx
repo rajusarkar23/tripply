@@ -1,3 +1,4 @@
+"use client"
 import { Button, Form, InputOtp } from "@heroui/react";
 
 export default function AdminEmailOtpVerification() {
@@ -16,7 +17,18 @@ export default function AdminEmailOtpVerification() {
           color="primary"
         />
         <div className="flex justify-center mt-6">
-        <Button color="primary" className="font-bold">Submit</Button>
+        <Button color="primary" className="font-bold"
+        onPress={async() => {
+          try {
+            const res = await fetch("/api/authentication/admin/email-otp-verify", {
+              method: "POST"
+            })
+            console.log(await res.json());
+            
+          } catch (error) {
+            
+          }
+        }}>Submit</Button>
         </div>
       </div>
     </Form>
