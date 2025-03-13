@@ -1,4 +1,4 @@
-import { jwtVerifyOTPSession } from "@/lib/auth/jwt-verify-for-otp-verification";
+import { jwtSession } from "@/lib/auth/jwt-verify-session";
 import { db } from "@/lib/db/db";
 import { tour } from "@/lib/schema/schema";
 import { eq } from "drizzle-orm";
@@ -15,8 +15,7 @@ export async function POST(req: NextRequest) {
   } = await req.json();
 
   // get id from cookie
-  const idFromCookie = await jwtVerifyOTPSession();
-  console.log(idFromCookie);
+  const idFromCookie = await jwtSession();
 
   // check
   if (typeof idFromCookie !== "number") {
@@ -80,6 +79,13 @@ export async function POST(req: NextRequest) {
 // get all entries from db
 export async function GET() {
   //TODO: fetch according to the user
+  const idFromCookie = await jwtSession()
+  if (typeof idFromCookie !== "number") {
+    return NextResponse.json({
+      success: false,
+      message: "Something went wrong, login again.."
+    })
+  }
 
   try {
     const getTours = await db
@@ -91,7 +97,7 @@ export async function GET() {
         createdAt: tour.createdAt,
         updatedAt: tour.updatedAt,
       })
-      .from(tour);
+      .from(tour).where(eq(tour.createdBy, idFromCookie));
     if (getTours.length === 0) {
       return NextResponse.json({
         success: false,

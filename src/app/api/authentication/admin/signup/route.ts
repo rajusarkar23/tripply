@@ -58,7 +58,7 @@ export async function POST(req: NextRequest) {
     const createEntry = await db
       .insert(admin)
       .values({
-        name: data.email.split("@"),
+        name: data.email.split("@")[0],
         email: data.email,
         password: hashedPassword,
         verificationOTP: hashedOTP,
