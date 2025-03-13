@@ -1,2 +1,0 @@
-ALTER TABLE "tour" ADD COLUMN "created_by" integer NOT NULL;--> statement-breakpoint
-ALTER TABLE "tour" ADD CONSTRAINT "tour_created_by_admin_id_fk" FOREIGN KEY ("created_by") REFERENCES "public"."admin"("id") ON DELETE no action ON UPDATE no action;

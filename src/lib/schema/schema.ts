@@ -75,4 +75,8 @@ export const ratings = pgTable("ratings", {
   ratingUserId: integer("rating_user_id") // id of the user
     .notNull()
     .references(() => tourists.id),
+
+  ratingTexts: text("rating_texts").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").$onUpdate(() => new Date()),
 });
