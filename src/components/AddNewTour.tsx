@@ -19,6 +19,10 @@ export default function AddNewTour() {
   const [errorMessage, setErrorMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
+  // add tour states
+  const [isAddError, setIsAddError] = useState(false);
+  const [addErrorMessage, setAddErrorMessage] = useState("");
+
   // file states
   const [imageUrl, setImageUrl] = useState("");
   const [isUploadError, setIsUploadError] = useState(false);
@@ -85,7 +89,9 @@ export default function AddNewTour() {
       } else {
         setLoading(false);
         console.log(response);
-        
+        setIsAddError(true);
+        setAddErrorMessage(response.message);
+        router.refresh();
       }
     } catch (error) {
       console.log(error);
@@ -170,7 +176,7 @@ export default function AddNewTour() {
               <div>
                 {isUploading && (
                   <p className="font-semibold text-blue-600 flex text-sm">
-                    Uploading....{" "}
+                    Uploading....
                     <LoaderCircle className="animate-spin" size={20} />
                   </p>
                 )}
@@ -184,9 +190,11 @@ export default function AddNewTour() {
                     {uploadErrorMessage}
                   </p>
                 )}
-                {
-                  isFileNotAvailable && (<p className="text-sm font-bold text-red-600">Please upload a image.</p>)
-                }
+                {isFileNotAvailable && (
+                  <p className="text-sm font-bold text-red-600">
+                    Please upload a image.
+                  </p>
+                )}
               </div>
               <Input id="file" type="file" onChange={handleFileUpload} />
             </div>
@@ -334,7 +342,7 @@ export default function AddNewTour() {
               {error && <p className="text-sm text-red-500">{errorMessage}</p>}
               <RichTextEditor content={content} setContent={setContent} />
             </div>
-
+            <div className="text-sm font-bold text-red-600">{isAddError && <p>{addErrorMessage}</p>}</div>
             <div className="flex justify-center">
               {loading ? (
                 <Button disabled className="w-full">

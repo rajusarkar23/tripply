@@ -1,7 +1,9 @@
 import { jwtSession } from "@/lib/auth/jwt-verify-session";
 import { db } from "@/lib/db/db";
-import { tour } from "@/lib/schema/schema";
+import { admin, tour } from "@/lib/schema/schema";
 import { eq } from "drizzle-orm";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 import { NextRequest, NextResponse } from "next/server";
 
 // create a single entry
@@ -26,6 +28,20 @@ export async function POST(req: NextRequest) {
   }
 
   try {
+    // check if id exist on db
+    const checkId = await db
+      .select({ id: admin.id })
+      .from(admin)
+      .where(eq(admin.id, idFromCookie));
+
+    if (checkId.length === 0) {
+      (await cookies()).delete("session");
+      return NextResponse.json({
+        success: false,
+        message: "Invalid session, login again",
+      });
+    }
+
     const addTour = await db
       .insert(tour)
       .values({
@@ -80,12 +96,12 @@ export async function POST(req: NextRequest) {
 // get all entries from db
 export async function GET() {
   //TODO: fetch according to the user
-  const idFromCookie = await jwtSession()
+  const idFromCookie = await jwtSession();
   if (typeof idFromCookie !== "number") {
     return NextResponse.json({
       success: false,
-      message: "Something went wrong, login again.."
-    })
+      message: "Something went wrong, login again..",
+    });
   }
 
   try {
@@ -98,7 +114,8 @@ export async function GET() {
         createdAt: tour.createdAt,
         updatedAt: tour.updatedAt,
       })
-      .from(tour).where(eq(tour.createdBy, idFromCookie));
+      .from(tour)
+      .where(eq(tour.createdBy, idFromCookie));
     if (getTours.length === 0) {
       return NextResponse.json({
         success: false,
