@@ -31,6 +31,7 @@ export async function POST(req: NextRequest) {
       .values({
         description: content,
         slug: data.slug,
+        tourOverView: data.overview,
         tourName: data.tourName,
         tourPrimaryImage: imageUrl,
         createdBy: idFromCookie,
