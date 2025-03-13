@@ -36,7 +36,10 @@ export default function PopularDestination() {
         const res = await fetch("/api/client/tours");
 
         console.log(await res.json());
-      } catch (error) {}
+      } catch (error) {
+        console.log(error);
+        
+      }
     };
 
     fetchAll();
