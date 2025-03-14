@@ -23,7 +23,7 @@ export default function Navigation() {
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
-            <Link href="/dest" className="hover:text-blue-600 transition-colors">
+            <Link href="/admin/home" className="hover:text-blue-600 transition-colors">
               Destinations
             </Link>
             <Link href="/packages" className="hover:text-blue-600 transition-colors">
