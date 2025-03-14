@@ -134,7 +134,7 @@ export default function FetchTourInAdmin() {
                     <Button color="danger" className="font-bold w-full">
                       Delete
                     </Button>
-                    <Button color="primary" className="font-bold w-full">
+                    <Button color="primary" className="font-bold w-full" onPress={() => router.push(`/admin/edit/${tour.tourSlug}`)}>
                       Edit
                     </Button>
                   </div>

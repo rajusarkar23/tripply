@@ -138,9 +138,6 @@ export async function GET() {
       });
     }
 
-    console.log(getTours);
-    
-
     return NextResponse.json({
       success: true,
       message: "Tours fetched successfully",
