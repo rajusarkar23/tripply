@@ -7,13 +7,13 @@ import PopularDestination from "@/components/PopularDestination";
 
 export default function Home() {
   return (
-    <main>
+    <div>
       <Hero />
       <PopularDestination />
       <CTASection />
       <Features />
       <InfiniteReviewCarousel />
       <Footer />
-    </main>
+    </div>
   );
 }
