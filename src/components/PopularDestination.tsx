@@ -4,7 +4,6 @@ import Image from "next/image";
 import { motion } from "motion/react";
 import { useEffect } from "react";
 import useTourStore from "@/store/tour-store/tourStore";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 
 interface Category {
@@ -36,7 +35,6 @@ interface Tour {
 }
 
 export default function PopularDestination() {
-  const router = useRouter();
 
   const { fetchTour, tours } = useTourStore() as {
     fetchTour: () => void;
