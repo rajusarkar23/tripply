@@ -3,46 +3,49 @@ import { Star } from "lucide-react";
 import Image from "next/image";
 import { motion } from "motion/react";
 import { useEffect } from "react";
+import useTourStore from "@/store/tour-store/tourStore";
+import { Button } from "@heroui/button";
+import { useRouter } from "next/navigation";
 
-const destinations = [
-  {
-    name: "Santorini, Greece",
-    image:
-      "https://images.pexels.com/photos/1010646/pexels-photo-1010646.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-    price: "1,299",
-    rating: 4.8,
-  },
-  {
-    name: "Bali, Indonesia",
-    image:
-      "https://images.pexels.com/photos/695779/pexels-photo-695779.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-    price: "899",
-    rating: 4.9,
-  },
-  {
-    name: "Maldives",
-    image:
-      "https://images.pexels.com/photos/1450354/pexels-photo-1450354.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-    price: "1,599",
-    rating: 4.7,
-  },
-];
+interface Category {
+  title: string | null;
+  description: string | null;
+  price: number | null;
+  slotsAvailable: number | null;
+  slotsBooked: number | null;
+  totalSlots: number | null;
+}
+
+interface Rating {
+  ratingBy: string | null;
+  rating: number | null;
+  ratingTexts: string | null;
+}
+
+interface Tour {
+  name: string | null;
+  image: string | null;
+  description: string | null;
+  overview: string | null;
+  slug: string | null;
+  tourCategory: {
+    standard: Category;
+    premium: Category;
+  };
+  ratings: Rating;
+}
 
 export default function PopularDestination() {
+  const router = useRouter();
+
+  const { fetchTour, tours } = useTourStore() as {
+    fetchTour: () => void;
+    tours: Tour[];
+  };
+
   // fetch tours
   useEffect(() => {
-    const fetchAll = async () => {
-      try {
-        const res = await fetch("/api/client/tours");
-
-        console.log(await res.json());
-      } catch (error) {
-        console.log(error);
-        
-      }
-    };
-
-    fetchAll();
+    fetchTour();
   }, []);
   return (
     <section className="py-20">
@@ -59,9 +62,9 @@ export default function PopularDestination() {
         </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {destinations.map((destination, index) => (
+          {tours.map((tour, index) => (
             <motion.div
-              key={destination.name}
+              key={tour.name}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.2 }}
@@ -69,26 +72,39 @@ export default function PopularDestination() {
             >
               <div className="relative h-64">
                 <Image
-                  src={destination.image || "/placeholder.svg"}
-                  alt={destination.name}
+                  src={tour.image || "/placeholder.svg"}
+                  alt={tour.name!}
                   fill
                   className="object-cover"
                 />
               </div>
-              <div className="p-6">
-                <div className="flex justify-between items-center mb-2">
-                  <h3 className="text-xl font-semibold">{destination.name}</h3>
-                  <div className="flex items-center text-yellow-500">
-                    <Star className="w-5 h-5 fill-current" />
-                    <span className="ml-1">{destination.rating}</span>
+              <div>
+                <div className="p-4">
+                  <div className="flex justify-between items-center">
+                    <h3 className="text-lg font-semibold line-clamp-1 w-80">
+                      {tour.name}
+                    </h3>
+                    <p className="text-yellow-500 flex justify-end font-bold">
+                      Top
+                      <Star />
+                    </p>
+                  </div>
+                  <h3 className="font-semibold text-gray-600">
+                    Starting from {tour.tourCategory.standard.price}
+                  </h3>
+
+                  <div>
+                    <Button
+                      className="w-full font-bold"
+                      color="primary"
+                      onPress={() => {
+                        router.push(`/tour/${tour.slug}`);
+                      }}
+                    >
+                      View details
+                    </Button>
                   </div>
                 </div>
-                <p className="text-gray-600 mb-4">
-                  Starting from ${destination.price}
-                </p>
-                <button className="w-full bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
-                  View Details
-                </button>
               </div>
             </motion.div>
           ))}

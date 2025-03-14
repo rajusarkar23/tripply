@@ -3,7 +3,6 @@ import { db } from "@/lib/db/db";
 import { admin, tour } from "@/lib/schema/schema";
 import { eq } from "drizzle-orm";
 import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
 import { NextRequest, NextResponse } from "next/server";
 
 // create a single entry
@@ -122,6 +121,9 @@ export async function GET() {
         message: "No tour found",
       });
     }
+
+    console.log(getTours);
+    
 
     return NextResponse.json({
       success: true,

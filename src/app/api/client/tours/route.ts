@@ -10,6 +10,9 @@ export async function GET() {
       .select({
         name: tour.tourName,
         image: tour.tourPrimaryImage,
+        overview: tour.tourOverView,
+        slug: tour.slug,
+        description: tour.description,
         tourCategory: tour.tourCategory,
         ratings: ratings.rating,
       })
