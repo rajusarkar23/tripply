@@ -12,7 +12,7 @@ export default function Navigation() {
     <motion.header
       initial={{ y: -20, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
-      className="fixed w-full z-50 bg-white/80 backdrop-blur-sm shadow-sm"
+      className="sticky top-0 w-full z-50 bg-white/80 backdrop-blur-sm shadow-sm"
     >
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">

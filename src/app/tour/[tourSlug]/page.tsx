@@ -1,8 +1,13 @@
+"use client"
+
+import ToursBySlug from '@/components/ToursBySlug'
 import React from 'react'
 
 const TourBySlug = () => {
   return (
-    <div>TourBySlug</div>
+    <div>
+      <ToursBySlug />
+    </div>
   )
 }
 

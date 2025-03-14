@@ -4,7 +4,8 @@ import Image from "next/image";
 import { motion } from "motion/react";
 import { useEffect } from "react";
 import useTourStore from "@/store/tour-store/tourStore";
-import Link from "next/link";
+import { Button } from "@heroui/button";
+import { useRouter } from "next/navigation";
 
 interface Category {
   title: string | null;
@@ -35,6 +36,7 @@ interface Tour {
 }
 
 export default function PopularDestination() {
+  const router = useRouter();
 
   const { fetchTour, tours } = useTourStore() as {
     fetchTour: () => void;
@@ -77,14 +79,14 @@ export default function PopularDestination() {
                 />
               </div>
               <div>
-                <div className="p-4">
+                <div className="p-4 space-y-2">
                   <div className="flex justify-between items-center">
                     <h3 className="text-lg font-semibold line-clamp-1 w-80">
                       {tour.name}
                     </h3>
-                    <p className="text-yellow-500 flex justify-end font-bold">
-                      Top
-                      <Star />
+                    <p className="text-yellow-500 flex justify-end font-bold items-center">
+                      Top Rated
+                      <Star size={18} className="ml-1"/>
                     </p>
                   </div>
                   <h3 className="font-semibold text-gray-600">
@@ -92,9 +94,15 @@ export default function PopularDestination() {
                   </h3>
 
                   <div>
-                   <Link href={`/tour/${tour.slug}`}>
-                   view
-                   </Link>
+                    <Button
+                      className="w-full font-bold"
+                      color="primary"
+                      onPress={() => {
+                        router.push(`/tour/${tour.slug}`);
+                      }}
+                    >
+                      View details
+                    </Button>
                   </div>
                 </div>
               </div>
