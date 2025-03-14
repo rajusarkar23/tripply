@@ -2,7 +2,7 @@ import CTASection from "@/components/CTASection";
 import Features from "@/components/Features";
 import Footer from "@/components/Footer";
 import Hero from "@/components/Hero";
-// import InfiniteReviewCarousel from "@/components/InfiniteScrollReviews";
+import InfiniteReviewCarousel from "@/components/InfiniteScrollReviews";
 import PopularDestination from "@/components/PopularDestination";
 
 export default function Home() {
@@ -12,7 +12,7 @@ export default function Home() {
       <PopularDestination />
       <CTASection />
       <Features />
-      {/* <InfiniteReviewCarousel /> */}
+      <InfiniteReviewCarousel />
       <Footer />
     </div>
   );

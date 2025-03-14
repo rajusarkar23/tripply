@@ -1,9 +1,9 @@
 "use client"
 
 import { useState, useEffect, useRef } from "react"
-import { motion, useAnimation, useMotionValue } from "motion/react"
+import { motion, useAnimation } from "framer-motion"
 import { Star } from "lucide-react"
-import type React from "react" // Import React
+import type React from "react"
 
 interface Review {
     id: number
@@ -19,28 +19,25 @@ const reviews: Review[] = [
         id: 1,
         name: "Sarah Thompson",
         location: "New York, USA",
-        review:
-            "ACME Travels made our honeymoon absolutely unforgettable. The attention to detail and personalized service was outstanding!",
+        review: "ACME Travels made our honeymoon absolutely unforgettable. The attention to detail and personalized service was outstanding!",
         rating: 5,
-        image: "https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg?t=st=1738495443~exp=1738499043~hmac=3844cb739ee0e16c63ccb862c6f4b6ff423f98b3817ea562e5d0217a8de0244e&w=740",
+        image: "https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg",
     },
     {
         id: 2,
         name: "John Doe",
         location: "London, UK",
-        review:
-            "I&apos;ve traveled with many agencies, but none compare to the experience I had with ACME. They truly go above and beyond.",
+        review: "I've traveled with many agencies, but none compare to the experience I had with ACME. They truly go above and beyond.",
         rating: 5,
-        image: "https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg?t=st=1738495443~exp=1738499043~hmac=3844cb739ee0e16c63ccb862c6f4b6ff423f98b3817ea562e5d0217a8de0244e&w=740",
+        image: "https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg",
     },
     {
         id: 3,
         name: "Maria Garcia",
         location: "Barcelona, Spain",
-        review:
-            "From start to finish, our family vacation was perfectly planned. The local guides were knowledgeable and friendly. Highly recommend!",
+        review: "From start to finish, our family vacation was perfectly planned. The local guides were knowledgeable and friendly. Highly recommend!",
         rating: 4,
-        image: "https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg?t=st=1738495443~exp=1738499043~hmac=3844cb739ee0e16c63ccb862c6f4b6ff423f98b3817ea562e5d0217a8de0244e&w=740",
+        image: "https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg",
     },
     {
         id: 4,
@@ -48,16 +45,15 @@ const reviews: Review[] = [
         location: "Tokyo, Japan",
         review: "ACME Travels helped me discover hidden gems in my own country. Their local expertise is unmatched!",
         rating: 5,
-        image: "https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg?t=st=1738495443~exp=1738499043~hmac=3844cb739ee0e16c63ccb862c6f4b6ff423f98b3817ea562e5d0217a8de0244e&w=740",
+        image: "https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg",
     },
     {
         id: 5,
         name: "Emma Wilson",
         location: "Sydney, Australia",
-        review:
-            "The eco-friendly options provided by ACME allowed us to explore responsibly. A fantastic experience all around!",
+        review: "The eco-friendly options provided by ACME allowed us to explore responsibly. A fantastic experience all around!",
         rating: 4,
-        image: "https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg?t=st=1738495443~exp=1738499043~hmac=3844cb739ee0e16c63ccb862c6f4b6ff423f98b3817ea562e5d0217a8de0244e&w=740",
+        image: "https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg",
     },
 ]
 
@@ -65,29 +61,48 @@ const InfiniteReviewCarousel: React.FC = () => {
     const [width, setWidth] = useState(0)
     const carousel = useRef<HTMLDivElement>(null)
     const controls = useAnimation()
-    const x = useMotionValue(0)
 
+    // Calculate width on mount & resize
     useEffect(() => {
-        if (carousel.current) {
-            setWidth(carousel.current.scrollWidth - carousel.current.offsetWidth)
-        }
-    }, [])
-
-    useEffect(() => {
-        const infiniteScroll = async () => {
-            while (true) {
-                await controls.start({
-                    x: -width,
-                    transition: { duration: 20, ease: "linear" },
-                })
-                await controls.start({
-                    x: 0,
-                    transition: { duration: 0 },
-                })
+        const updateWidth = () => {
+            if (carousel.current) {
+                const newWidth = carousel.current.scrollWidth - carousel.current.offsetWidth
+                setWidth(newWidth)
             }
         }
 
-        infiniteScroll()
+        updateWidth()
+        window.addEventListener("resize", updateWidth)
+
+        return () => window.removeEventListener("resize", updateWidth)
+    }, [])
+
+    // Start infinite scroll only when width is ready
+    useEffect(() => {
+        if (width > 0) {
+            let isRunning = true
+    
+            const infiniteScroll = async () => {
+                if (!isRunning) return
+                
+                await controls.start({
+                    x: [-width, 0],  // Animation goes from -width to 0
+                    transition: { 
+                        duration: 20, 
+                        ease: "linear",
+                        times: [0, 1],  // Corresponds to the values in the array
+                        repeat: Infinity,  // Make it repeat forever
+                    }
+                })
+            }
+    
+            infiniteScroll()
+    
+            return () => {
+                isRunning = false
+                controls.stop()
+            }
+        }
     }, [controls, width])
 
     const ReviewCard: React.FC<Review> = ({ name, location, review, rating, image }) => (
@@ -111,14 +126,16 @@ const InfiniteReviewCarousel: React.FC = () => {
     return (
         <div className="mb-4">
             <div className="flex flex-col justify-center py-4">
-                <h1 className="text-4xl font-bold text-center mb-4">
-                    Reviews from our travelers
-                </h1>
+                <h1 className="text-4xl font-bold text-center mb-4">Reviews from our travelers</h1>
                 <p className="text-gray-600 text-center">Generous words from our travelers</p>
-
             </div>
             <div className="overflow-hidden">
-                <motion.div ref={carousel} className="flex" animate={controls} style={{ x }}>
+                <motion.div
+                    ref={carousel}
+                    className="flex"
+                    animate={controls}
+                    initial={false} // Prevents flicker on load
+                >
                     {[...reviews, ...reviews].map((review, index) => (
                         <ReviewCard key={`${review.id}-${index}`} {...review} />
                     ))}
@@ -129,4 +146,3 @@ const InfiniteReviewCarousel: React.FC = () => {
 }
 
 export default InfiniteReviewCarousel
-
