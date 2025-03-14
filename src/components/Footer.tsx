@@ -141,6 +141,10 @@ export default function Footer() {
             </div>
 
             <div className="text-sm text-blue-100">
+              <h1>dchfd</h1>
+              <Link href={"/admin/home"}>
+              sdjkhkcv
+              </Link>
               © {new Date().getFullYear()} ACME Travels. All rights reserved.
             </div>
           </div>
