@@ -4,8 +4,8 @@ import Image from "next/image";
 import { motion } from "motion/react";
 import { useEffect } from "react";
 import useTourStore from "@/store/tour-store/tourStore";
-import { Button } from "@heroui/button";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 interface Category {
   title: string | null;
@@ -94,15 +94,9 @@ export default function PopularDestination() {
                   </h3>
 
                   <div>
-                    <Button
-                      className="w-full font-bold"
-                      color="primary"
-                      onPress={() => {
-                        router.push(`/tour/${tour.slug}`);
-                      }}
-                    >
-                      View details
-                    </Button>
+                   <Link href={`/tour/${tour.slug}`}>
+                   view
+                   </Link>
                   </div>
                 </div>
               </div>
