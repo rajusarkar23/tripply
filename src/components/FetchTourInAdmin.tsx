@@ -1,62 +1,73 @@
 "use client";
+import useAdminTourStore from "@/store/tour-store/adminTourStore";
 import { Button, Card, Spinner } from "@heroui/react";
 import { CornerDownRight } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
-interface TourCategory {
-  premium: {
-    slotsAvailable: number;
-    slotsBooked: number;
-    totalSlots: number;
-  };
-  standard: {
-    slotsAvailable: number;
-    slotsBooked: number;
-    totalSlots: number;
-  };
+interface Category {
+  title: string | null;
+  description: string | null;
+  price: number | null;
+  slotsAvailable: number | null;
+  slotsBooked: number | null;
+  totalSlots: number | null;
 }
 
-interface Tours {
-  id: number;
-  tourName: string;
-  tourImageUrl: string;
-  tourCategory: TourCategory;
-  createdAt: string;
-  updatedAt: string;
+interface Tour {
+  id: number | number;
+  tourName: string | null;
+  tourSlug: string | null;
+  tourDescription: string | null;
+  tourOverview: string | null;
+  tourImageUrl: string | null;
+  updatedAt: string | null;
+  tourCategory: {
+    premium: Category;
+    standard: Category;
+  };
 }
 
 export default function FetchTourInAdmin() {
-  const [tours, setTours] = useState<Tours[]>([]);
+  // const [tours, setTours] = useState<Tours[]>([]);
   const [loading, setLoading] = useState(false);
 
   const router = useRouter();
 
+  const { fetchToursForAdmin, tours } = useAdminTourStore() as {
+    fetchToursForAdmin: () => void;
+    tours: Tour[];
+  };
+
+  console.log(tours);
+
   useEffect(() => {
-    setLoading(true);
-    const fetchTours = async () => {
-      try {
-        const res = await fetch("/api/tour", {
-          method: "GET",
-        });
+    // setLoading(true);
+    // const fetchTours = async () => {
+    //   try {
+    //     const res = await fetch("/api/tour", {
+    //       method: "GET",
+    //     });
 
-        const response = await res.json();
+    //     const response = await res.json();
 
-        if (response.success === true) {
-          setTours(response.tours);
-          setLoading(false);
-        } else {
-          console.log(response);
-          setLoading(false);
-        }
-      } catch (error) {
-        console.log(error);
-        setLoading(false);
-      }
-    };
+    //     if (response.success === true) {
+    //       setTours(response.tours);
+    //       setLoading(false);
+    //     } else {
+    //       console.log(response);
+    //       setLoading(false);
+    //     }
+    //   } catch (error) {
+    //     console.log(error);
+    //     setLoading(false);
+    //   }
+    // };
 
-    fetchTours();
+    fetchToursForAdmin();
+
+    // fetchTours();
   }, []);
 
   if (loading) {
@@ -76,8 +87,8 @@ export default function FetchTourInAdmin() {
             <div className="flex gap-3">
               <div className="flex items-center">
                 <Image
-                  src={tour.tourImageUrl}
-                  alt={tour.tourName}
+                  src={tour.tourImageUrl!}
+                  alt={tour.tourName!}
                   width={600}
                   height={400}
                   className="rounded-lg"
@@ -92,8 +103,8 @@ export default function FetchTourInAdmin() {
                     </h3>
                     <p className="flex text-blue-600 font-bold items-center">
                       <CornerDownRight size={16} className=" mr-1" />
-                      {tour.tourCategory.standard.slotsAvailable +
-                        tour.tourCategory.premium.slotsAvailable}
+                      {tour.tourCategory.standard.slotsAvailable! +
+                        tour.tourCategory.premium.slotsAvailable!}
                     </p>
                   </div>
                   <div>
@@ -116,7 +127,7 @@ export default function FetchTourInAdmin() {
                   </div>
                 </div>
                 <div>
-                  <h2>Created on {tour.createdAt}</h2>
+                  <h2>Updated on {tour.updatedAt}</h2>
                 </div>
                 <div className="space-y-2">
                   <div className="flex space-x-2">

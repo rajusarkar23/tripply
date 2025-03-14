@@ -154,7 +154,7 @@ export default function ToursBySlug() {
                           className="w-full font-bold"
                           color="primary"
                         >
-                          Book
+                          Book now
                         </Button>
                       </Form>
                     </div>

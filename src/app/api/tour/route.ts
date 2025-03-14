@@ -104,13 +104,29 @@ export async function GET() {
   }
 
   try {
+    // check if id exist in the db
+    const checkId = await db
+    .select({ id: admin.id })
+    .from(admin)
+    .where(eq(admin.id, idFromCookie));
+
+  if (checkId.length === 0) {
+    (await cookies()).delete("session");
+    return NextResponse.json({
+      success: false,
+      message: "Invalid session, login again",
+    });
+  }
+
     const getTours = await db
       .select({
         id: tour.id,
         tourName: tour.tourName,
+        tourSlug: tour.slug,
+        tourDescription: tour.description,
+        tourOverview: tour.tourOverView,
         tourImageUrl: tour.tourPrimaryImage,
         tourCategory: tour.tourCategory,
-        createdAt: tour.createdAt,
         updatedAt: tour.updatedAt,
       })
       .from(tour)
