@@ -49,6 +49,7 @@ const useTourStore = create(
         try {
           const res = await fetch("/api/client/tours");
           const response = await res.json();
+          
           if (response.success) {
             set({ isLoading: false, tours: response.tours });
           } else {

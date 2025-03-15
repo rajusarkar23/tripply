@@ -151,40 +151,4 @@ export async function GET() {
     });
   }
 }
-// delete one specific entry, TODO: move this func to by-id folder
-export async function DELETE(req: NextRequest) {
-  const params = req.nextUrl.searchParams;
-  const id = params.get("id");
 
-  if (!id || isNaN(Number(id))) {
-    return NextResponse.json({
-      success: false,
-      message: "The id is not valid or undefined",
-    });
-  }
-
-  try {
-    const deleteTour = await db
-      .delete(tour)
-      .where(eq(tour.id, Number(id)))
-      .returning();
-
-    if (deleteTour.length === 0) {
-      return NextResponse.json({
-        success: false,
-        message: "Unable to find tour with the provided id",
-      });
-    }
-
-    return NextResponse.json({
-      success: true,
-      message: "Deleted successfully.",
-    });
-  } catch (error) {
-    console.log(error);
-    return NextResponse.json({
-      success: false,
-      message: "Something went wrong please try again..",
-    });
-  }
-}

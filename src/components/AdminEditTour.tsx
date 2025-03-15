@@ -3,7 +3,7 @@
 import { Button } from "@heroui/button";
 import { Form } from "@heroui/form";
 import { Input } from "@heroui/input";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import RichTextEditor from "./RichTextEditor";
 import { useParams, useRouter } from "next/navigation";
 import { Spinner } from "@heroui/spinner";
@@ -34,24 +34,11 @@ interface Tour {
 }
 
 export default function AdmineditTour() {
-    // replace this
-  const [content, setContent] = useState("");
-  // with this
-  const [editedDescription, setEditedDescription] = useState("")
-  // replace this
-  const [standardPackageDescription, setStandarPackageDescription] =
+  const [editedDescription, setEditedDescription] = useState("");
+  const [editedStandarPackageDescription, setEditedStandardPackageDescription] =
     useState("");
-  // with this
-  const [editedStandarPackageDescription, setEditedPackageDescription] =
-    useState("");
-  // replace this
-  const [premiumPackageDescription, setPremiumPackageDescription] =
-    useState("");
-  // with this
   const [editedPremiumpackageDescription, setEditedPremiumPackagesDescription] =
     useState("");
-  const [error, setError] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
   // add tour states
@@ -64,16 +51,12 @@ export default function AdmineditTour() {
   const [uploadErrorMessage, setUploadErrorMessage] = useState("");
   const [isUploading, setIsUploading] = useState(false);
   const [isUploaded, setIsUploaded] = useState(false);
-  const [isFileNotAvailable, setIsFileNotAvailable] = useState(false);
 
   const router = useRouter();
 
   const slug = useParams().tourSlug;
-  //   console.log(slug);
 
   const adminEditTour: Tour[] = [];
-
-  console.log(adminEditTour);
 
   const { tours } = useAdminTourStore() as { tours: Tour[] };
 
@@ -96,12 +79,6 @@ export default function AdmineditTour() {
   const onsubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (!isUploaded) {
-      setIsFileNotAvailable(true);
-      return;
-    }
-
-    setError(false);
     const data = Object.fromEntries(new FormData(e.currentTarget));
     if (typeof data.tourName !== "string") {
       return;
@@ -109,30 +86,25 @@ export default function AdmineditTour() {
     const slug = slugify(data.tourName);
     data.slug = slug;
 
-    if (content.length < 20) {
-      setError(true);
-      setErrorMessage("The description is not siffiecient");
-      return;
-    }
-
     try {
       setLoading(true);
 
-      const res = await fetch("/api/tour", {
-        method: "POST",
+      const res = await fetch("/api/tour/by-id", {
+        method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
           data,
-          content,
+          editedDescription,
           imageUrl,
-          standardPackageDescription,
-          premiumPackageDescription,
+          editedStandarPackageDescription,
+          editedPremiumpackageDescription,
         }),
       });
 
       const response = await res.json();
+      console.log(response);
 
       if (response.success === true) {
         return router.push("/admin/tours");
@@ -148,6 +120,30 @@ export default function AdmineditTour() {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (editedDescription.length === 0) {
+      const description = adminEditTour.map((tour) => tour.tourDescription);
+      setEditedDescription(description.toString());
+    }
+    if (editedStandarPackageDescription.length === 0) {
+      const standardDescription = adminEditTour.map(
+        (tour) => tour.tourCategory.standard.description
+      );
+      setEditedStandardPackageDescription(standardDescription.toString());
+    }
+    if (editedPremiumpackageDescription.length === 0) {
+      const premiumDescription = adminEditTour.map(
+        (tour) => tour.tourCategory.premium.description
+      );
+      setEditedPremiumPackagesDescription(premiumDescription.toString());
+    }
+
+    if (imageUrl.length === 0) {
+      const imageUrl = adminEditTour.map((tour) => tour.tourImageUrl);
+      setImageUrl(imageUrl.toString());
+    }
+  }, [onsubmit]);
 
   // file uplaod
   const handleFileUpload = async (e: ChangeEvent<HTMLInputElement>) => {
@@ -242,11 +238,6 @@ export default function AdmineditTour() {
                       {uploadErrorMessage}
                     </p>
                   )}
-                  {isFileNotAvailable && (
-                    <p className="text-sm font-bold text-red-600">
-                      Please upload a image.
-                    </p>
-                  )}
                 </div>
                 <Input id="file" type="file" onChange={handleFileUpload} />
               </div>
@@ -321,12 +312,9 @@ export default function AdmineditTour() {
                     <label className="font-semibold">
                       Standar package description:
                     </label>
-                    {error && (
-                      <p className="text-sm text-red-500">{errorMessage}</p>
-                    )}
                     <RichTextEditor
                       content={editTour.tourCategory.standard.description!}
-                      setContent={setEditedPackageDescription}
+                      setContent={setEditedStandardPackageDescription}
                     />
                   </div>
                 </div>
@@ -383,9 +371,7 @@ export default function AdmineditTour() {
                     <label className="font-semibold">
                       Premium package description:
                     </label>
-                    {error && (
-                      <p className="text-sm text-red-500">{errorMessage}</p>
-                    )}
+
                     <RichTextEditor
                       content={editTour.tourCategory.premium.description!}
                       setContent={setEditedPremiumPackagesDescription}
@@ -398,10 +384,28 @@ export default function AdmineditTour() {
                 <label className="font-semibold text-green-700">
                   Detailed description:
                 </label>
-                {error && (
-                  <p className="text-sm text-red-500">{errorMessage}</p>
-                )}
-                <RichTextEditor content={editTour.tourDescription!} setContent={setEditedDescription} />
+                <RichTextEditor
+                  content={editTour.tourDescription!}
+                  setContent={setEditedDescription}
+                />
+              </div>
+              {/*invisible fields */}
+              <div className="hidden">
+                <Input
+                  isRequired
+                  name="standardSlotsBooked"
+                  defaultValue={editTour.tourCategory.standard.slotsBooked!.toString()}
+                />
+                <Input
+                  isRequired
+                  name="premiumSlotsBooked"
+                  defaultValue={editTour.tourCategory.premium.slotsBooked!.toString()}
+                />
+                <Input
+                  isRequired
+                  name="tourId"
+                  defaultValue={editTour.id!.toString()}
+                />
               </div>
               <div className="text-sm font-bold text-red-600">
                 {isAddError && <p>{addErrorMessage}</p>}
