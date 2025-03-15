@@ -1,10 +1,20 @@
 "use client";
 import useAdminTourStore from "@/store/tour-store/adminTourStore";
-import { Button, Card, Spinner } from "@heroui/react";
+import {
+  Button,
+  Card,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  Spinner,
+  useDisclosure,
+} from "@heroui/react";
 import { CornerDownRight } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 interface Category {
   title: string | null;
@@ -29,15 +39,22 @@ interface Tour {
   };
 }
 
+interface DeleteTOur {
+  title: string;
+  imageUrl: string;
+}
+
 export default function FetchTourInAdmin() {
   const router = useRouter();
+  const [deleteTour, setDeleteTour] = useState<DeleteTOur | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const { fetchToursForAdmin, tours } = useAdminTourStore() as {
     fetchToursForAdmin: () => void;
     tours: Tour[];
   };
 
-  const {isLoading} = useAdminTourStore()
+  const { isLoading } = useAdminTourStore();
 
   useEffect(() => {
     fetchToursForAdmin();
@@ -51,13 +68,12 @@ export default function FetchTourInAdmin() {
     );
   }
 
-
   return (
     <div>
       <h2 className="text-5xl text-center py-3 font-bold">All tours.</h2>
       <div className="grid grid-cols-2 gap-3 mx-auto max-w-7xl w-full py-3">
-        {tours.map((tour) => (
-          <Card className="p-4 hover:bg-gray-100" key={tour.id}>
+        {tours.map((tour, index) => (
+          <Card className="p-4 hover:bg-gray-100" key={index}>
             <div className="flex gap-3">
               <div className="flex items-center">
                 <Image
@@ -105,10 +121,99 @@ export default function FetchTourInAdmin() {
                 </div>
                 <div className="space-y-2">
                   <div className="flex space-x-2">
-                    <Button color="danger" className="font-bold w-full">
+                    <Button
+                      onPress={() => {
+                        setDeleteTour({
+                          imageUrl: tour.tourImageUrl!,
+                          title: tour.tourName!,
+                        });
+                      }}
+                      color="danger"
+                    >
                       Delete
                     </Button>
-                    <Button color="primary" className="font-bold w-full" onPress={() => router.push(`/admin/edit/${tour.tourSlug}`)}>
+                    <Modal
+                      isOpen={!!deleteTour}
+                      onOpenChange={() => setDeleteTour(null)}
+                      size="xl"
+                    >
+                      <ModalContent>
+                        {(onClose) => (
+                          <>
+                            <ModalHeader className="flex flex-col gap-1 text-red-600 text-center">
+                              Do you want to delete this tour?
+                            </ModalHeader>
+                            <ModalBody className="flex justify-center items-center">
+                              <p className="text-xl font-bold text-gray-600">
+                                {deleteTour!.title}
+                              </p>
+                              <Image
+                                src={deleteTour!.imageUrl}
+                                alt={deleteTour!.title}
+                                width={400}
+                                height={400}
+                                className="rounded-lg"
+                              />
+                            </ModalBody>
+                            <ModalFooter>
+                              <Button
+                                color="primary"
+                                onPress={onClose}
+                                className="font-bold"
+                              >
+                                Close
+                              </Button>
+                              <div>
+                                {isDeleting ? (
+                                  <Button isDisabled>
+                                    <Spinner />
+                                  </Button>
+                                ) : (
+                                  <Button
+                                    color="danger"
+                                    variant="ghost"
+                                    onPress={async () => {
+                                      try {
+                                        setIsDeleting(true)
+                                        const res = await fetch(
+                                          "/api/tour/by-id",
+                                          {
+                                            method: "DELETE",
+                                            headers: {
+                                              "Content-Type":
+                                                "application/json",
+                                            },
+                                            body: JSON.stringify(tour.id),
+                                          }
+                                        );
+                                        const response = await res.json();
+                                        if (response.success === true) {
+                                          tours.splice(index, 1);
+                                          router.refresh();
+                                          setDeleteTour(null);
+                                          setIsDeleting(false)
+                                        }
+                                      } catch (error) {
+                                        console.log(error);
+                                      }
+                                    }}
+                                  >
+                                    Delete
+                                  </Button>
+                                )}
+                              </div>
+                            </ModalFooter>
+                          </>
+                        )}
+                      </ModalContent>
+                    </Modal>
+                    <Button
+                      color="primary"
+                      className="font-bold w-full"
+                      onPress={() =>
+                        router.push(`/admin/edit/${tour.tourSlug}`)
+                      }
+                    >
                       Edit
                     </Button>
                   </div>

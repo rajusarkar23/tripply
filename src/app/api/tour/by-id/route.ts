@@ -42,8 +42,7 @@ export async function GET(req: NextRequest) {
 
 // delete one specific entry, TODO: move this func to by-id folder
 export async function DELETE(req: NextRequest) {
-  const params = req.nextUrl.searchParams;
-  const id = params.get("id");
+  const id = await req.json()
 
   if (!id || isNaN(Number(id))) {
     return NextResponse.json({
