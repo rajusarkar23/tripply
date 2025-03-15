@@ -1,6 +1,6 @@
 "use client";
 import useAdminTourStore from "@/store/tour-store/adminTourStore";
-import { Button, Card } from "@heroui/react";
+import { Button, Card, Spinner } from "@heroui/react";
 import { CornerDownRight } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -37,9 +37,19 @@ export default function FetchTourInAdmin() {
     tours: Tour[];
   };
 
+  const {isLoading} = useAdminTourStore()
+
   useEffect(() => {
     fetchToursForAdmin();
   }, []);
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center min-h-[90vh]">
+        <Spinner />
+      </div>
+    );
+  }
 
 
   return (
