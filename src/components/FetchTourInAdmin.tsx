@@ -1,10 +1,10 @@
 "use client";
 import useAdminTourStore from "@/store/tour-store/adminTourStore";
-import { Button, Card, Spinner } from "@heroui/react";
+import { Button, Card } from "@heroui/react";
 import { CornerDownRight } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 interface Category {
   title: string | null;
@@ -30,9 +30,6 @@ interface Tour {
 }
 
 export default function FetchTourInAdmin() {
-  // const [tours, setTours] = useState<Tours[]>([]);
-  const [loading, setLoading] = useState(false);
-
   const router = useRouter();
 
   const { fetchToursForAdmin, tours } = useAdminTourStore() as {
@@ -40,43 +37,10 @@ export default function FetchTourInAdmin() {
     tours: Tour[];
   };
 
-  console.log(tours);
-
   useEffect(() => {
-    // setLoading(true);
-    // const fetchTours = async () => {
-    //   try {
-    //     const res = await fetch("/api/tour", {
-    //       method: "GET",
-    //     });
-
-    //     const response = await res.json();
-
-    //     if (response.success === true) {
-    //       setTours(response.tours);
-    //       setLoading(false);
-    //     } else {
-    //       console.log(response);
-    //       setLoading(false);
-    //     }
-    //   } catch (error) {
-    //     console.log(error);
-    //     setLoading(false);
-    //   }
-    // };
-
     fetchToursForAdmin();
-
-    // fetchTours();
   }, []);
 
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center min-h-[90vh]">
-        <Spinner />
-      </div>
-    );
-  }
 
   return (
     <div>
