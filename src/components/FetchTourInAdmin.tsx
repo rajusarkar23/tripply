@@ -221,7 +221,7 @@ export default function FetchTourInAdmin() {
                     className="w-full font-bold"
                     color="success"
                     onPress={() => {
-                      router.push(`/admin/tours/${tour.id}`);
+                      router.push(`/admin/tour/view/${tour.tourSlug}`);
                     }}
                   >
                     View

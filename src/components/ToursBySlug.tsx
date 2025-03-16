@@ -51,8 +51,6 @@ export default function ToursBySlug() {
   const [value, setValue] = useState<RangeValue<DateValue> | null>();
   const [personCount, setPersonCount] = useState<number>();
 
-  console.log(personCount);
-
   const formatter = useDateFormatter({ dateStyle: "long" });
 
   const slug = useParams().tourSlug;
