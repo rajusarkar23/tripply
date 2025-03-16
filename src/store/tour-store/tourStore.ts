@@ -54,6 +54,7 @@ const useTourStore = create(
             set({ isLoading: false, tours: response.tours });
           } else {
             console.log(response);
+            set({isLoading: false, tours: []})
           }
         } catch (error) {
           console.log(error);

@@ -58,6 +58,7 @@ const useAdminTourStore = create(
               isLoading: false,
               isError: true,
               errosMessage: response.message,
+              tours: []
             });
           }
         } catch (error) {

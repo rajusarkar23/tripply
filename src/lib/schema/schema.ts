@@ -80,3 +80,18 @@ export const ratings = pgTable("ratings", {
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").$onUpdate(() => new Date()),
 });
+
+export const bookings = pgTable("bookings", {
+  id: serial("id").primaryKey(),
+  bookingFor: integer("booking_for")
+    .notNull()
+    .references(() => tour.id),
+  bookingBy: integer("booking_by")
+    .notNull()
+    .references(() => tourists.id),
+  bookingDate: text("booking_date").notNull(),
+  totalTouristCount: integer("total_tourist_count").notNull(),
+  bookingCost: integer("booking_cost").notNull(),
+  isPaymentDone: boolean("is_payment_done").notNull().default(false),
+  isBookingSuccess: boolean("is_booking_success").notNull().default(false),
+});

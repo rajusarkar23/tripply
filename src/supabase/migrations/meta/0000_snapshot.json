@@ -1,5 +1,5 @@
 {
-  "id": "c19ddcca-b363-4763-9dc0-c61352f86375",
+  "id": "c934af1b-ada4-48ba-bc6f-f743094677a4",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -61,6 +61,96 @@
       },
       "indexes": {},
       "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.bookings": {
+      "name": "bookings",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "booking_for": {
+          "name": "booking_for",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "booking_by": {
+          "name": "booking_by",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "booking_date": {
+          "name": "booking_date",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "total_tourist_count": {
+          "name": "total_tourist_count",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "booking_cost": {
+          "name": "booking_cost",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "is_payment_done": {
+          "name": "is_payment_done",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "is_booking_success": {
+          "name": "is_booking_success",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "bookings_booking_for_tour_id_fk": {
+          "name": "bookings_booking_for_tour_id_fk",
+          "tableFrom": "bookings",
+          "tableTo": "tour",
+          "columnsFrom": [
+            "booking_for"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "bookings_booking_by_tourists_id_fk": {
+          "name": "bookings_booking_by_tourists_id_fk",
+          "tableFrom": "bookings",
+          "tableTo": "tourists",
+          "columnsFrom": [
+            "booking_by"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "policies": {},

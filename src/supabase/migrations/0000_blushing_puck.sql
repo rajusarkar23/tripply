@@ -9,6 +9,17 @@ CREATE TABLE "admin" (
 	"updated_at" timestamp NOT NULL
 );
 --> statement-breakpoint
+CREATE TABLE "bookings" (
+	"id" serial PRIMARY KEY NOT NULL,
+	"booking_for" integer NOT NULL,
+	"booking_by" integer NOT NULL,
+	"booking_date" text NOT NULL,
+	"total_tourist_count" integer NOT NULL,
+	"booking_cost" integer NOT NULL,
+	"is_payment_done" boolean DEFAULT false NOT NULL,
+	"is_booking_success" boolean DEFAULT false NOT NULL
+);
+--> statement-breakpoint
 CREATE TABLE "ratings" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"rating" integer DEFAULT 0 NOT NULL,
@@ -44,6 +55,8 @@ CREATE TABLE "tourists" (
 	"updated_at" timestamp NOT NULL
 );
 --> statement-breakpoint
+ALTER TABLE "bookings" ADD CONSTRAINT "bookings_booking_for_tour_id_fk" FOREIGN KEY ("booking_for") REFERENCES "public"."tour"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "bookings" ADD CONSTRAINT "bookings_booking_by_tourists_id_fk" FOREIGN KEY ("booking_by") REFERENCES "public"."tourists"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "ratings" ADD CONSTRAINT "ratings_rating_for_tour_id_fk" FOREIGN KEY ("rating_for") REFERENCES "public"."tour"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "ratings" ADD CONSTRAINT "ratings_rating_user_id_tourists_id_fk" FOREIGN KEY ("rating_user_id") REFERENCES "public"."tourists"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "tour" ADD CONSTRAINT "tour_created_by_admin_id_fk" FOREIGN KEY ("created_by") REFERENCES "public"."admin"("id") ON DELETE no action ON UPDATE no action;
