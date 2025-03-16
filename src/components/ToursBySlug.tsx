@@ -6,7 +6,6 @@ import {
   CardBody,
   DateRangePicker,
   Form,
-  Input,
   NumberInput,
   RangeValue,
   Tab,
