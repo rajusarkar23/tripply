@@ -33,6 +33,7 @@ interface Rating {
 }
 
 interface Tour {
+  id: number | null
   name: string | null;
   image: string | null;
   description: string | null;
@@ -47,15 +48,19 @@ interface Tour {
 
 export default function ToursBySlug() {
   const [date, setDate] = useState<RangeValue<DateValue> | null>();
-  const [personCount, setPersonCount] = useState<number>(1);
+  const [personCount, setPersonCount] = useState<number>(0);
   const [isPersonCountError, setIsPersonCountError] = useState(false);
 
   const [selectedTab, setSelectedtab] = useState<string>("standard");
 
-  // 
+  // price
   const [price, setPrice] = useState<number>(0)
-  console.log(price);
+  // tourid
+  const [tourId, setTourId] = useState<number>(0)
   
+  console.log(tourId);
+  
+
   const formatter = useDateFormatter({ dateStyle: "long" });
   const slug = useParams().tourSlug;
   const { tours } = useTourStore() as { tours: Tour[] };
@@ -69,6 +74,8 @@ export default function ToursBySlug() {
 
   const standardPrice = tourSlug.map((tour) => tour.tourCategory.standard.price).toString()
 
+  const id = tourSlug.map((tour) => tour.id).toString()
+
   useEffect(() => {
     if (personCount < 1) {
       setIsPersonCountError(true);
@@ -78,6 +85,9 @@ export default function ToursBySlug() {
 
     if (selectedTab === "standard") {
       setPrice(Number(standardPrice) * personCount)
+    }
+    if (tourId === 0) {
+      setTourId(Number(id))
     }
   }, [personCount]);
 
@@ -152,7 +162,7 @@ export default function ToursBySlug() {
                               headers: {
                                 "Content-Type": "application/json",
                               },
-                              body: JSON.stringify({ date, personCount, category:selectedTab, price }),
+                              body: JSON.stringify({ date, personCount, category:selectedTab, price, tourId }),
                             });
 
                             console.log(await res.json());
@@ -198,8 +208,8 @@ export default function ToursBySlug() {
                             </p>
                           )}
                           {isPersonCountError && (
-                            <p className="font-semibold text-red-600">
-                              This is not a valid person count.
+                            <p className="font-semibold text-green-600 text-sm">
+                              Person count should be greater than 0(Zero).
                             </p>
                           )}
                         </div>

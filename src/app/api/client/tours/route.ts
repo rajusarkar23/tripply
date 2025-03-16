@@ -8,6 +8,7 @@ export async function GET() {
     // try to get all tours
     const getAllTours = await db
       .select({
+        id: tour.id,
         name: tour.tourName,
         image: tour.tourPrimaryImage,
         overview: tour.tourOverView,

@@ -17,6 +17,7 @@ interface Rating {
 }
 
 interface Tour {
+  id: number | null;
   name: string | null;
   image: string | null;
   description: string | null;
