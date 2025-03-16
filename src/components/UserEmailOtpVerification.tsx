@@ -16,7 +16,7 @@ export default function UserEmailOtpVerification() {
     try {
       setIsLoading(true);
       setIsError(false);
-      const res = await fetch("/api/authentication/email-otp-verify", {
+      const res = await fetch("/api/authentication/user-email-otp-verify", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

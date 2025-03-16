@@ -29,7 +29,7 @@ export default function UserSignin() {
     try {
       setIsLoading(true);
       setIsError(false);
-      const res = await fetch("/api/authentication/admin/signin", {
+      const res = await fetch("/api/authentication/user-signin", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

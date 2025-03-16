@@ -41,7 +41,7 @@ export default function UserSignup() {
     try {
       setIsLoading(true);
       setIsError(false);
-      const res = await fetch("/api/authentication/admin/signup", {
+      const res = await fetch("/api/authentication/user-signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

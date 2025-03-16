@@ -1,8 +1,11 @@
+import UserEmailOtpVerification from '@/components/UserEmailOtpVerification'
 import React from 'react'
 
 const EmaillVerify = () => {
   return (
-    <div>EmaillVerify</div>
+    <div>
+      <UserEmailOtpVerification />
+    </div>
   )
 }
 
