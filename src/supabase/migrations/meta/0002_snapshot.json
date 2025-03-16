@@ -1,0 +1,425 @@
+{
+  "id": "fa3d96dd-39d9-45b7-8c2e-98ffaf11c908",
+  "prevId": "3d55f6fb-e8f4-4f3c-acf9-33a060b4695c",
+  "version": "7",
+  "dialect": "postgresql",
+  "tables": {
+    "public.admin": {
+      "name": "admin",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "email": {
+          "name": "email",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "password": {
+          "name": "password",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "verification_otp": {
+          "name": "verification_otp",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "is_verfied": {
+          "name": "is_verfied",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.bookings": {
+      "name": "bookings",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "booking_for": {
+          "name": "booking_for",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "booking_by": {
+          "name": "booking_by",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "booking_category": {
+          "name": "booking_category",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "booking_date_start": {
+          "name": "booking_date_start",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "booking_date_end": {
+          "name": "booking_date_end",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "total_tourist_count": {
+          "name": "total_tourist_count",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "booking_cost": {
+          "name": "booking_cost",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "is_payment_done": {
+          "name": "is_payment_done",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "is_booking_success": {
+          "name": "is_booking_success",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "bookings_booking_for_tour_id_fk": {
+          "name": "bookings_booking_for_tour_id_fk",
+          "tableFrom": "bookings",
+          "tableTo": "tour",
+          "columnsFrom": [
+            "booking_for"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "bookings_booking_by_tourists_id_fk": {
+          "name": "bookings_booking_by_tourists_id_fk",
+          "tableFrom": "bookings",
+          "tableTo": "tourists",
+          "columnsFrom": [
+            "booking_by"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.ratings": {
+      "name": "ratings",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "rating": {
+          "name": "rating",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        },
+        "rating_for": {
+          "name": "rating_for",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "rating_by": {
+          "name": "rating_by",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "rating_user_id": {
+          "name": "rating_user_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "rating_texts": {
+          "name": "rating_texts",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "ratings_rating_for_tour_id_fk": {
+          "name": "ratings_rating_for_tour_id_fk",
+          "tableFrom": "ratings",
+          "tableTo": "tour",
+          "columnsFrom": [
+            "rating_for"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "ratings_rating_user_id_tourists_id_fk": {
+          "name": "ratings_rating_user_id_tourists_id_fk",
+          "tableFrom": "ratings",
+          "tableTo": "tourists",
+          "columnsFrom": [
+            "rating_user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.tour": {
+      "name": "tour",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "tour_name": {
+          "name": "tour_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "tour_overview": {
+          "name": "tour_overview",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "slug": {
+          "name": "slug",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "description": {
+          "name": "description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "tour_category": {
+          "name": "tour_category",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "tour_primary_image": {
+          "name": "tour_primary_image",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_by": {
+          "name": "created_by",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "tour_created_by_admin_id_fk": {
+          "name": "tour_created_by_admin_id_fk",
+          "tableFrom": "tour",
+          "tableTo": "admin",
+          "columnsFrom": [
+            "created_by"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.tourists": {
+      "name": "tourists",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "email": {
+          "name": "email",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "password": {
+          "name": "password",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "verification_otp": {
+          "name": "verification_otp",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "is_verfied": {
+          "name": "is_verfied",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    }
+  },
+  "enums": {},
+  "schemas": {},
+  "sequences": {},
+  "roles": {},
+  "policies": {},
+  "views": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}

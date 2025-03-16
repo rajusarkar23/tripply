@@ -6,19 +6,17 @@ import {
   CardBody,
   DateRangePicker,
   Form,
+  Input,
   NumberInput,
   RangeValue,
   Tab,
   Tabs,
 } from "@heroui/react";
-import {
-  DateValue,
-  getLocalTimeZone,
-} from "@internationalized/date";
+import { DateValue, getLocalTimeZone } from "@internationalized/date";
 import { useDateFormatter } from "@react-aria/i18n";
 import Image from "next/image";
 import { useParams } from "next/navigation";
-import { useState } from "react";
+import { Key, useEffect, useState } from "react";
 interface Category {
   title: string | null;
   description: string | null;
@@ -48,15 +46,19 @@ interface Tour {
 }
 
 export default function ToursBySlug() {
-  const [value, setValue] = useState<RangeValue<DateValue> | null>();
-  const [personCount, setPersonCount] = useState<number>();
+  const [date, setDate] = useState<RangeValue<DateValue> | null>();
+  const [personCount, setPersonCount] = useState<number>(1);
+  const [isPersonCountError, setIsPersonCountError] = useState(false);
 
+  const [selectedTab, setSelectedtab] = useState<string>("standard");
+
+  // 
+  const [price, setPrice] = useState<number>(0)
+  console.log(price);
+  
   const formatter = useDateFormatter({ dateStyle: "long" });
-
   const slug = useParams().tourSlug;
-
   const { tours } = useTourStore() as { tours: Tour[] };
-
   const tourSlug: Tour[] = [];
 
   for (const tour of tours) {
@@ -64,6 +66,20 @@ export default function ToursBySlug() {
       tourSlug.push(tour);
     }
   }
+
+  const standardPrice = tourSlug.map((tour) => tour.tourCategory.standard.price).toString()
+
+  useEffect(() => {
+    if (personCount < 1) {
+      setIsPersonCountError(true);
+    } else {
+      setIsPersonCountError(false);
+    }
+
+    if (selectedTab === "standard") {
+      setPrice(Number(standardPrice) * personCount)
+    }
+  }, [personCount]);
 
   return (
     <div className="">
@@ -92,7 +108,20 @@ export default function ToursBySlug() {
           </div>
 
           <div className="flex w-full flex-col max-w-2xl mx-auto">
-            <Tabs aria-label="Packeges">
+            <Tabs
+              aria-label="Packeges"
+              selectedKey={selectedTab}
+              onSelectionChange={(key: Key) => {
+                if (typeof key === "string") {
+                  if (selectedTab === "standard") {
+                    setSelectedtab("premium");
+                  }
+                  if (selectedTab === "premium") {
+                    setSelectedtab("standard");
+                  }
+                }
+              }}
+            >
               <Tab key="standard" title="Standard">
                 <Card>
                   <CardBody>
@@ -104,6 +133,7 @@ export default function ToursBySlug() {
                       Starting from ${tourslug.tourCategory.standard.price} per
                       person
                     </p>
+
                     <div
                       dangerouslySetInnerHTML={{
                         __html: `${tourslug.tourCategory.standard.description}`,
@@ -113,20 +143,37 @@ export default function ToursBySlug() {
 
                     <div className="mt-4">
                       <h3 className="text-xl font-bold">Book yours </h3>
-                      <Form>
+                      <Form
+                        onSubmit={async (e) => {
+                          e.preventDefault();
+                          try {
+                            const res = await fetch("/api/booking", {
+                              method: "POST",
+                              headers: {
+                                "Content-Type": "application/json",
+                              },
+                              body: JSON.stringify({ date, personCount, category:selectedTab, price }),
+                            });
+
+                            console.log(await res.json());
+                          } catch (error) {
+                            console.log(error);
+                          }
+                        }}
+                      >
                         <div>
                           <DateRangePicker
                             label="Date range (controlled)"
-                            value={value}
-                            onChange={setValue}
+                            value={date}
+                            onChange={setDate}
                             isRequired
                           />
                           <p className="text-default-500 text-sm">
                             Selected date:
-                            {value
+                            {date
                               ? formatter.formatRange(
-                                  value.start.toDate(getLocalTimeZone()),
-                                  value.end.toDate(getLocalTimeZone())
+                                  date.start.toDate(getLocalTimeZone()),
+                                  date.end.toDate(getLocalTimeZone())
                                 )
                               : "--"}
                           </p>
@@ -137,15 +184,24 @@ export default function ToursBySlug() {
                             label="Person count"
                             placeholder="Total visitor"
                             value={personCount}
+                            isInvalid={isPersonCountError}
                             onValueChange={setPersonCount}
                           />
                         </div>
                         <div>
-                          <p className="text-sm font-bold text-gray-600">
-                            Your total cost will be{" "}
-                           <span className="text-blue-600"> {tourslug.tourCategory.standard.price! *
-                              personCount!}</span>
-                          </p>
+                          {price > 1 && (
+                            <p className="text-sm font-bold text-gray-600">
+                              Your total cost will be{" "}
+                              <span className="text-blue-600">
+                                {price}
+                              </span>
+                            </p>
+                          )}
+                          {isPersonCountError && (
+                            <p className="font-semibold text-red-600">
+                              This is not a valid person count.
+                            </p>
+                          )}
                         </div>
                         <Button
                           type="submit"
@@ -159,13 +215,12 @@ export default function ToursBySlug() {
                   </CardBody>
                 </Card>
               </Tab>
-              <Tab key="music" title="Music">
+              <Tab key="premium" title="Premium">
                 <Card>
                   <CardBody>
-                    Ut enim ad minim veniam, quis nostrud exercitation ullamco
-                    laboris nisi ut aliquip ex ea commodo consequat. Duis aute
-                    irure dolor in reprehenderit in voluptate velit esse cillum
-                    dolore eu fugiat nulla pariatur.
+                    <p className="font-bold">
+                      {tourslug.tourCategory.standard.title}
+                    </p>
                   </CardBody>
                 </Card>
               </Tab>

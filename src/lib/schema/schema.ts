@@ -89,7 +89,9 @@ export const bookings = pgTable("bookings", {
   bookingBy: integer("booking_by")
     .notNull()
     .references(() => tourists.id),
-  bookingDate: text("booking_date").notNull(),
+  bookingCategory: text("booking_category").notNull(),
+  bookingDateStart: text("booking_date_start").notNull(),
+  bookingDateEnd: text("booking_date_end").notNull(),
   totalTouristCount: integer("total_tourist_count").notNull(),
   bookingCost: integer("booking_cost").notNull(),
   isPaymentDone: boolean("is_payment_done").notNull().default(false),
