@@ -8,6 +8,7 @@ import {
   Form,
   NumberInput,
   RangeValue,
+  Spinner,
   Tab,
   Tabs,
 } from "@heroui/react";
@@ -251,13 +252,19 @@ export default function ToursBySlug() {
                             </p>
                           )}
                         </div>
-                        <Button
-                          type="submit"
-                          className="w-full font-bold"
-                          color="primary"
-                        >
-                          Book now
-                        </Button>
+                        {standardLoading ? (
+                          <Button isDisabled className="w-full font-bold">
+                            <Spinner />
+                          </Button>
+                        ) : (
+                          <Button
+                            type="submit"
+                            className="w-full font-bold"
+                            color="primary"
+                          >
+                            Book now
+                          </Button>
+                        )}
                       </Form>
                     </div>
                   </CardBody>
@@ -360,13 +367,19 @@ export default function ToursBySlug() {
                             </p>
                           )}
                         </div>
-                        <Button
-                          type="submit"
-                          className="w-full font-bold"
-                          color="primary"
-                        >
-                          Book now
-                        </Button>
+                        {premiumLoading ? (
+                          <Button isDisabled className="w-full font-bold">
+                            <Spinner />
+                          </Button>
+                        ) : (
+                          <Button
+                            type="submit"
+                            className="w-full font-bold"
+                            color="primary"
+                          >
+                            Book now
+                          </Button>
+                        )}
                       </Form>
                     </div>
                   </CardBody>
