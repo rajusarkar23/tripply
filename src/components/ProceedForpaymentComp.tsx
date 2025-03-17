@@ -1,14 +1,13 @@
 "use client";
 
 import {
-    Button,
+  Button,
   Card,
   CardBody,
   CardFooter,
   CardHeader,
   Divider,
-  Image,
-  Link,
+  Spinner,
 } from "@heroui/react";
 import { ArrowRight } from "lucide-react";
 import { useParams } from "next/navigation";
@@ -56,6 +55,14 @@ export default function ProccedForPaymentComp() {
     getBookignDetails();
   }, []);
 
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center min-h-[90vh]">
+        <Spinner />
+      </div>
+    );
+  }
+
   return (
     <div className=" flex justify-center items-center min-h-[90vh]">
       {tour.map((items, index) => (
@@ -97,7 +104,9 @@ export default function ProccedForPaymentComp() {
             </p>
 
             <div className="w-full">
-                <Button className="w-full font-bold" color="primary">Go for checkout <ArrowRight/></Button>
+              <Button className="w-full font-bold" color="primary">
+                Go for checkout <ArrowRight />
+              </Button>
             </div>
           </CardFooter>
         </Card>
