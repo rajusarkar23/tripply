@@ -93,16 +93,16 @@ export async function POST(req: NextRequest) {
         });
       }
 
-      const seats = getPremium.map((seat) => seat.avalableSlots)[0];
-      const seatsBooked = getPremium.map((booked) => booked.slotsBooked)[0];
-
       await db.update(tour).set({
-        tourCategory: {
-          premium: {
-            slotsBooked: Number(seatsBooked) + 1,
-            slotsAvailable: Number(seats) - 1,
-          },
-        },
+        tourCategory: sql` jsonb_set(
+        jsonb_set(
+        ${tour.tourCategory},
+        '{premium,slotsBooked}',
+        to_jsonb((${tour.tourCategory} -> 'premium' ->> 'slotsBooked')::int + 1)
+        ),
+        '{premium, slotsAvailable}',
+        to_jsonb((${tour.tourCategory} -> 'premium' ->> 'slotsAvailable')::int - 1)
+        )`,
       });
     }
   } catch (error) {

@@ -32,7 +32,7 @@ interface Rating {
 }
 
 interface Tour {
-  id: number | null
+  id: number | null;
   name: string | null;
   image: string | null;
   description: string | null;
@@ -52,13 +52,18 @@ export default function ToursBySlug() {
 
   const [selectedTab, setSelectedtab] = useState<string>("standard");
 
+  // for premiun
+  const [premiumDate, setPremiumDate] =
+    useState<RangeValue<DateValue> | null>();
+  const [premiumPersonCount, setPremiumPersonCount] = useState<number>(0);
+  const [isPremiumPersonCountError, setIsPremiumPersonCountError] =
+    useState(false);
+  const [premiumPrices, setPremiumPrices] = useState<number>(0);
+
   // price
-  const [price, setPrice] = useState<number>(0)
+  const [price, setPrice] = useState<number>(0);
   // tourid
-  const [tourId, setTourId] = useState<number>(0)
-  
-  console.log(tourId);
-  
+  const [tourId, setTourId] = useState<number>(0);
 
   const formatter = useDateFormatter({ dateStyle: "long" });
   const slug = useParams().tourSlug;
@@ -71,9 +76,12 @@ export default function ToursBySlug() {
     }
   }
 
-  const standardPrice = tourSlug.map((tour) => tour.tourCategory.standard.price).toString()
+  const standardPrice = tourSlug
+    .map((tour) => tour.tourCategory.standard.price)
+    .toString();
+  const premiumPrice = tourSlug.map((tour) => tour.tourCategory.premium.price);
 
-  const id = tourSlug.map((tour) => tour.id).toString()
+  const id = tourSlug.map((tour) => tour.id).toString();
 
   useEffect(() => {
     if (personCount < 1) {
@@ -82,13 +90,22 @@ export default function ToursBySlug() {
       setIsPersonCountError(false);
     }
 
+    if (premiumPersonCount < 1) {
+      setIsPremiumPersonCountError(true);
+    } else {
+      setIsPremiumPersonCountError(false);
+    }
+
     if (selectedTab === "standard") {
-      setPrice(Number(standardPrice) * personCount)
+      setPrice(Number(standardPrice) * personCount);
+    }
+    if (selectedTab === "premium") {
+      setPremiumPrices(Number(premiumPrice) * premiumPersonCount);
     }
     if (tourId === 0) {
-      setTourId(Number(id))
+      setTourId(Number(id));
     }
-  }, [personCount]);
+  }, [personCount, premiumPersonCount]);
 
   return (
     <div className="">
@@ -161,7 +178,13 @@ export default function ToursBySlug() {
                               headers: {
                                 "Content-Type": "application/json",
                               },
-                              body: JSON.stringify({ date, personCount, category:selectedTab, price, tourId }),
+                              body: JSON.stringify({
+                                date,
+                                personCount,
+                                category: selectedTab,
+                                price,
+                                tourId,
+                              }),
                             });
 
                             console.log(await res.json());
@@ -201,9 +224,7 @@ export default function ToursBySlug() {
                           {price > 1 && (
                             <p className="text-sm font-bold text-gray-600">
                               Your total cost will be{" "}
-                              <span className="text-blue-600">
-                                {price}
-                              </span>
+                              <span className="text-blue-600">{price}</span>
                             </p>
                           )}
                           {isPersonCountError && (
@@ -228,8 +249,96 @@ export default function ToursBySlug() {
                 <Card>
                   <CardBody>
                     <p className="font-bold">
-                      {tourslug.tourCategory.standard.title}
+                      {tourslug.tourCategory.premium.title}
                     </p>
+                    <p className="text-sm font-semibold text-gray-600">
+                      {" "}
+                      Starting from ${tourslug.tourCategory.premium.price} per
+                      person
+                    </p>
+
+                    <div
+                      dangerouslySetInnerHTML={{
+                        __html: `${tourslug.tourCategory.premium.description}`,
+                      }}
+                      className="mt-2"
+                    />
+
+                    <div className="mt-4">
+                      <h3 className="text-xl font-bold">Book yours </h3>
+                      <Form
+                        onSubmit={async (e) => {
+                          e.preventDefault();
+                          try {
+                            const res = await fetch("/api/booking", {
+                              method: "POST",
+                              headers: {
+                                "Content-Type": "application/json",
+                              },
+                              body: JSON.stringify({
+                                date: premiumDate,
+                                personCount: premiumPersonCount,
+                                category: selectedTab,
+                                price: premiumPrices,
+                                tourId,
+                              }),
+                            });
+
+                            console.log(await res.json());
+                          } catch (error) {
+                            console.log(error);
+                          }
+                        }}
+                      >
+                        <div>
+                          <DateRangePicker
+                            label="Date range (controlled)"
+                            value={date}
+                            onChange={setPremiumDate}
+                            isRequired
+                          />
+                          <p className="text-default-500 text-sm">
+                            Selected date:
+                            {premiumDate
+                              ? formatter.formatRange(
+                                  premiumDate.start.toDate(getLocalTimeZone()),
+                                  premiumDate.end.toDate(getLocalTimeZone())
+                                )
+                              : "--"}
+                          </p>
+                        </div>
+                        <div>
+                          <NumberInput
+                            isRequired
+                            label="Person count"
+                            placeholder="Total visitor"
+                            value={premiumPersonCount}
+                            isInvalid={isPremiumPersonCountError}
+                            onValueChange={setPremiumPersonCount}
+                          />
+                        </div>
+                        <div>
+                          {premiumPrices > 1 && (
+                            <p className="text-sm font-bold text-gray-600">
+                              Your total cost will be{" "}
+                              <span className="text-blue-600">{premiumPrices}</span>
+                            </p>
+                          )}
+                          {isPremiumPersonCountError && (
+                            <p className="font-semibold text-green-600 text-sm">
+                              Person count should be greater than 0(Zero).
+                            </p>
+                          )}
+                        </div>
+                        <Button
+                          type="submit"
+                          className="w-full font-bold"
+                          color="primary"
+                        >
+                          Book now
+                        </Button>
+                      </Form>
+                    </div>
                   </CardBody>
                 </Card>
               </Tab>
