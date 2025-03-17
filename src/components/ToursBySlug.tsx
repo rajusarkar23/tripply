@@ -14,7 +14,7 @@ import {
 import { DateValue, getLocalTimeZone } from "@internationalized/date";
 import { useDateFormatter } from "@react-aria/i18n";
 import Image from "next/image";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { Key, useEffect, useState } from "react";
 interface Category {
   title: string | null;
@@ -51,6 +51,13 @@ export default function ToursBySlug() {
   const [isPersonCountError, setIsPersonCountError] = useState(false);
 
   const [selectedTab, setSelectedtab] = useState<string>("standard");
+
+  // router
+  const router = useRouter();
+
+  // loading states for standard and for premium
+  const [standardLoading, setStandardLoading] = useState(false);
+  const [premiumLoading, setPremiumLoading] = useState(false);
 
   // for premiun
   const [premiumDate, setPremiumDate] =
@@ -171,6 +178,7 @@ export default function ToursBySlug() {
                       <h3 className="text-xl font-bold">Book yours </h3>
                       <Form
                         onSubmit={async (e) => {
+                          setStandardLoading(true);
                           e.preventDefault();
                           try {
                             const res = await fetch("/api/booking", {
@@ -187,9 +195,19 @@ export default function ToursBySlug() {
                               }),
                             });
 
-                            console.log(await res.json());
+                            const response = await res.json();
+                            if (response.success === true) {
+                              router.push(
+                                `/proceed-for-payment/${response.orderId}`
+                              );
+                              setStandardLoading(false);
+                            } else {
+                              console.log(response);
+                              setStandardLoading(false);
+                            }
                           } catch (error) {
                             console.log(error);
+                            setStandardLoading(false);
                           }
                         }}
                       >
@@ -268,6 +286,7 @@ export default function ToursBySlug() {
                       <h3 className="text-xl font-bold">Book yours </h3>
                       <Form
                         onSubmit={async (e) => {
+                          setPremiumLoading(true);
                           e.preventDefault();
                           try {
                             const res = await fetch("/api/booking", {
@@ -283,10 +302,19 @@ export default function ToursBySlug() {
                                 tourId,
                               }),
                             });
-
-                            console.log(await res.json());
+                            const response = await res.json();
+                            if (response.success === true) {
+                              router.push(
+                                `/proceed-for-payment/${response.orderId}`
+                              );
+                              setPremiumLoading(false);
+                            } else {
+                              console.log(response);
+                              setPremiumLoading(false);
+                            }
                           } catch (error) {
                             console.log(error);
+                            setPremiumLoading(false);
                           }
                         }}
                       >
@@ -321,7 +349,9 @@ export default function ToursBySlug() {
                           {premiumPrices > 1 && (
                             <p className="text-sm font-bold text-gray-600">
                               Your total cost will be{" "}
-                              <span className="text-blue-600">{premiumPrices}</span>
+                              <span className="text-blue-600">
+                                {premiumPrices}
+                              </span>
                             </p>
                           )}
                           {isPremiumPersonCountError && (
