@@ -141,3 +141,48 @@ export async function POST(req: NextRequest) {
     });
   }
 }
+
+// getPayment details by payment id
+
+export async function GET(req: NextRequest) {
+  const bookingId = Number(req.nextUrl.searchParams.get("id"));
+  if (typeof bookingId !== "number") {
+    return NextResponse.json({
+      success: false,
+      message: "Invalid booking Id.",
+    });
+  }
+
+  try {
+    const getBookignById = await db
+      .select({
+        category: bookings.bookingCategory,
+        startingDate: bookings.bookingDateStart,
+        endingDate: bookings.bookingDateEnd,
+        totalPerson: bookings.totalTouristCount,
+        amount: bookings.bookingCost,
+        tourName: tour.tourName,
+      })
+      .from(bookings)
+      .leftJoin(tour, eq(tour.id, bookings.bookingFor))
+      .where(eq(bookings.id, bookingId));
+    if (!Array.isArray(getBookignById)) {
+      return NextResponse.json({
+        success: false,
+        message: "Not able to retrive the bookign details.",
+      });
+    }
+
+    return NextResponse.json({
+      success: true,
+      message: "Booking details fetched successfully",
+      details: getBookignById,
+    });
+  } catch (error) {
+    console.log(error);
+    return NextResponse.json({
+      success: false,
+      message: "Something went wrong, please try again..",
+    });
+  }
+}
