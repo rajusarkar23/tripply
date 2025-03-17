@@ -9,17 +9,17 @@ import {
 } from "drizzle-orm/pg-core";
 
 type TourPlans = {
-  title: string;
-  price: number;
-  totalSlots: number;
-  description: string;
-  slotsBooked: number;
-  slotsAvailable: number;
+  title?: string;
+  price?: number;
+  totalSlots?: number;
+  description?: string;
+  slotsBooked?: number;
+  slotsAvailable?: number;
 };
 
 type Tours = {
-  standard: TourPlans;
-  premium: TourPlans;
+  standard?: TourPlans;
+  premium?: TourPlans;
 };
 
 export const tour = pgTable("tour", {
