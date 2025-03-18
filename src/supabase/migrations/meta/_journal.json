@@ -22,6 +22,20 @@
       "when": 1742120784676,
       "tag": "0002_serious_ultimatum",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1742281207643,
+      "tag": "0003_parched_cyclops",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1742281679511,
+      "tag": "0004_yielding_titania",
+      "breakpoints": true
     }
   ]
 }

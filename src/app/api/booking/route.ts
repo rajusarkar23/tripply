@@ -1,6 +1,6 @@
 import { db } from "@/db";
 import { userJwtSession } from "@/lib/auth/jwt-verify-for-user";
-import { bookings, tour } from "@/lib/schema/schema";
+import { bookings, tour, tourists } from "@/lib/schema/schema";
 import { eq, sql } from "drizzle-orm";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -162,9 +162,11 @@ export async function GET(req: NextRequest) {
         totalPerson: bookings.totalTouristCount,
         amount: bookings.bookingCost,
         tourName: tour.tourName,
+        touristEmail: tourists.email
       })
       .from(bookings)
       .leftJoin(tour, eq(tour.id, bookings.bookingFor))
+      .leftJoin(tourists, eq(tourists.id, bookings.bookingBy))
       .where(eq(bookings.id, bookingId));
     if (!Array.isArray(getBookignById)) {
       return NextResponse.json({
@@ -172,6 +174,9 @@ export async function GET(req: NextRequest) {
         message: "Not able to retrive the bookign details.",
       });
     }
+
+    console.log(getBookignById);
+    
 
     return NextResponse.json({
       success: true,

@@ -1,7 +1,6 @@
 "use client";
 
 import {
-  Button,
   Card,
   CardBody,
   CardFooter,
@@ -9,9 +8,9 @@ import {
   Divider,
   Spinner,
 } from "@heroui/react";
-import { ArrowRight } from "lucide-react";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import CheckoutButton from "./CheckoutButton";
 
 interface TourDetails {
   amount: number;
@@ -20,6 +19,7 @@ interface TourDetails {
   startingDate: string;
   totalPerson: number;
   tourName: string;
+  touristEmail: string;
 }
 
 export default function ProccedForPaymentComp() {
@@ -37,8 +37,6 @@ export default function ProccedForPaymentComp() {
       try {
         const res = await fetch(`/api/booking?id=${orderId}`);
         const response = await res.json();
-        console.log(response);
-
         if (response.success === true) {
           setTour(response.details);
           setLoading(false);
@@ -78,35 +76,45 @@ export default function ProccedForPaymentComp() {
           <CardBody>
             <p className="font-bold">
               Booking for-
-              <span className="text-blue-600">{items.tourName}</span>
+              <span className="text-blue-600 ml-1">{items.tourName}</span>
             </p>
           </CardBody>
           <Divider />
           <CardFooter className="flex flex-col items-start space-y-1    ">
             <p className="font-semibold">
               Booking start date-
-              <span className="text-blue-600">{items.startingDate}</span>
+              <span className="text-blue-600 ml-1">{items.startingDate}</span>
             </p>
             <p className="font-semibold">
               Booking end date-
-              <span className="text-blue-600">{items.endingDate}</span>
+              <span className="text-blue-600 ml-1">{items.endingDate}</span>
             </p>
             <p className="font-semibold">
               Total person-
-              <span className="text-blue-600">{items.totalPerson}</span>
+              <span className="text-blue-600 ml-1">{items.totalPerson}</span>
             </p>
             <p className="font-semibold">
               Booking category-
-              <span className="text-blue-600">{items.category}</span>
+              <span className="text-blue-600 ml-1">{items.category}</span>
             </p>
             <p className="font-semibold">
-              Amount- <span className="text-blue-600"> {items.amount}</span>
+              Email Id-
+              <span className="text-blue-600 ml-1">{items.touristEmail}</span>
+            </p>
+            <p className="font-semibold">
+              Amount-{" "}
+              <span className="text-blue-600 ml-1"> {items.amount}</span>
             </p>
 
             <div className="w-full">
-              <Button className="w-full font-bold" color="primary">
-                Go for checkout <ArrowRight />
-              </Button>
+              {orderId && (
+                <CheckoutButton
+                  email={items.touristEmail}
+                  bookingId={orderId?.toString()}
+                  price={items.amount.toString()}
+                  product={items.tourName}
+                />
+              )}
             </div>
           </CardFooter>
         </Card>
