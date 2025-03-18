@@ -36,6 +36,13 @@
       "when": 1742281679511,
       "tag": "0004_yielding_titania",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1742288005081,
+      "tag": "0005_opposite_warpath",
+      "breakpoints": true
     }
   ]
 }

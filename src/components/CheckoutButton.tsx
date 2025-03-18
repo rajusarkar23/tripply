@@ -20,7 +20,7 @@ export default function CheckoutButton({
   const handlePayment = async () => {
     try {
       setLoading(true);
-      const res = await fetch("/api/checkout", {
+      const res = await fetch("/api/checkout/process-payment", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -30,19 +30,19 @@ export default function CheckoutButton({
           product,
           email,
           bookingId,
-          successUrl: `${window.location.origin}/process-order`,
-          cancelUrl: `${window.location.origin}/cancel`,
+          successUrl: `${window.location.origin}/process-booking/${bookingId}`,
+          cancelUrl: `${window.location.origin}/cancel/${bookingId}`,
         }),
       });
 
-      const data = await res.json();
+      const response = await res.json();
 
-      console.log(data);
+      console.log(response);
 
-      if (data.url) {
-        window.location.href = data.url;
+      if (response.url) {
+        window.location.href = response.url;
       } else {
-        console.log("Failed to create session", data);
+        console.log("Failed to create session", response);
       }
       setLoading(false);
     } catch (error) {

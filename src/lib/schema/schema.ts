@@ -97,6 +97,7 @@ export const bookings = pgTable("bookings", {
   isPaymentDone: boolean("is_payment_done").notNull().default(false),
   isBookingSuccess: boolean("is_booking_success").notNull().default(false),
   paymentId: text("payment_id"),
+  paymentSessionId: text("payment_session_id"),
   createdAt: timestamp("created_at").notNull().defaultNow(),
   updatedAt: timestamp("updated_at").$onUpdate(() => new Date()),
 });
