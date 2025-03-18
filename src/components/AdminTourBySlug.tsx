@@ -28,8 +28,6 @@ interface Tour {
 }
 export default function AdminTourBySlug() {
   const slug = useParams().tourSlug;
-  console.log(slug);
-
   const { tours } = useAdminTourStore() as { tours: Tour[] };
 
   const myTour: Tour[] = [];
@@ -39,8 +37,6 @@ export default function AdminTourBySlug() {
       myTour.push(tour);
     }
   }
-
-  console.log(myTour);
 
   return (
     <div>

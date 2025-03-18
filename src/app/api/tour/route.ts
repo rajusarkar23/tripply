@@ -78,8 +78,6 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    console.log(addTour);
-
     return NextResponse.json({
       success: true,
       message: "New tour added.",

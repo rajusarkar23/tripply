@@ -89,9 +89,6 @@ export async function PUT(req: NextRequest) {
 
   const idFromCookie = await jwtSession();
 
-  console.log(editedStandarPackageDescription);
-  // return
-
   if (typeof idFromCookie !== "number") {
     return NextResponse.json({
       success: false,
@@ -100,9 +97,6 @@ export async function PUT(req: NextRequest) {
   }
 
   try {
-    console.log("ran");
-    console.log(data.tourId);
-
     const updateTour = await db
       .update(tour)
       .set({

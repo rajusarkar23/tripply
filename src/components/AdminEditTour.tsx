@@ -104,8 +104,6 @@ export default function AdmineditTour() {
       });
 
       const response = await res.json();
-      console.log(response);
-
       if (response.success === true) {
         return router.push("/admin/tours");
       } else {

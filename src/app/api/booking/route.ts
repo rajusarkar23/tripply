@@ -175,9 +175,6 @@ export async function GET(req: NextRequest) {
       });
     }
 
-    console.log(getBookignById);
-    
-
     return NextResponse.json({
       success: true,
       message: "Booking details fetched successfully",
