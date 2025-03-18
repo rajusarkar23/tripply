@@ -4,6 +4,7 @@ import { useState } from "react"
 import Link from "next/link"
 import { motion } from "motion/react"
 import { Menu, X, Globe } from "lucide-react"
+import TouristProfile from "./TouristProfile"
 
 export default function Navigation() {
   const [isOpen, setIsOpen] = useState(false)
@@ -38,6 +39,7 @@ export default function Navigation() {
             <button className="bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700 transition-colors">
               Book Now
             </button>
+            <TouristProfile />
           </nav>
 
           {/* Mobile Menu Button */}
