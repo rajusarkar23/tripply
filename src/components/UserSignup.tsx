@@ -8,6 +8,8 @@ import { OctagonX } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
+import UserGoogleAuth from "./UserGoogleAuthComp";
+import { Divider } from "@heroui/react";
 
 export default function UserSignup() {
   const [email, setEmail] = useState("");
@@ -70,12 +72,20 @@ export default function UserSignup() {
       className="max-w-md mx-auto w-full flex items-center justify-center min-h-[90vh]"
       onSubmit={onSubmit}
     >
-      <div className="border max-w-md mx-auto w-full px-6 py-10 rounded-lg shadow-xl space-y-10">
+      <div className="border max-w-md mx-auto w-full px-6 py-10 rounded-lg shadow-xl space-y-4">
+        <h2 className="text-center text-2xl font-bold">Signup</h2>
+        <p className="text-center font-semibold text-gray-600">
+          Please create your account below.
+        </p>
+        <div className="flex justify-center">
+          <UserGoogleAuth />
+        </div>
+        <div>
+          <p className="text-center font-semibold text-gray-600">OR</p>
+          <Divider />
+          <p className="text-center font-semibold text-gray-600">Continue with email and password</p>
+        </div>
         <div className="pb-6">
-          <h2 className="text-center text-2xl font-bold">Signup</h2>
-          <p className="text-center font-semibold text-gray-600">
-            Please create your account below.
-          </p>
           <div className="flex justify-center">
             {isError && (
               <p className="font-bold text-red-600 flex items-center">
@@ -85,33 +95,35 @@ export default function UserSignup() {
             )}
           </div>
         </div>
-        <Input
-          isRequired
-          errorMessage="Please enter a valid email"
-          label="Email"
-          labelPlacement="outside"
-          name="email"
-          placeholder="Enter your email"
-          type="email"
-          value={email}
-          onValueChange={setEmail}
-        />
-        <Input
-          errorMessage={() => (
-            <ul>
-              {errors.map((error, index) => (
-                <li key={index}>{error}</li>
-              ))}
-            </ul>
-          )}
-          isInvalid={errors.length > 0}
-          label="Password"
-          labelPlacement="outside"
-          placeholder="Please enter a password"
-          type="password"
-          value={password}
-          onValueChange={setPassword}
-        />
+        <div className="space-y-10">
+          <Input
+            isRequired
+            errorMessage="Please enter a valid email"
+            label="Email"
+            labelPlacement="outside"
+            name="email"
+            placeholder="Enter your email"
+            type="email"
+            value={email}
+            onValueChange={setEmail}
+          />
+          <Input
+            errorMessage={() => (
+              <ul>
+                {errors.map((error, index) => (
+                  <li key={index}>{error}</li>
+                ))}
+              </ul>
+            )}
+            isInvalid={errors.length > 0}
+            label="Password"
+            labelPlacement="outside"
+            placeholder="Please enter a password"
+            type="password"
+            value={password}
+            onValueChange={setPassword}
+          />
+        </div>
 
         {isLoading ? (
           <Button isDisabled className="w-full">

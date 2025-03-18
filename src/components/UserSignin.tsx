@@ -8,6 +8,8 @@ import { OctagonX } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
+import UserGoogleAuth from "./UserGoogleAuthComp";
+import { Divider } from "@heroui/react";
 
 export default function UserSignin() {
   const [email, setEmail] = useState("");
@@ -60,10 +62,22 @@ export default function UserSignin() {
     >
       <div className="border max-w-md mx-auto w-full px-6 py-10 rounded-lg shadow-xl space-y-10">
         <div className="pb-6">
-          <h2 className="text-center text-2xl font-bold">Signin</h2>
+         <div className="space-y-2">
+         <h2 className="text-center text-2xl font-bold">Signin</h2>
           <p className="text-center font-semibold text-gray-600">
-            Please signin to continue.
+            Please to continue.
           </p>
+          <div className="flex justify-center">
+            <UserGoogleAuth />
+          </div>
+         </div>
+          <div>
+            <p className="text-center font-semibold text-gray-600">OR</p>
+            <Divider />
+            <p className="text-center font-semibold text-gray-600">
+              Continue with email and password
+            </p>
+          </div>
           <div className="flex justify-center">
             {isError && (
               <p className="font-bold text-red-600 flex items-center">
