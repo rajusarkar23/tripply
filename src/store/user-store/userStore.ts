@@ -7,7 +7,7 @@ interface Profile {
 }
 
 interface Booking {
-  tournName: string | null;
+  tourName: string | null;
   tourImageUrl: string | null;
   startingDate: string | null;
   endingDate: string | null;
@@ -18,7 +18,7 @@ interface UserState {
   isLoading: boolean;
   isError: boolean;
   errorMessage: string | null;
-  profile: Profile[];
+  profile: Profile | [];
   bookings: Booking[];
   fetchUserDetails: () => Promise<void>;
 }
