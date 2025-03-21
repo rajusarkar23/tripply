@@ -1,5 +1,6 @@
 "use client";
 import useTourStore from "@/store/tour-store/tourStore";
+import { useUserStore } from "@/store/user-store/userStore";
 import {
   Button,
   Card,
@@ -55,6 +56,8 @@ export default function ToursBySlug() {
 
   // router
   const router = useRouter();
+  // user store, zustand
+  const { isUserLogedIn } = useUserStore() as { isUserLogedIn: boolean };
 
   // loading states for standard and for premium
   const [standardLoading, setStandardLoading] = useState(false);
@@ -181,6 +184,10 @@ export default function ToursBySlug() {
                         onSubmit={async (e) => {
                           setStandardLoading(true);
                           e.preventDefault();
+                          if (!isUserLogedIn) {
+                            router.replace("/authentication/signin");
+                          }
+
                           try {
                             const res = await fetch("/api/booking", {
                               method: "POST",

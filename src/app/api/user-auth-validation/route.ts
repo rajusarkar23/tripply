@@ -4,6 +4,14 @@ import { bookings, tour, tourists } from "@/lib/schema/schema";
 import { eq } from "drizzle-orm";
 import { NextResponse } from "next/server";
 
+type Booking = {
+  tourName: string | null;
+  tourImageUrl: string | null;
+  startingDate: string | null;
+  endingDate: string | null;
+  paid: number | null;
+}
+
 export async function GET() {
   const idFromCookie = await TouristAuthJwt();
 
@@ -23,6 +31,7 @@ export async function GET() {
         startingDate: bookings.bookingDateStart,
         endingDate: bookings.bookingDateEnd,
         paid: bookings.bookingCost,
+        isPaymentDone: bookings.isPaymentDone,
         tourName: tour.tourName,
         tourImageUrl: tour.tourPrimaryImage
       })
@@ -38,6 +47,24 @@ export async function GET() {
         })
     }
 
+
+
+    const bookingArr: Booking[]= []
+
+    for(const tourist of getTouristById) {
+      if (tourist.isPaymentDone === true) {
+        const newBookArray = {
+          tourName: tourist.tourName,
+          email: tourist.email,
+          tourImageUrl: tourist.tourImageUrl,
+          startingDate: tourist.startingDate,
+          endingDate: tourist.endingDate,
+          paid: tourist.paid
+        }
+        bookingArr.push(newBookArray)
+      }
+    }
+
     return NextResponse.json({
         success: true,
         message: "user details found",
@@ -45,7 +72,7 @@ export async function GET() {
             name: getTouristById[0].name,
             email: getTouristById[0].email
         },
-        bookingDetails: getTouristById.map((tourist) => ({startingDate: tourist.startingDate, endingDate: tourist.endingDate, paid: tourist.paid, tourName: tourist.tourName, tourImageUrl: tourist.tourImageUrl}))
+        bookingDetails: bookingArr
     })
   } catch (error) {
     console.log(error);
