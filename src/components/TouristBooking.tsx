@@ -2,7 +2,6 @@
 
 import { useUserStore } from "@/store/user-store/userStore";
 import {
-  Button,
   Card,
   CardBody,
   CardFooter,
@@ -10,7 +9,6 @@ import {
   Divider,
   Image,
 } from "@heroui/react";
-import Link from "next/link";
 import { useEffect } from "react";
 
 interface Profile {
