@@ -10,4 +10,15 @@ export function middleware(request: NextRequest) {
       new URL("/authentication/admin/signin", request.url)
     );
   }
+
+  if (
+    request.nextUrl.pathname.startsWith("/profile") &&
+    !request.cookies.get("tousession")
+  ) {
+    return NextResponse.rewrite(new URL("/authentication/signin", request.url));
+  }
+
+  if (request.nextUrl.pathname.startsWith("/bookings") && !request.cookies.get("tousession")) {
+    return NextResponse.rewrite(new URL("/authentication/signin", request.url))
+  }
 }

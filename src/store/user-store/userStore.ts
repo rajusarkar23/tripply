@@ -4,6 +4,7 @@ import { persist } from "zustand/middleware";
 interface Profile {
   name: string;
   email: string;
+
 }
 
 interface Booking {
@@ -17,6 +18,7 @@ interface Booking {
 interface UserState {
   isLoading: boolean;
   isError: boolean;
+  isUserLogedIn: boolean;
   errorMessage: string | null;
   profile: Profile | [];
   bookings: Booking[];
@@ -28,6 +30,7 @@ const useUserStore = create(
     (set) => ({
       isLoading: false,
       isError: false,
+      isUserLogedIn: false,
       errorMessage: null,
       bookings: [],
       profile: [],
@@ -41,6 +44,7 @@ const useUserStore = create(
             set({
               isLoading: false,
               isError: false,
+              isUserLogedIn: true,
               profile: response.userProfile,
               bookings: response.bookingDetails,
             });
@@ -48,6 +52,7 @@ const useUserStore = create(
             set({
               isLoading: false,
               isError: true,
+              isUserLogedIn: false,
               errorMessage: response.message,
             });
           }

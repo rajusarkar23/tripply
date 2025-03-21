@@ -1,11 +1,12 @@
 "use client";
 
 import { useUserStore } from "@/store/user-store/userStore";
-import { Avatar, Button, Divider } from "@heroui/react";
+import { Avatar, Button, Divider, Skeleton } from "@heroui/react";
 import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, LogIn } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 interface Profile {
   name: string;
@@ -21,17 +22,23 @@ interface Booking {
 }
 
 export default function TouristProfile() {
-  const { fetchUserDetails, profile } = useUserStore() as {
-    fetchUserDetails: () => void;
-    bookings: Booking[];
-    profile: Profile;
-    isLoading: boolean;
-  };
+  const router = useRouter();
+
+  const { fetchUserDetails, profile, isUserLogedIn, isLoading } =
+    useUserStore() as {
+      fetchUserDetails: () => void;
+      bookings: Booking[];
+      profile: Profile;
+      isLoading: boolean;
+      isUserLogedIn: boolean;
+    };
 
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    fetchUserDetails();
+    if (!isUserLogedIn) {
+      fetchUserDetails();
+    }
 
     function handleClickOutside(event: MouseEvent) {
       if (
@@ -47,6 +54,33 @@ export default function TouristProfile() {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+
+  if (isLoading && !isUserLogedIn) {
+    return (
+      <div className="max-w-[300px] w-full flex items-center gap-3">
+        <div>
+          <Skeleton className="flex rounded-full w-12 h-12" />
+        </div>
+      </div>
+    );
+  }
+
+  if (!isUserLogedIn) {
+    return (
+      <div>
+        <Button
+          size="md"
+          color="primary"
+          variant="solid"
+          className="rounded-full font-bold"
+          onPress={() => router.push("/authentication/signin")}
+        >
+          Signin <LogIn size={20} />
+        </Button>
+      </div>
+    );
+  }
+
   return (
     <div className="relative" ref={dropdownRef}>
       <Button
