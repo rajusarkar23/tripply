@@ -57,7 +57,7 @@ export async function POST(req: NextRequest) {
       `${process.env.USER_SESSION_JWT_SECRET}`
     );
     // assign jwt
-    (await cookies()).set("tousession", jwt_token, {
+    (await cookies()).set("_tripply_tou_session_", jwt_token, {
       maxAge: 30 * 24 * 60 * 60,
       httpOnly: true,
     });

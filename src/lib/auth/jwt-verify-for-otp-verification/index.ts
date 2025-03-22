@@ -2,7 +2,7 @@ import { cookies } from "next/headers";
 import jwt from "jsonwebtoken"
 
 export async function jwtVerifyOTPSession() {
-  const cookie = (await cookies()).get("vsession")?.value;
+  const cookie = (await cookies()).get("_tripply_v_session_")?.value;
 
   if (!cookie) {
     return "No cookie available"

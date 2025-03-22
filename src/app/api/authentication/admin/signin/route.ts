@@ -49,7 +49,7 @@ export async function POST(req: NextRequest) {
       `${process.env.SESSION_JWT_SECRET}`
     );
     // create jwt
-    (await cookies()).set("session", jwt_token, {
+    (await cookies()).set("_tripply_a_session_", jwt_token, {
       maxAge: 30 * 24 * 60 * 60,
       httpOnly: true,
     });

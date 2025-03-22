@@ -82,7 +82,7 @@ export async function POST(req: NextRequest) {
       `${process.env.OTP_VERIFY_SESSION_JWT_SECRET}`
     );
     // sign cookie
-    (await cookies()).set("vsession", jwt_token, {
+    (await cookies()).set("_tripply_v_session_", jwt_token, {
       maxAge: 30 * 24 * 60 * 60,
       httpOnly: true,
     });

@@ -48,7 +48,7 @@ export async function POST(req: NextRequest) {
       `${process.env.PAYMENT_SESSION_JWT_SECRET}`
     );
     // set cookie
-    (await cookies()).set("payment-session", jwt_token, {
+    (await cookies()).set("_tripply_payment_session", jwt_token, {
       maxAge: 10 * 60 * 100,
       expires: 10 * 60 * 100,
       httpOnly: true,

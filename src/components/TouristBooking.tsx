@@ -59,7 +59,7 @@ export default function TouristBooking() {
                 width={80}
               />
               <div className="flex flex-col">
-                <p className="text-md">{booking.tourName}</p>
+                <p className="text-lg font-semibold">{booking.tourName}</p>
                 <p className="text-small text-default-500">Booked by: {profile.name}</p>
               </div>
             </CardHeader>
