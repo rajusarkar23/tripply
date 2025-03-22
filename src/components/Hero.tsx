@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import { motion } from "motion/react";
-import { Calendar, MapPin, Users } from "lucide-react";
+import { MapPin } from "lucide-react";
 
 export default function Hero() {
   return (

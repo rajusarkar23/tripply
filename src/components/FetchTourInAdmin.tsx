@@ -59,7 +59,7 @@ export default function FetchTourInAdmin() {
     fetchToursForAdmin();
   }, []);
 
-  if (isLoading) {
+  if (isLoading && tours.length === 0) {
     return (
       <div className="flex justify-center items-center min-h-[90vh]">
         <Spinner />
