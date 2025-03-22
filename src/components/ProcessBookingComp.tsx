@@ -1,6 +1,6 @@
 "use client";
 
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { motion } from "motion/react";
 import { ArrowRight, BadgeX, CheckCircle } from "lucide-react";
@@ -11,6 +11,8 @@ export default function ProcessBookingComp() {
   const bookingId = useParams().bookingId;
   const [isBookingSuccess, setIsBookingSuccess] =  useState(false)
   const [isLoading, setIsLoading] = useState(false)
+
+  const router = useRouter()
 
   useEffect(() => {
     const getPaymentStatus = async () => {
@@ -96,7 +98,7 @@ export default function ProcessBookingComp() {
           transition={{ delay: 0.8 }}
           className="flex justify-center"
         >
-          <Button className="w-full font-bold" color="primary">
+          <Button className="w-full font-bold" color="primary" onPress={() => router.push("/bookings")}>
             Go to bookings <ArrowRight size={20} />
           </Button>
         </motion.div>
@@ -145,7 +147,7 @@ export default function ProcessBookingComp() {
             transition={{ delay: 0.8 }}
             className="flex justify-center"
           >
-            <Button className="w-full font-bold" color="primary">
+            <Button className="w-full font-bold" color="primary" onPress={() => router.push("/push")}>
               Go to bookings <ArrowRight size={20} />
             </Button>
           </motion.div>
