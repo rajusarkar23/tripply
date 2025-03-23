@@ -1,5 +1,5 @@
 "use client";
-import { Star } from "lucide-react";
+import { Loader, Star } from "lucide-react";
 import Image from "next/image";
 import { motion } from "motion/react";
 import { useEffect } from "react";
@@ -38,9 +38,10 @@ interface Tour {
 export default function PopularDestination() {
   const router = useRouter();
 
-  const { fetchTour, tours } = useTourStore() as {
+  const { fetchTour, tours, isLoading } = useTourStore() as {
     fetchTour: () => void;
     tours: Tour[];
+    isLoading: boolean;
   };
 
   // fetch tours
@@ -55,7 +56,10 @@ export default function PopularDestination() {
           animate={{ opacity: 1, y: 0 }}
           className="text-center mb-12"
         >
-          <h2 className="text-4xl font-bold mb-4">Popular Destinations</h2>
+          <h2 className="text-4xl font-bold mb-4 flex justify-center items-center">
+            Popular Destinations
+            {isLoading && <Loader className="animate-spinner-ease-spin mt-0.5 ml-1" />}
+          </h2>
           <p className="text-gray-600">
             Explore our most sought-after vacation spots
           </p>
@@ -86,7 +90,7 @@ export default function PopularDestination() {
                     </h3>
                     <p className="text-yellow-500 flex justify-end font-bold items-center">
                       Top Rated
-                      <Star size={18} className="ml-1"/>
+                      <Star size={18} className="ml-1" />
                     </p>
                   </div>
                   <h3 className="font-semibold text-gray-600">
