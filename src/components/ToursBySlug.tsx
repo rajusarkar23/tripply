@@ -122,6 +122,7 @@ export default function ToursBySlug() {
     <div className="">
       {tourSlug.map((tourslug) => (
         <div key={tourslug.slug}>
+          {/* start */}
           <div className="relative w-full h-96">
             <Image
               src={tourslug.image!}
@@ -130,269 +131,277 @@ export default function ToursBySlug() {
               className="object-cover"
             />
           </div>
-          <div className="max-w-2xl mx-auto flex flex-col justify-center py-4">
-            <h2 className="text-4xl font-bold">{tourslug.name}</h2>
-            <h4 className="font-semibold text-gray-600">{tourslug.overview}</h4>
 
-            <div
-              dangerouslySetInnerHTML={{
-                __html: `${tourslug.description}`.replace(
-                  /<p>\s*<\/p>/g,
-                  "<br>"
-                ),
-              }}
-            />
-          </div>
+          <div className="sm:flex justify-between mt-5 px-4">
+            {/* start */}
+            <div className="max-w-2xl mx-auto space-y-1">
+              <h2 className="text-4xl font-bold">{tourslug.name}</h2>
+              <h4 className="font-light text-3xl text-gray-900">
+                {tourslug.overview}
+              </h4>
 
-          <div className="flex w-full flex-col max-w-2xl mx-auto">
-            <Tabs
-              aria-label="Packeges"
-              selectedKey={selectedTab}
-              onSelectionChange={(key: Key) => {
-                if (typeof key === "string") {
-                  if (selectedTab === "standard") {
-                    setSelectedtab("premium");
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: `${tourslug.description}`.replace(
+                    /<p>\s*<\/p>/g,
+                    "<br>"
+                  ),
+                }}
+              />
+            </div>
+            {/* end */}
+            <div className="flex w-full flex-col max-w-2xl mx-auto sm:mt-0 mt-4">
+              <Tabs
+              color="primary"
+              className="font-bold"
+                aria-label="Packeges"
+                selectedKey={selectedTab}
+                onSelectionChange={(key: Key) => {
+                  if (typeof key === "string") {
+                    if (selectedTab === "standard") {
+                      setSelectedtab("premium");
+                    }
+                    if (selectedTab === "premium") {
+                      setSelectedtab("standard");
+                    }
                   }
-                  if (selectedTab === "premium") {
-                    setSelectedtab("standard");
-                  }
-                }
-              }}
-            >
-              <Tab key="standard" title="Standard">
-                <Card>
-                  <CardBody>
-                    <p className="font-bold">
-                      {tourslug.tourCategory.standard.title}
-                    </p>
-                    <p className="text-sm font-semibold text-gray-600">
-                      {" "}
-                      Starting from ${tourslug.tourCategory.standard.price} per
-                      person
-                    </p>
+                }}
+              >
+                <Tab key="standard" title="Standard">
+                  <Card>
+                    <CardBody>
+                      <div className="mt-4">
+                        <h3 className="text-xl font-bold">Book yours </h3>
+                        <Form
+                          onSubmit={async (e) => {
+                            setStandardLoading(true);
+                            e.preventDefault();
+                            if (!isUserLogedIn) {
+                              router.replace("/authentication/signin");
+                            }
 
-                    <div
-                      dangerouslySetInnerHTML={{
-                        __html: `${tourslug.tourCategory.standard.description}`,
-                      }}
-                      className="mt-2"
-                    />
+                            try {
+                              const res = await fetch("/api/booking", {
+                                method: "POST",
+                                headers: {
+                                  "Content-Type": "application/json",
+                                },
+                                body: JSON.stringify({
+                                  date,
+                                  personCount,
+                                  category: selectedTab,
+                                  price,
+                                  tourId,
+                                }),
+                              });
 
-                    <div className="mt-4">
-                      <h3 className="text-xl font-bold">Book yours </h3>
-                      <Form
-                        onSubmit={async (e) => {
-                          setStandardLoading(true);
-                          e.preventDefault();
-                          if (!isUserLogedIn) {
-                            router.replace("/authentication/signin");
-                          }
-
-                          try {
-                            const res = await fetch("/api/booking", {
-                              method: "POST",
-                              headers: {
-                                "Content-Type": "application/json",
-                              },
-                              body: JSON.stringify({
-                                date,
-                                personCount,
-                                category: selectedTab,
-                                price,
-                                tourId,
-                              }),
-                            });
-
-                            const response = await res.json();
-                            if (response.success === true) {
-                              router.push(
-                                `/proceed-for-payment/${response.orderId}`
-                              );
-                              setStandardLoading(false);
-                            } else {
-                              console.log(response);
+                              const response = await res.json();
+                              if (response.success === true) {
+                                router.push(
+                                  `/proceed-for-payment/${response.orderId}`
+                                );
+                                setStandardLoading(false);
+                              } else {
+                                console.log(response);
+                                setStandardLoading(false);
+                              }
+                            } catch (error) {
+                              console.log(error);
                               setStandardLoading(false);
                             }
-                          } catch (error) {
-                            console.log(error);
-                            setStandardLoading(false);
-                          }
+                          }}
+                        >
+                          <div>
+                            <DateRangePicker
+                              label="Date range (controlled)"
+                              value={date}
+                              onChange={setDate}
+                              isRequired
+                            />
+                            <p className="text-default-500 text-sm">
+                              Selected date:
+                              {date
+                                ? formatter.formatRange(
+                                    date.start.toDate(getLocalTimeZone()),
+                                    date.end.toDate(getLocalTimeZone())
+                                  )
+                                : "--"}
+                            </p>
+                          </div>
+                          <div>
+                            <NumberInput
+                              isRequired
+                              label="Person count"
+                              placeholder="Total visitor"
+                              value={personCount}
+                              isInvalid={isPersonCountError}
+                              onValueChange={setPersonCount}
+                            />
+                          </div>
+                          <div>
+                            {price > 1 && (
+                              <p className="text-sm font-bold text-gray-600">
+                                Your total cost will be{" "}
+                                <span className="text-blue-600">{price}</span>
+                              </p>
+                            )}
+                            {isPersonCountError && (
+                              <p className="font-semibold text-green-600 text-sm">
+                                Person count should be greater than 0(Zero).
+                              </p>
+                            )}
+                          </div>
+                          {standardLoading ? (
+                            <Button isDisabled className="w-full font-bold">
+                              <Spinner />
+                            </Button>
+                          ) : (
+                            <Button
+                              type="submit"
+                              className="w-full font-bold"
+                              color="primary"
+                            >
+                              Book now
+                            </Button>
+                          )}
+                        </Form>
+                      </div>
+                      <p className="font-bold">
+                        {tourslug.tourCategory.standard.title}
+                      </p>
+                      <p className="text-sm font-semibold text-gray-600">
+                        {" "}
+                        Starting from ${
+                          tourslug.tourCategory.standard.price
+                        }{" "}
+                        per person
+                      </p>
+                      <div
+                        dangerouslySetInnerHTML={{
+                          __html: `${tourslug.tourCategory.standard.description}`,
                         }}
-                      >
-                        <div>
-                          <DateRangePicker
-                            label="Date range (controlled)"
-                            value={date}
-                            onChange={setDate}
-                            isRequired
-                          />
-                          <p className="text-default-500 text-sm">
-                            Selected date:
-                            {date
-                              ? formatter.formatRange(
-                                  date.start.toDate(getLocalTimeZone()),
-                                  date.end.toDate(getLocalTimeZone())
-                                )
-                              : "--"}
-                          </p>
-                        </div>
-                        <div>
-                          <NumberInput
-                            isRequired
-                            label="Person count"
-                            placeholder="Total visitor"
-                            value={personCount}
-                            isInvalid={isPersonCountError}
-                            onValueChange={setPersonCount}
-                          />
-                        </div>
-                        <div>
-                          {price > 1 && (
-                            <p className="text-sm font-bold text-gray-600">
-                              Your total cost will be{" "}
-                              <span className="text-blue-600">{price}</span>
-                            </p>
-                          )}
-                          {isPersonCountError && (
-                            <p className="font-semibold text-green-600 text-sm">
-                              Person count should be greater than 0(Zero).
-                            </p>
-                          )}
-                        </div>
-                        {standardLoading ? (
-                          <Button isDisabled className="w-full font-bold">
-                            <Spinner />
-                          </Button>
-                        ) : (
-                          <Button
-                            type="submit"
-                            className="w-full font-bold"
-                            color="primary"
-                          >
-                            Book now
-                          </Button>
-                        )}
-                      </Form>
-                    </div>
-                  </CardBody>
-                </Card>
-              </Tab>
-              <Tab key="premium" title="Premium">
-                <Card>
-                  <CardBody>
-                    <p className="font-bold">
-                      {tourslug.tourCategory.premium.title}
-                    </p>
-                    <p className="text-sm font-semibold text-gray-600">
-                      {" "}
-                      Starting from ${tourslug.tourCategory.premium.price} per
-                      person
-                    </p>
-
-                    <div
-                      dangerouslySetInnerHTML={{
-                        __html: `${tourslug.tourCategory.premium.description}`,
-                      }}
-                      className="mt-2"
-                    />
-
-                    <div className="mt-4">
-                      <h3 className="text-xl font-bold">Book yours </h3>
-                      <Form
-                        onSubmit={async (e) => {
-                          setPremiumLoading(true);
-                          e.preventDefault();
-                          try {
-                            const res = await fetch("/api/booking", {
-                              method: "POST",
-                              headers: {
-                                "Content-Type": "application/json",
-                              },
-                              body: JSON.stringify({
-                                date: premiumDate,
-                                personCount: premiumPersonCount,
-                                category: selectedTab,
-                                price: premiumPrices,
-                                tourId,
-                              }),
-                            });
-                            const response = await res.json();
-                            if (response.success === true) {
-                              router.push(
-                                `/proceed-for-payment/${response.orderId}`
-                              );
-                              setPremiumLoading(false);
-                            } else {
-                              console.log(response);
+                        className="mt-2"
+                      />
+                    </CardBody>
+                  </Card>
+                </Tab>
+                <Tab key="premium" title="Premium">
+                  <Card>
+                    <CardBody>
+                      <div className="space-y-2">
+                        <h3 className="text-xl font-bold">Book yours </h3>
+                        <Form
+                          onSubmit={async (e) => {
+                            setPremiumLoading(true);
+                            e.preventDefault();
+                            try {
+                              const res = await fetch("/api/booking", {
+                                method: "POST",
+                                headers: {
+                                  "Content-Type": "application/json",
+                                },
+                                body: JSON.stringify({
+                                  date: premiumDate,
+                                  personCount: premiumPersonCount,
+                                  category: selectedTab,
+                                  price: premiumPrices,
+                                  tourId,
+                                }),
+                              });
+                              const response = await res.json();
+                              if (response.success === true) {
+                                router.push(
+                                  `/proceed-for-payment/${response.orderId}`
+                                );
+                                setPremiumLoading(false);
+                              } else {
+                                console.log(response);
+                                setPremiumLoading(false);
+                              }
+                            } catch (error) {
+                              console.log(error);
                               setPremiumLoading(false);
                             }
-                          } catch (error) {
-                            console.log(error);
-                            setPremiumLoading(false);
-                          }
+                          }}
+                        >
+                          <div>
+                            <DateRangePicker
+                              label="Date range (controlled)"
+                              value={date}
+                              onChange={setPremiumDate}
+                              isRequired
+                            />
+                            <p className="text-default-500 text-sm">
+                              Selected date:
+                              {premiumDate
+                                ? formatter.formatRange(
+                                    premiumDate.start.toDate(
+                                      getLocalTimeZone()
+                                    ),
+                                    premiumDate.end.toDate(getLocalTimeZone())
+                                  )
+                                : "--"}
+                            </p>
+                          </div>
+                          <div>
+                            <NumberInput
+                              isRequired
+                              label="Person count"
+                              placeholder="Total visitor"
+                              value={premiumPersonCount}
+                              isInvalid={isPremiumPersonCountError}
+                              onValueChange={setPremiumPersonCount}
+                            />
+                          </div>
+                          <div>
+                            {premiumPrices > 1 && (
+                              <p className="text-sm font-bold text-gray-600">
+                                Your total cost will be{" "}
+                                <span className="text-blue-600">
+                                  {premiumPrices}
+                                </span>
+                              </p>
+                            )}
+                            {isPremiumPersonCountError && (
+                              <p className="font-semibold text-green-600 text-sm">
+                                Person count should be greater than 0(Zero).
+                              </p>
+                            )}
+                          </div>
+                          {premiumLoading ? (
+                            <Button isDisabled className="w-full font-bold">
+                              <Spinner />
+                            </Button>
+                          ) : (
+                            <Button
+                              type="submit"
+                              className="w-full font-bold"
+                              color="primary"
+                            >
+                              Book now
+                            </Button>
+                          )}
+                        </Form>
+                      </div>
+                      <p className="font-bold">
+                        {tourslug.tourCategory.premium.title}
+                      </p>
+                      <p className="text-sm font-semibold text-gray-600">
+                        Starting from ${tourslug.tourCategory.premium.price} per
+                        person
+                      </p>
+
+                      <div
+                        dangerouslySetInnerHTML={{
+                          __html: `${tourslug.tourCategory.premium.description}`,
                         }}
-                      >
-                        <div>
-                          <DateRangePicker
-                            label="Date range (controlled)"
-                            value={date}
-                            onChange={setPremiumDate}
-                            isRequired
-                          />
-                          <p className="text-default-500 text-sm">
-                            Selected date:
-                            {premiumDate
-                              ? formatter.formatRange(
-                                  premiumDate.start.toDate(getLocalTimeZone()),
-                                  premiumDate.end.toDate(getLocalTimeZone())
-                                )
-                              : "--"}
-                          </p>
-                        </div>
-                        <div>
-                          <NumberInput
-                            isRequired
-                            label="Person count"
-                            placeholder="Total visitor"
-                            value={premiumPersonCount}
-                            isInvalid={isPremiumPersonCountError}
-                            onValueChange={setPremiumPersonCount}
-                          />
-                        </div>
-                        <div>
-                          {premiumPrices > 1 && (
-                            <p className="text-sm font-bold text-gray-600">
-                              Your total cost will be{" "}
-                              <span className="text-blue-600">
-                                {premiumPrices}
-                              </span>
-                            </p>
-                          )}
-                          {isPremiumPersonCountError && (
-                            <p className="font-semibold text-green-600 text-sm">
-                              Person count should be greater than 0(Zero).
-                            </p>
-                          )}
-                        </div>
-                        {premiumLoading ? (
-                          <Button isDisabled className="w-full font-bold">
-                            <Spinner />
-                          </Button>
-                        ) : (
-                          <Button
-                            type="submit"
-                            className="w-full font-bold"
-                            color="primary"
-                          >
-                            Book now
-                          </Button>
-                        )}
-                      </Form>
-                    </div>
-                  </CardBody>
-                </Card>
-              </Tab>
-            </Tabs>
+                        className="mt-2"
+                      />
+                    </CardBody>
+                  </Card>
+                </Tab>
+              </Tabs>
+            </div>
           </div>
         </div>
       ))}

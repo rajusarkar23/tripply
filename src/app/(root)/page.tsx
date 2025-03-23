@@ -13,7 +13,6 @@ export default function Home() {
       <CTASection />
       <Features />
       <InfiniteReviewCarousel />
-      <Footer />
     </div>
   );
 }
