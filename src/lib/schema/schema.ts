@@ -31,7 +31,7 @@ export const tour = pgTable("tour", {
   tourCategory: jsonb("tour_category").$type<Tours>().notNull(),
   tourPrimaryImage: text("tour_primary_image").notNull(),
   createdBy: integer("created_by")
-    .references(() => admin.id)
+    .references(() => admin.id, {onDelete: "cascade"})
     .notNull(),
   createdAt: timestamp("created_at").notNull().defaultNow(),
   updatedAt: timestamp("updated_at")
@@ -70,7 +70,7 @@ export const ratings = pgTable("ratings", {
   rating: integer("rating").notNull().default(0),
   ratingFor: integer("rating_for")
     .notNull()
-    .references(() => tour.id),
+    .references(() => tour.id, {onDelete: "cascade"}),
   ratingBy: text("rating_by").notNull(), // name of the user
   ratingUserId: integer("rating_user_id") // id of the user
     .notNull()
@@ -85,10 +85,10 @@ export const bookings = pgTable("bookings", {
   id: serial("id").primaryKey(),
   bookingFor: integer("booking_for")
     .notNull()
-    .references(() => tour.id),
+    .references(() => tour.id, {onDelete: "cascade"}),
   bookingBy: integer("booking_by")
     .notNull()
-    .references(() => tourists.id),
+    .references(() => tourists.id, {onDelete: "cascade"}),
   bookingCategory: text("booking_category").notNull(),
   bookingDateStart: text("booking_date_start").notNull(),
   bookingDateEnd: text("booking_date_end").notNull(),
@@ -96,6 +96,8 @@ export const bookings = pgTable("bookings", {
   bookingCost: integer("booking_cost").notNull(),
   isPaymentDone: boolean("is_payment_done").notNull().default(false),
   isBookingSuccess: boolean("is_booking_success").notNull().default(false),
+  isBookingSuccessMailSent: boolean("is_booking_success_mail_sent").notNull().default(false),
+  isBookingFailedEmailSent: boolean("is_booking_failed_email_sent").notNull().default(false),
   paymentId: text("payment_id"),
   paymentSessionId: text("payment_session_id"),
   createdAt: timestamp("created_at").notNull().defaultNow(),

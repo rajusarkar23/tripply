@@ -10,7 +10,7 @@ import {
   ModalHeader,
   Spinner,
 } from "@heroui/react";
-import { CornerDownRight } from "lucide-react";
+import { CornerDownRight, Loader } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -38,15 +38,18 @@ interface Tour {
   };
 }
 
-interface DeleteTOur {
+interface DeleteTour {
   title: string;
   imageUrl: string;
 }
 
 export default function FetchTourInAdmin() {
   const router = useRouter();
-  const [deleteTour, setDeleteTour] = useState<DeleteTOur | null>(null);
+  const [deleteTour, setDeleteTour] = useState<DeleteTour | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
+
+  // tour id
+  const [deleteTourId, setDeleteTourId] = useState<number | null>()
 
   const { fetchToursForAdmin, tours } = useAdminTourStore() as {
     fetchToursForAdmin: () => void;
@@ -67,9 +70,16 @@ export default function FetchTourInAdmin() {
     );
   }
 
+
   return (
     <div>
       <h2 className="text-5xl text-center py-3 font-bold">All tours.</h2>
+      {
+        isLoading && ( <div className="flex justify-end pr-20">
+        <Loader className="animate-spinner-ease-spin"/>
+      </div>)
+      }
+     
       <div className="grid grid-cols-2 gap-3 mx-auto max-w-7xl w-full py-3">
         {tours.map((tour, index) => (
           <Card className="p-4 hover:bg-gray-100" key={index}>
@@ -122,6 +132,8 @@ export default function FetchTourInAdmin() {
                   <div className="flex space-x-2">
                     <Button
                       onPress={() => {
+                        setDeleteTourId(tour.id)
+                        
                         setDeleteTour({
                           imageUrl: tour.tourImageUrl!,
                           title: tour.tourName!,
@@ -140,7 +152,7 @@ export default function FetchTourInAdmin() {
                         {(onClose) => (
                           <>
                             <ModalHeader className="flex flex-col gap-1 text-red-600 text-center">
-                              Do you want to delete this tour?
+                              Do you want to delete?
                             </ModalHeader>
                             <ModalBody className="flex justify-center items-center">
                               <p className="text-xl font-bold text-gray-600">
@@ -156,7 +168,7 @@ export default function FetchTourInAdmin() {
                             </ModalBody>
                             <ModalFooter>
                               <Button
-                                color="primary"
+                                color="success"
                                 onPress={onClose}
                                 className="font-bold"
                               >
@@ -182,13 +194,13 @@ export default function FetchTourInAdmin() {
                                               "Content-Type":
                                                 "application/json",
                                             },
-                                            body: JSON.stringify(tour.id),
+                                            body: JSON.stringify(deleteTourId),
                                           }
                                         );
                                         const response = await res.json();
+                                        
                                         if (response.success === true) {
-                                          tours.splice(index, 1);
-                                          router.refresh();
+                                          fetchToursForAdmin()
                                           setDeleteTour(null);
                                           setIsDeleting(false)
                                         }
@@ -235,5 +247,3 @@ export default function FetchTourInAdmin() {
     </div>
   );
 }
-
-// name, imageurl, seatsavailable, booked, id, created at, updated at

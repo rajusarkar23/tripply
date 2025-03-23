@@ -1,0 +1,2 @@
+ALTER TABLE "bookings" ADD COLUMN "is_booking_success_mail_sent" boolean DEFAULT false NOT NULL;--> statement-breakpoint
+ALTER TABLE "bookings" ADD COLUMN "is_booking_failed_email_sent" boolean DEFAULT false NOT NULL;
