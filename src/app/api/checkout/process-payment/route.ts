@@ -9,13 +9,22 @@ import { cookies } from "next/headers";
 const stripe = new Stripe(`${process.env.STRIPE_SECRET_KEY}` as string, {
   apiVersion: "2025-02-24.acacia",
 });
+
+console.log(":ran3");
+
 export async function POST(req: NextRequest) {
   // get data from client
   const { price, product, email, bookingId, successUrl, cancelUrl } =
     await req.json();
 
+console.log(email);
+
+
   try {
     // create session with above data
+
+    console.log("ran");
+    
     const createSession = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
       mode: "payment",
@@ -35,6 +44,8 @@ export async function POST(req: NextRequest) {
       success_url: successUrl,
       cancel_url: cancelUrl,
     });
+    console.log("ran54");
+    
     // update
     await db
       .update(bookings)
@@ -43,6 +54,8 @@ export async function POST(req: NextRequest) {
       })
       .where(eq(bookings.id, bookingId));
     // assign jwt
+    console.log(":ran4");
+    
     const jwt_token = jwt.sign(
       { sessionId: createSession.id },
       `${process.env.PAYMENT_SESSION_JWT_SECRET}`
