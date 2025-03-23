@@ -48,10 +48,10 @@ export default function Footer() {
           <div className="lg:col-span-2">
             <Link href="/" className="flex items-center space-x-2 mb-6">
               <Globe className="w-8 h-8" />
-              <span className="text-2xl font-bold">ACME Travels</span>
+              <span className="text-2xl font-bold">Tripply</span>
             </Link>
             <p className="text-blue-100 mb-6 max-w-md">
-              Discover the world with ACME Travels. We create unforgettable journeys and provide exceptional travel
+              Discover the world with Tripply. We create unforgettable journeys and provide exceptional travel
               experiences for adventurers worldwide.
             </p>
             <div className="space-y-3">
@@ -61,7 +61,7 @@ export default function Footer() {
               </div>
               <div className="flex items-center space-x-3 text-blue-100">
                 <Mail className="w-5 h-5" />
-                <span>contact@acmetravels.com</span>
+                <span>contact@tripply.com</span>
               </div>
               <div className="flex items-center space-x-3 text-blue-100">
                 <MapPin className="w-5 h-5" />
@@ -145,7 +145,7 @@ export default function Footer() {
               <Link href={"/admin/home"}>
               sdjkhkcv
               </Link>
-              © {new Date().getFullYear()} ACME Travels. All rights reserved.
+              © {new Date().getFullYear()} Tripply. All rights reserved.
             </div>
           </div>
         </div>

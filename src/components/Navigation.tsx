@@ -19,7 +19,7 @@ export default function Navigation() {
         <div className="flex items-center justify-between h-16">
           <Link href="/" className="flex items-center space-x-2">
             <Globe className="w-8 h-8 text-blue-600" />
-            <span className="text-xl font-bold">ACME Travels</span>
+            <span className="text-xl font-bold">Tripply</span>
           </Link>
 
           {/* Desktop Navigation */}
