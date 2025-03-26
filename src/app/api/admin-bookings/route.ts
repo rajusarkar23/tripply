@@ -17,35 +17,11 @@ export async function GET() {
         totalPersonCount: bookings.totalTouristCount,
         bookingCost: bookings.bookingCost,
         isPaymentDone: bookings.isPaymentDone,
+        bookingDate: bookings.createdAt
       })
       .from(bookings)
       .leftJoin(tourists, eq(tourists.id, bookings.bookingBy))
       .leftJoin(tour, eq(tour.id, bookings.bookingFor));
-
-    const failedBookings = [];
-
-    for (const booking of getBookings) {
-      if (booking.isPaymentDone === false) {
-        failedBookings.push({
-          id: booking.id,
-          bookingFor: booking.bookingFor,
-          bookingBy: booking.bookingBy,
-          bookingByPersonEmail: booking.bookingByPersonEmail,
-          bookingCategory: booking.bookingCategory,
-          bookingStartingDate: booking.bookingStartingDate,
-          bookingEndingDate: booking.bookingEndingDate,
-          totalPersonCount: booking.totalPersonCount,
-          bookingCost: booking.bookingCost,
-          isPaymentDone: booking.isPaymentDone,
-        });
-      }
-    }
-    if (failedBookings.length === 0) {
-        return NextResponse.json({
-            success: false,
-            message: "No failed bookings available"
-        })
-    }
 
     return NextResponse.json({
         success: true,

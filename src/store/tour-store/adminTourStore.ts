@@ -35,6 +35,7 @@ interface Booking {
   totalPersonCount: string | null;
   bookingCost: number | null;
   isPaymentDone: boolean | null;
+  bookingDate: string | null
 }
 
 interface TourState {

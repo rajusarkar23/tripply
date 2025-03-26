@@ -6,6 +6,7 @@ import { useEffect } from "react";
 import useTourStore from "@/store/tour-store/tourStore";
 import { Button } from "@heroui/button";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 interface Category {
   title: string | null;
@@ -98,15 +99,11 @@ export default function PopularDestination() {
                   </h3>
 
                   <div>
-                    <Button
-                      className="w-full font-bold"
-                      color="primary"
-                      onPress={() => {
-                        router.push(`/tour/${tour.slug}`);
-                      }}
-                    >
-                      View details
-                    </Button>
+                    <Link 
+                    className="flex justify-center items-center bg-blue-600 text-white font-bold h-10 rounded-full hover:bg-blue-700 transition-all"
+                    href={`/tour/${tour.slug}`}>
+                    View details
+                    </Link>
                   </div>
                 </div>
               </div>

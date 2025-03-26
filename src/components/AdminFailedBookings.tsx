@@ -23,6 +23,7 @@ interface Booking {
   totalPersonCount: string | null;
   bookingCost: number | null;
   isPaymentDone: boolean | null;
+  bookingDate: string | null
 }
 
 export default function AdminFailedBookings() {
