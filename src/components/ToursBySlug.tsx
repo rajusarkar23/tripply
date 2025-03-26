@@ -134,9 +134,9 @@ export default function ToursBySlug() {
 
           <div className="sm:flex justify-between mt-5 px-4">
             {/* start */}
-            <div className="max-w-2xl mx-auto space-y-1">
+            <div className="max-w-3xl mx-auto space-y-1 border px-4 rounded shadow-md py-4">
               <h2 className="text-4xl font-bold">{tourslug.name}</h2>
-              <h4 className="font-light text-3xl text-gray-900">
+              <h4 className="text-3xl text-gray-700 font-semibold">
                 {tourslug.overview}
               </h4>
 
@@ -147,6 +147,8 @@ export default function ToursBySlug() {
                     "<br>"
                   ),
                 }}
+
+                className="text-lg"
               />
             </div>
             {/* end */}
@@ -171,7 +173,7 @@ export default function ToursBySlug() {
                   <Card>
                     <CardBody>
                       <div className="mt-4">
-                        <h3 className="text-xl font-bold">Book yours </h3>
+                        <h3 className="text-xl font-bold">Book yours: <span className="text-blue-600"> Standard</span> </h3>
                         <Form
                           onSubmit={async (e) => {
                             setStandardLoading(true);
@@ -289,7 +291,7 @@ export default function ToursBySlug() {
                   <Card>
                     <CardBody>
                       <div className="space-y-2">
-                        <h3 className="text-xl font-bold">Book yours </h3>
+                        <h3 className="text-xl font-bold">Book yours: <span className="text-orange-400">Premium</span> </h3>
                         <Form
                           onSubmit={async (e) => {
                             setPremiumLoading(true);
