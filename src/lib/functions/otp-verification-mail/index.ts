@@ -14,7 +14,7 @@ export async function otpVerifyEmail(otp: string, email: string) {
 
   await transporter
     .sendMail({
-      from: sender,
+      from: '"Tripply" <rsa22027@gmail.com>',
       to: email,
       replyTo: sender,
       subject: `Tripply verification OTP`,
