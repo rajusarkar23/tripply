@@ -39,8 +39,8 @@ export default function Hero() {
                 <MapPin className="text-blue-600" />
                 <input
                   type="text"
-                  placeholder="Where to? Search place you want to visit"
-                  className="w-[590px] focus:outline-none text-gray-800"
+                  placeholder="Search places..."
+                  className="focus:outline-none text-gray-800"
                 />
               </div>
               <div>

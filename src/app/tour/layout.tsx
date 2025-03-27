@@ -1,3 +1,4 @@
+import Footer from "@/components/Footer";
 import Navigation from "@/components/Navigation";
 import React from "react";
 
@@ -8,6 +9,7 @@ export default function TourLayout({
     <div>
       <Navigation />
       {children}
+      <Footer />
     </div>
   );
 }

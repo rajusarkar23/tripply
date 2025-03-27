@@ -64,7 +64,7 @@ export default function ProccedForPaymentComp() {
   return (
     <div className=" flex justify-center items-center min-h-[90vh]">
       {tour.map((items, index) => (
-        <Card className="max-w-[600px]" key={index}>
+        <Card className="w-96 px-4" key={index}>
           <CardHeader className="flex justify-center">
             <div>
               <h2 className="text-4xl font-semibold text-blue-600">
