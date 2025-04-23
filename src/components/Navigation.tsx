@@ -1,13 +1,13 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import Link from "next/link"
-import { motion } from "motion/react"
-import { Menu, X, Globe } from "lucide-react"
-import TouristProfile from "./TouristProfile"
+import { useState } from "react";
+import Link from "next/link";
+import { motion } from "motion/react";
+import { Menu, X, Globe } from "lucide-react";
+import TouristProfile from "./TouristProfile";
 
 export default function Navigation() {
-  const [isOpen, setIsOpen] = useState(false)
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
     <motion.header
@@ -24,21 +24,30 @@ export default function Navigation() {
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
-            <Link href="/admin/home" className="hover:text-blue-600 transition-colors">
+            <Link
+              href="/admin/home"
+              className="hover:text-blue-600 transition-colors"
+            >
               Destinations
             </Link>
-            <Link href="/packages" className="hover:text-blue-600 transition-colors">
+            <Link
+              href="/packages"
+              className="hover:text-blue-600 transition-colors"
+            >
               Packages
             </Link>
-            <Link href="/about" className="hover:text-blue-600 transition-colors">
+            <Link
+              href="/about"
+              className="hover:text-blue-600 transition-colors"
+            >
               About
             </Link>
-            <Link href="/contact" className="hover:text-blue-600 transition-colors">
+            <Link
+              href="/contact"
+              className="hover:text-blue-600 transition-colors"
+            >
               Contact
             </Link>
-            <div>
-              
-            </div>
             <TouristProfile />
           </nav>
 
@@ -50,25 +59,41 @@ export default function Navigation() {
 
         {/* Mobile Navigation */}
         {isOpen && (
-          <motion.nav initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="md:hidden py-4">
+          <motion.nav
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="md:hidden py-4"
+          >
             <div className="flex flex-col space-y-4">
-              <Link href="/destinations" className="hover:text-blue-600 transition-colors">
+              <Link
+                href="/destinations"
+                className="hover:text-blue-600 transition-colors"
+              >
                 Destinations
               </Link>
-              <Link href="/packages" className="hover:text-blue-600 transition-colors">
+              <Link
+                href="/packages"
+                className="hover:text-blue-600 transition-colors"
+              >
                 Packages
               </Link>
-              <Link href="/about" className="hover:text-blue-600 transition-colors">
+              <Link
+                href="/about"
+                className="hover:text-blue-600 transition-colors"
+              >
                 About
               </Link>
-              <Link href="/contact" className="hover:text-blue-600 transition-colors">
+              <Link
+                href="/contact"
+                className="hover:text-blue-600 transition-colors"
+              >
                 Contact
               </Link>
+              <TouristProfile />
             </div>
           </motion.nav>
         )}
       </div>
     </motion.header>
-  )
+  );
 }
-

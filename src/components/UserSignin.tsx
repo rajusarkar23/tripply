@@ -57,10 +57,10 @@ export default function UserSignin() {
 
   return (
     <Form
-      className="max-w-md mx-auto w-full flex items-center justify-center min-h-[90vh]"
+      className="max-w-md mx-auto w-full flex items-center justify-center min-h-[90vh] px-4"
       onSubmit={onSubmit}
     >
-      <div className="border rounded-xl p-8 shadow-lg w-96">
+      <div className="border w-full rounded-xl p-8 shadow-lg">
         <div>
           <div className="flex flex-col justify-center text-center">
             <h2 className="text-2xl font-semibold">Signin</h2>

@@ -67,7 +67,7 @@ export default function TouristProfile() {
     return (
       <div>
         <Link
-        className="rounded-full bg-blue-600 font-bold p-2 px-6 text-sm text-white flex"
+        className="rounded-full bg-blue-600 items-center justify-center font-bold p-2 px-6 text-sm text-white flex"
         href={"/authentication/signin"}>
           Signin <LogIn size={20}/>
         </Link>

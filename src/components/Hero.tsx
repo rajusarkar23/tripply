@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import { motion } from "motion/react";
-import { MapPin } from "lucide-react";
+import { MapPin, Search } from "lucide-react";
 
 export default function Hero() {
   return (
@@ -44,8 +44,11 @@ export default function Hero() {
                 />
               </div>
               <div>
-                <button className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors w-full">
+                <button className="hidden md:flex bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors w-full items-center">
                   Search
+                </button>
+                <button className="md:hidden bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors w-full flex items-center">
+                  <Search className="ml-1" size={18}/>
                 </button>
               </div>
             </div>
