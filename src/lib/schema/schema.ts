@@ -22,6 +22,35 @@ type Tours = {
   premium?: TourPlans;
 };
 
+type HeroBannerContent = {
+  heading: string,
+  briefParagraph: string,
+  heroBannerImageUrls: string[]
+}
+
+type ThingsToDoArr = {
+  heading: string,
+  subHeading: string,
+  briefParagraph: string,
+  rating: number
+  imageUrl: string,
+}
+
+type VisitTimings = {
+  best: {
+    start: string,
+    end: string
+  },
+  good: {
+    start: string,
+    end: string
+  },
+  notRecomended: {
+    start: string,
+    end: string
+  }
+}
+
 export const tour = pgTable("tour", {
   id: serial("id").primaryKey(),
   tourName: text("tour_name").notNull(),
@@ -38,6 +67,19 @@ export const tour = pgTable("tour", {
     .notNull()
     .$onUpdate(() => new Date()),
 });
+
+export const tourV2 = pgTable("tourV2", ({
+  id: serial("id").primaryKey(),
+  placeName: text("place_name").notNull(),
+  mainBackImage: text("main_back_image").notNull(),
+  slug: text("slug").notNull(),
+  heroBannerContent: jsonb("hero_banner_content").$type<HeroBannerContent>().notNull(),
+  thingsToDoArr: jsonb("things_to_do_arr").$type<ThingsToDoArr>().notNull(),
+  visitTimings: jsonb("visit_timings").$type<VisitTimings>().notNull(),
+  createdBy: integer("created_by").references(() => admin.id, {onDelete: "cascade"}),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").$onUpdate(() => new Date())
+}))
 
 export const admin = pgTable("admin", {
   id: serial("id").primaryKey(),

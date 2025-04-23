@@ -1,0 +1,1 @@
+ALTER TABLE "tourV2" ADD COLUMN "place_name" text NOT NULL;

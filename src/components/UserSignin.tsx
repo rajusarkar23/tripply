@@ -4,7 +4,7 @@ import { Button } from "@heroui/button";
 import { Form } from "@heroui/form";
 import { Input } from "@heroui/input";
 import { Spinner } from "@heroui/spinner";
-import { OctagonX } from "lucide-react";
+import { Globe, OctagonX } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
@@ -60,11 +60,11 @@ export default function UserSignin() {
       className="max-w-md mx-auto w-full flex items-center justify-center min-h-[90vh] px-4"
       onSubmit={onSubmit}
     >
-      <div className="border w-full rounded-xl p-8 shadow-lg">
+      <div className="border w-full rounded-md p-8 shadow-lg">
         <div>
           <div className="flex flex-col justify-center text-center">
-            <h2 className="text-2xl font-semibold">Signin</h2>
-            <p className="text-sm font-semibold">Please signin to continue.</p>
+            <h2 className="text-2xl font-semibold flex justify-center items-center text-blue-600"><Globe />Tripply - Signin</h2>
+            <p className="text-xs font-semibold">Please signin to continue.</p>
           </div>
           <Divider />
           <div className="py-1 text-center">
@@ -92,6 +92,7 @@ export default function UserSignin() {
           className="py-2"
         />
         <Input
+          isRequired
           label="Password"
           type="password"
           labelPlacement="outside"

@@ -4,7 +4,7 @@ import { Button } from "@heroui/button";
 import { Form } from "@heroui/form";
 import { Input } from "@heroui/input";
 import { Spinner } from "@heroui/spinner";
-import { OctagonX } from "lucide-react";
+import { Globe, OctagonX } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
@@ -72,10 +72,13 @@ export default function UserSignup() {
       className="max-w-md mx-auto w-full flex items-center justify-center min-h-[90vh] px-4"
       onSubmit={onSubmit}
     >
-      <div className="border rounded-xl p-8 shadow-lg w-full">
+      <div className="border rounded-md p-8 shadow-lg w-full">
         <div>
           <div className="flex flex-col justify-center text-center">
-            <h2 className="text-2xl font-semibold">Signup</h2>
+            <h2 className="text-2xl font-semibold flex justify-center items-center text-blue-600">
+              <Globe />
+              Tripply - Signup
+            </h2>
             <p className="text-sm font-semibold">
               Please create your account to continue.
             </p>
@@ -114,6 +117,7 @@ export default function UserSignup() {
               ))}
             </ul>
           )}
+          isRequired
           isInvalid={errors.length > 0}
           label="Password"
           labelPlacement="outside"
@@ -128,7 +132,11 @@ export default function UserSignup() {
             <Spinner />
           </Button>
         ) : (
-          <Button type="submit" color="primary" className="w-full font-bold mt-2">
+          <Button
+            type="submit"
+            color="primary"
+            className="w-full font-bold mt-2"
+          >
             Signup
           </Button>
         )}
