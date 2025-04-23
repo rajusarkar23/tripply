@@ -6,7 +6,6 @@ import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { ChevronDown, LogIn } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 
 interface Profile {
   name: string;
@@ -22,7 +21,6 @@ interface Booking {
 }
 
 export default function TouristProfile() {
-  const router = useRouter();
 
   const { fetchUserDetails, profile, isUserLogedIn, isLoading } =
     useUserStore() as {
@@ -68,15 +66,11 @@ export default function TouristProfile() {
   if (!isUserLogedIn) {
     return (
       <div>
-        <Button
-          size="md"
-          color="primary"
-          variant="solid"
-          className="rounded-full font-bold"
-          onPress={() => router.push("/authentication/signin")}
-        >
-          Signin <LogIn size={20} />
-        </Button>
+        <Link
+        className="rounded-full bg-blue-600 font-bold p-2 px-6 text-sm text-white flex"
+        href={"/authentication/signin"}>
+          Signin <LogIn size={20}/>
+        </Link>
       </div>
     );
   }

@@ -198,6 +198,7 @@ function UpdateEmail({ email }: { email: string }) {
         setIsEmailFieldDisabled(true)
       } else {
         setIsError(true);
+        setIsEmailSending(false)
         setErrorMessage(response.message);
       }
     } catch (error) {

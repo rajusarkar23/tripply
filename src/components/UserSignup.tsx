@@ -72,71 +72,76 @@ export default function UserSignup() {
       className="max-w-md mx-auto w-full flex items-center justify-center min-h-[90vh]"
       onSubmit={onSubmit}
     >
-      <div className="border max-w-md mx-auto w-full px-6 py-10 rounded-lg shadow-xl space-y-4">
-        <h2 className="text-center text-2xl font-bold">Signup</h2>
-        <p className="text-center font-semibold text-gray-600">
-          Please create your account below.
-        </p>
-        <div className="flex justify-center">
-          <UserGoogleAuth />
-        </div>
+      <div className="border rounded-xl p-8 shadow-lg w-96">
         <div>
-          <p className="text-center font-semibold text-gray-600">OR</p>
+          <div className="flex flex-col justify-center text-center">
+            <h2 className="text-2xl font-semibold">Signup</h2>
+            <p className="text-sm font-semibold">
+              Please create your account to continue.
+            </p>
+          </div>
           <Divider />
-          <p className="text-center font-semibold text-gray-600">Continue with email and password</p>
-        </div>
-        <div className="pb-6">
+          <div className="py-1 text-center">
+            <p className="text-xs">Continue with email and password</p>
+          </div>
           <div className="flex justify-center">
             {isError && (
-              <p className="font-bold text-red-600 flex items-center">
-                <OctagonX size={20} className="mr-1" />
+              <p className="font-bold text-sm text-red-600 flex items-center">
+                <OctagonX size={16} className="mr-1" />
                 {errorMessage}
               </p>
             )}
           </div>
         </div>
-        <div className="space-y-10">
-          <Input
-            isRequired
-            errorMessage="Please enter a valid email"
-            label="Email"
-            labelPlacement="outside"
-            name="email"
-            placeholder="Enter your email"
-            type="email"
-            value={email}
-            onValueChange={setEmail}
-          />
-          <Input
-            errorMessage={() => (
-              <ul>
-                {errors.map((error, index) => (
-                  <li key={index}>{error}</li>
-                ))}
-              </ul>
-            )}
-            isInvalid={errors.length > 0}
-            label="Password"
-            labelPlacement="outside"
-            placeholder="Please enter a password"
-            type="password"
-            value={password}
-            onValueChange={setPassword}
-          />
-        </div>
+
+        <Input
+          isRequired
+          errorMessage="Please enter a valid email"
+          label="Email"
+          labelPlacement="outside"
+          name="email"
+          placeholder="Enter your email"
+          type="email"
+          value={email}
+          onValueChange={setEmail}
+          className="py-2"
+        />
+        <Input
+          errorMessage={() => (
+            <ul>
+              {errors.map((error, index) => (
+                <li key={index}>{error}</li>
+              ))}
+            </ul>
+          )}
+          isInvalid={errors.length > 0}
+          label="Password"
+          labelPlacement="outside"
+          placeholder="Please enter a password"
+          type="password"
+          value={password}
+          onValueChange={setPassword}
+        />
 
         {isLoading ? (
           <Button isDisabled className="w-full">
             <Spinner />
           </Button>
         ) : (
-          <Button type="submit" color="primary" className="w-full font-bold">
+          <Button type="submit" color="primary" className="w-full font-bold mt-2">
             Signup
           </Button>
         )}
-        <p className="text-center font-semibold text-gray-600">
-          Have account?
-          <Link href={"/authentication/signin"} className="text-blue-600">
+        <div className="text-center mt-2">
+          <p className="text-sm font-semibold">OR</p>
+          <UserGoogleAuth />
+        </div>
+        <p className="text-xs font-semibold text-center">
+          Already have account?
+          <Link
+            href={"/authentication/signin"}
+            className="text-blue-600 ml-1 underline underline-offset-4 font-semibold"
+          >
             Signin
           </Link>
         </p>

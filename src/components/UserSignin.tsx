@@ -60,28 +60,20 @@ export default function UserSignin() {
       className="max-w-md mx-auto w-full flex items-center justify-center min-h-[90vh]"
       onSubmit={onSubmit}
     >
-      <div className="border max-w-md mx-auto w-full px-6 py-10 rounded-lg shadow-xl space-y-10">
-        <div className="pb-6">
-         <div className="space-y-2">
-         <h2 className="text-center text-2xl font-bold">Signin</h2>
-          <p className="text-center font-semibold text-gray-600">
-            Please to continue.
-          </p>
-          <div className="flex justify-center">
-            <UserGoogleAuth />
+      <div className="border rounded-xl p-8 shadow-lg w-96">
+        <div>
+          <div className="flex flex-col justify-center text-center">
+            <h2 className="text-2xl font-semibold">Signin</h2>
+            <p className="text-sm font-semibold">Please signin to continue.</p>
           </div>
-         </div>
-          <div>
-            <p className="text-center font-semibold text-gray-600">OR</p>
-            <Divider />
-            <p className="text-center font-semibold text-gray-600">
-              Continue with email and password
-            </p>
+          <Divider />
+          <div className="py-1 text-center">
+            <p className="text-xs">Continue with email and password</p>
           </div>
           <div className="flex justify-center">
             {isError && (
-              <p className="font-bold text-red-600 flex items-center">
-                <OctagonX size={20} className="mr-1" />
+              <p className="font-bold text-sm text-red-600 flex items-center">
+                <OctagonX size={16} className="mr-1" />
                 {errorMessage}
               </p>
             )}
@@ -97,6 +89,7 @@ export default function UserSignin() {
           type="email"
           value={email}
           onValueChange={setEmail}
+          className="py-2"
         />
         <Input
           label="Password"
@@ -106,19 +99,27 @@ export default function UserSignin() {
           value={password}
           onValueChange={setPassword}
         />
-
-        {isLoading ? (
-          <Button isDisabled className="w-full">
-            <Spinner />
-          </Button>
-        ) : (
-          <Button type="submit" color="primary" className="w-full font-bold">
-            Signin
-          </Button>
-        )}
-        <p className="text-center font-semibold text-gray-600">
+        <div className="py-2">
+          {isLoading ? (
+            <Button isDisabled className="w-full">
+              <Spinner />
+            </Button>
+          ) : (
+            <Button type="submit" color="primary" className="w-full font-bold mt-2">
+              Signin
+            </Button>
+          )}
+        </div>
+        <div className="text-center">
+          <p className="text-sm font-semibold">OR</p>
+          <UserGoogleAuth />
+        </div>
+        <p className="text-xs font-semibold text-center">
           Do not have account?
-          <Link href={"/authentication/signup"} className="text-blue-600">
+          <Link
+            href={"/authentication/signup"}
+            className="text-blue-600 ml-1 underline underline-offset-4 font-semibold"
+          >
             Signup
           </Link>
         </p>

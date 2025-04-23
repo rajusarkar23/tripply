@@ -24,9 +24,18 @@ export async function POST(req: NextRequest) {
   const hashedOTP = bcrypt.hashSync(otp, 10);
 
   try {
+    const checkIfEmailIsAlreadyRegistered = await db
+      .select({ email: tourists.email })
+      .from(tourists)
+      .where(eq(tourists.email, newEmail));
+    if (checkIfEmailIsAlreadyRegistered.length !== 0) {
+      return NextResponse.json({
+        success: false,
+        message: "This email is already registered.",
+      });
+    }
 
-    otpVerifyEmail(otp, newEmail)
-
+    otpVerifyEmail(otp, newEmail);
     await db
       .update(tourists)
       .set({
