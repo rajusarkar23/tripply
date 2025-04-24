@@ -7,6 +7,7 @@ export default function AdminNavbar() {
   const pathname = usePathname();
 
   const addPath = "/admin/add-new-tour";
+  const addPathV2 = "/admin/add-new-tour-v2";
   const tours = "/admin/tours";
   const successBookings = "/admin/bookings";
   const failedBookings = "/admin/failed-bookings";
@@ -28,6 +29,16 @@ export default function AdminNavbar() {
           }`}
         >
           Add new tour
+        </Link>
+        <Link
+          href={"/admin/add-new-tour-v2"}
+          className={`${
+            pathname === addPathV2
+              ? "font-bold text-white p-1  rounded-full px-2 transition-all bg-black"
+              : "font-bold text-black border p-1 rounded-full px-2 border-black/60 hover:bg-black hover:text-white transition-all"
+          }`}
+        >
+          Add new tour V2
         </Link>
         <Link
           href={"/admin/tours"}
