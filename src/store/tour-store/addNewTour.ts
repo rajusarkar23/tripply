@@ -3,22 +3,30 @@ import { persist } from "zustand/middleware";
 
 // hero banner content
 interface HeroBannerContent {
-  heading: string,
-  briefParagraph: string,
+  heading: string;
+  briefParagraph: string;
 }
 // hero banner images
-
+interface HeroBannerImageUrl {
+  url: string;
+}
 
 // FINAL STORE DATA TYPES
 interface AddNewtour {
   placeName: string;
   mainBackImageUrl: string;
   heroBannerContent: HeroBannerContent;
-  heroBannerImageurls: string[],
-  addPlaceName: ({ placeName }: { placeName: string }) => Promise<void>;
+  heroBannerImageurls: HeroBannerImageUrl[];
+  setPlaceName: ({ placeName }: { placeName: string }) => Promise<void>;
   setMainBackImageUrl: ({ imageUrl }: { imageUrl: string }) => Promise<void>;
-  setHeroBannerContent: ({heading, briefParagraph}: {heading: string, briefParagraph: string}) => Promise<void>
-  setHeroBannerImages: ({imageUrl}: {imageUrl: any}) => void
+  setHeroBannerContent: ({
+    heading,
+    briefParagraph,
+  }: {
+    heading: string;
+    briefParagraph: string;
+  }) => Promise<void>;
+  setHeroBannerImages: ({ imageUrl }: { imageUrl: any }) => void;
 }
 
 const useAddNewTour = create(
@@ -31,23 +39,27 @@ const useAddNewTour = create(
         briefParagraph: "",
       },
       heroBannerImageurls: [],
-      addPlaceName: async ({ placeName }) => {
+      setPlaceName: async ({ placeName }) => {
         set({ placeName: placeName });
       },
       setMainBackImageUrl: async ({ imageUrl }) => {
         set({ mainBackImageUrl: imageUrl });
       },
-      setHeroBannerContent: async ({heading,briefParagraph}) => {
-        set(() => ({heroBannerContent: {
-          heading: heading,
-          briefParagraph: briefParagraph,
-        }}))
+      setHeroBannerContent: async ({ heading, briefParagraph }) => {
+        set(() => ({
+          heroBannerContent: {
+            heading: heading,
+            briefParagraph: briefParagraph,
+          },
+        }));
       },
-      setHeroBannerImages: ({imageUrl}) => {
+      setHeroBannerImages: ({ imageUrl }) => {
         set((state) => ({
-          heroBannerImageurls:[...state.heroBannerImageurls || [], imageUrl]
-        }))
-      } 
+          heroBannerImageurls: [
+            ...state.heroBannerImageurls.concat(imageUrl)
+          ],
+        }));
+      },
     }),
     { name: "add-new-tour" }
   )

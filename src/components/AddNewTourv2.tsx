@@ -8,241 +8,102 @@ import {
   ModalContent,
   ModalFooter,
   ModalHeader,
+  NumberInput,
   Spinner,
   Textarea,
   useDisclosure,
 } from "@heroui/react";
 import { CheckCircle } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
+
+interface HeroBannerImageUrl {
+  url: string;
+}
 
 export default function AddNewTourV2() {
-  // STATES FOR ALL DATA
   const {
-    addPlaceName,
-    setMainBackImageUrl,
-    setHeroBannerContent,
-    heroBannerImageurls,
     mainBackImageUrl,
     placeName,
     heroBannerContent,
-    setHeroBannerImages,
+    heroBannerImageurls,
   } = useAddNewTour();
+  const [activeBannerImage, setActiveBannerImage] = useState("");
+  console.log(activeBannerImage);
 
+  useEffect(() => {
+    if (useAddNewTour.getState().heroBannerImageurls.length !== 0) {
+      setActiveBannerImage(useAddNewTour.getState().heroBannerImageurls[0].url);
+    } else {
+      return;
+    }
+  }, []);
 
-  // ALL COMPONENT FUNC WILL GO HERE
-
-  // add place name
-  function PlaceName() {
-    const { isOpen, onOpen, onClose } = useDisclosure();
-    const handleOpen = () => {
-      onOpen();
-    };
+  function SetPlaceName() {
+    const { isOpen, onOpen, onOpenChange } = useDisclosure();
     const [place, setPlace] = useState("");
-
+    const { setPlaceName, placeName } = useAddNewTour();
     return (
-      <div>
-        <div>
-          <div>
-            {placeName.length !== 0 ? (
-              <div>
-                <div
-                  onClick={() => {
-                    console.log(placeName.length);
-
-                    handleOpen();
-                  }}
-                  className="font-semibold underline underline-offset-2 text-green-600 flex items-center hover:cursor-pointer"
-                >
-                  Add Place Name <CheckCircle size={18} />
-                </div>
-              </div>
-            ) : (
-              <div
-                onClick={() => {
-                  console.log(placeName.length);
-
-                  handleOpen();
-                }}
-                className="font-semibold underline underline-offset-2 hover:cursor-pointer"
-              >
-                Add Place Name
-              </div>
-            )}
-          </div>
+      <>
+        <div className="hover:bg-zinc-200 transition-all w-80 h-10 flex items-center hover:cursor-pointer px-4 rounded">
+          {placeName.length !== 0 ? (
+            <div
+              className=" text-green-600 font-semibold flex items-center"
+              onClick={onOpen}
+            >
+              Place Name added <CheckCircle size={18} className="ml-1" />
+            </div>
+          ) : (
+            <div
+              onClick={onOpen}
+              className="hover:cursor-pointer font-semibold"
+            >
+              Set place name
+            </div>
+          )}
         </div>
-        <Modal isOpen={isOpen} size={"md"} onClose={onClose}>
+        <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
           <ModalContent>
             {(onClose) => (
               <>
                 <ModalHeader className="flex flex-col gap-1">
-                  Place name
+                  Write Place Name Below
                 </ModalHeader>
                 <ModalBody>
                   {placeName.length !== 0 ? (
-                    <Input
-                      label="Place Name"
-                      type="text"
-                      onChange={(e) => {
-                        setPlace(e.target.value);
-                      }}
-                      defaultValue={placeName}
-                    />
-                  ) : (
-                    <Input
-                      label="Place Name"
-                      type="text"
-                      onChange={(e) => {
-                        setPlace(e.target.value);
-                      }}
-                    />
-                  )}
-                </ModalBody>
-                <ModalFooter>
-                  <Button color="danger" variant="light" onPress={onClose}>
-                    Close
-                  </Button>
-                  <Button
-                    color="primary"
-                    onPress={() => {
-                      addPlaceName({ placeName: place });
-                      onClose();
-                    }}
-                    className="font-bold"
-                  >
-                    Action
-                  </Button>
-                </ModalFooter>
-              </>
-            )}
-          </ModalContent>
-        </Modal>
-      </div>
-    );
-  }
-  // set main back image
-  function AddMainbackImage() {
-    const { isOpen, onOpen, onClose } = useDisclosure();
-    const handleOpen = () => {
-      onOpen();
-    };
-
-    const [fileUploading, setFileUploading] = useState(false);
-    const [fileUploadError, setFileUploadError] = useState(false);
-    const [fileUploadErrorMessage, setFileUploadErrorMessage] = useState("");
-
-    // file upload function
-    const handleFileUplaod = async (e: ChangeEvent<HTMLInputElement>) => {
-      e.preventDefault();
-
-      // extract the file
-      const fileSelected = e.target.files?.[0];
-      // check
-      if (!fileSelected) {
-        return <p>Please select a file</p>;
-      }
-      // create a new form data
-      const formData = new FormData();
-      // append it with the selected file
-      formData.append("file", fileSelected);
-
-      // send http req
-      try {
-        setFileUploading(true);
-        setFileUploadError(false);
-        const res = await fetch("/api/tour/upload-media", {
-          method: "POST",
-          body: formData,
-        });
-
-        const response = await res.json();
-        if (response.success) {
-          setFileUploading(false);
-          setMainBackImageUrl({ imageUrl: response.url });
-        } else {
-          setFileUploading(false);
-          setFileUploadError(true);
-          setFileUploadErrorMessage(response.message);
-        }
-      } catch (error) {
-        setFileUploading(false);
-        setFileUploadError(true);
-        setFileUploadErrorMessage("Something went wrong.");
-      }
-    };
-    return (
-      <div>
-        <div>
-          <div>
-            {mainBackImageUrl.length !== 0 ? (
-              <div>
-                <div
-                  onClick={() => {
-                    handleOpen();
-                  }}
-                  className="font-semibold underline underline-offset-2 text-green-600 flex items-center hover:cursor-pointer"
-                >
-                  Upload main back image <CheckCircle size={18} />
-                </div>
-              </div>
-            ) : (
-              <div
-                onClick={() => {
-                  handleOpen();
-                }}
-                className="font-semibold underline underline-offset-2 hover:cursor-pointer"
-              >
-                Upload main back image
-              </div>
-            )}
-          </div>
-        </div>
-        <Modal isOpen={isOpen} size={"md"} onClose={onClose}>
-          <ModalContent>
-            {(onClose) => (
-              <>
-                <ModalHeader className="flex flex-col gap-1">
-                  Place name
-                </ModalHeader>
-                <ModalBody>
-                  {mainBackImageUrl.length !== 0 ? (
-                    <div>
+                    <>
                       <Input
-                        label="Main back image"
-                        type="file"
+                        label="Place name"
+                        defaultValue={placeName}
                         onChange={(e) => {
-                          handleFileUplaod(e);
+                          setPlace(e.target.value);
                         }}
                       />
-                      {fileUploading && <Spinner className="mt-2" />}
-                      {fileUploadError && <p>{fileUploadErrorMessage}</p>}
-                      <div className="mt-4">
-                        <p className="text-sm font-bold">Current image:</p>
-                        <Image
-                          src={mainBackImageUrl}
-                          alt="main_back_image"
-                          width={400}
-                          height={600}
-                          className="rounded"
-                        />
-                        <p className="mt-2 text-sm font-semibold text-zinc-600">
-                          Upload a new file to change this image.
+                      <p>
+                        Place name:{" "}
+                        <span className="text-green-600 font-semibold">
+                          {placeName}
+                        </span>
+                      </p>
+                    </>
+                  ) : (
+                    <>
+                      <Input
+                        label="Place name"
+                        onChange={(e) => {
+                          setPlace(e.target.value);
+                        }}
+                      />
+
+                      {placeName.length !== 0 && (
+                        <p>
+                          Place name:{" "}
+                          <span className="text-green-600 font-semibold">
+                            {placeName}
+                          </span>
                         </p>
-                      </div>
-                    </div>
-                  ) : (
-                    <div>
-                      <Input
-                        label="Main back image"
-                        type="file"
-                        onChange={(e) => {
-                          handleFileUplaod(e);
-                        }}
-                      />
-                      {fileUploading && <Spinner className="mt-2" />}
-                      {fileUploadError && <p>{fileUploadErrorMessage}</p>}
-                    </div>
+                      )}
+                    </>
                   )}
                 </ModalBody>
                 <ModalFooter>
@@ -251,40 +112,34 @@ export default function AddNewTourV2() {
                   </Button>
                   <Button
                     color="primary"
+                    className="font-semibold"
                     onPress={() => {
-                      onClose();
+                      console.log(place);
+                      setPlaceName({ placeName: place });
                     }}
-                    className="font-bold"
                   >
-                    Action
+                    Set Place Name
                   </Button>
                 </ModalFooter>
               </>
             )}
           </ModalContent>
         </Modal>
-      </div>
+      </>
     );
   }
-  // ADD HERO BANNER CONTENT
-  function AddHeroBannerContent() {
-    const { isOpen, onOpen, onClose } = useDisclosure();
-    const handleOpen = () => {
-      onOpen();
-    };
-
+  function SetMainBackgroundImage() {
+    const { isOpen, onOpen, onOpenChange } = useDisclosure();
     const [fileUploading, setFileUploading] = useState(false);
+    const [fileUploadingSuccess, setFileUploadingSuccess] = useState(false);
     const [fileUploadError, setFileUploadError] = useState(false);
     const [fileUploadErrorMessage, setFileUploadErrorMessage] = useState("");
-    const [heading, setHeading] = useState("");
-    const [briefParagraph, setBriefParagraph] = useState("");
-    const [imageUrl, setImageUrl] = useState([]);
+    const [imageUrl, setImageUrl] = useState("");
+    const { setMainBackImageUrl, mainBackImageUrl } = useAddNewTour();
 
-    // file upload function
+    // handle file upload
     const handleFileUplaod = async (e: ChangeEvent<HTMLInputElement>) => {
       e.preventDefault();
-
-      // extract the file
       const fileSelected = e.target.files?.[0];
       // check
       if (!fileSelected) {
@@ -307,7 +162,9 @@ export default function AddNewTourV2() {
         const response = await res.json();
         if (response.success) {
           setFileUploading(false);
-          setHeroBannerImages({ imageUrl: response.url });
+          // setMainBackImageUrl({ imageUrl: response.url });
+          setImageUrl(response.url);
+          setFileUploadingSuccess(true);
         } else {
           setFileUploading(false);
           setFileUploadError(true);
@@ -320,59 +177,77 @@ export default function AddNewTourV2() {
       }
     };
     return (
-      <div>
-        <div>
-          <div>
-            {heroBannerContent.briefParagraph.length !== 0 ? (
-              <div>
-                <div
-                  onClick={() => {
-                    handleOpen();
-                  }}
-                  className="font-semibold underline underline-offset-2 text-green-600 flex items-center hover:cursor-pointer"
-                >
-                  Add Hero banner content <CheckCircle size={18} />
-                </div>
-              </div>
-            ) : (
-              <div
-                onClick={() => {
-                  handleOpen();
-                }}
-                className="font-semibold underline underline-offset-2 hover:cursor-pointer"
-              >
-                Add hero banner content
-              </div>
-            )}
-          </div>
+      <>
+        <div className="hover:bg-zinc-200 transition-all w-80 h-10 flex items-center hover:cursor-pointer px-4 rounded">
+          {mainBackImageUrl.length !== 0 ? (
+            <div
+              className="hover:cursor-pointer text-green-600 font-semibold flex items-center"
+              onClick={onOpen}
+            >
+              Main Background Image Added{" "}
+              <CheckCircle size={18} className="ml-1" />
+            </div>
+          ) : (
+            <div
+              onClick={onOpen}
+              className="hover:cursor-pointer font-semibold"
+            >
+              Set Main Background Image
+            </div>
+          )}
         </div>
-        <Modal isOpen={isOpen} size={"md"} onClose={onClose}>
+        <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
           <ModalContent>
             {(onClose) => (
               <>
                 <ModalHeader className="flex flex-col gap-1">
-                  Place name
+                  Uplaod main background image
                 </ModalHeader>
                 <ModalBody>
-                  <Textarea
-                    label="Heading"
-                    onChange={(e) => {
-                      setHeading(e.target.value);
-                    }}
-                  />
-                  <Textarea
-                    label="Brief Para"
-                    onChange={(e) => {
-                      setBriefParagraph(e.target.value);
-                    }}
-                  />
                   <Input
-                    label="Upload banner images"
+                    label="Select an image"
                     type="file"
                     onChange={(e) => {
                       handleFileUplaod(e);
                     }}
                   />
+                  <div>
+                    {fileUploading && (
+                      <p className="font-bold flex items-center text-zinc-700 mb-2">
+                        Uploading... <Spinner size="sm" color="default" />{" "}
+                      </p>
+                    )}
+                    {fileUploadError && <p>{fileUploadErrorMessage}</p>}
+                    {fileUploadingSuccess && imageUrl.length !== 0 && (
+                      <>
+                        <p className="text-xs font-semibold text-zinc-700">
+                          To change this image upload a new image.
+                        </p>
+                        <Image
+                          src={imageUrl}
+                          alt="main_background_image"
+                          width={400}
+                          height={400}
+                          className="rounded"
+                        />
+                      </>
+                    )}
+
+                    {mainBackImageUrl.length !== 0 && !fileUploadingSuccess && (
+                      <>
+                        <p className="text-xs font-semibold text-zinc-700">
+                          To change this image upload a new image.
+                        </p>
+                        <Image
+                          src={mainBackImageUrl}
+                          alt="main_background_image"
+                          width={400}
+                          height={400}
+                          className="rounded"
+                        />
+                      </>
+                    )}
+                  </div>
                 </ModalBody>
                 <ModalFooter>
                   <Button color="danger" variant="light" onPress={onClose}>
@@ -381,35 +256,302 @@ export default function AddNewTourV2() {
                   <Button
                     color="primary"
                     onPress={() => {
-                      setHeroBannerContent({ heading, briefParagraph });
+                      setMainBackImageUrl({ imageUrl });
                     }}
-                    className="font-bold"
+                    className="font-semibold"
                   >
-                    Action
+                    Set Image
                   </Button>
                 </ModalFooter>
               </>
             )}
           </ModalContent>
         </Modal>
-      </div>
+      </>
+    );
+  }
+  function HeroBannerContent() {
+    const { isOpen, onOpen, onOpenChange } = useDisclosure();
+    const [heading, setHeading] = useState("");
+    const [para, setPara] = useState("");
+    const [imageUrl, setImageUrl] = useState<HeroBannerImageUrl[]>([]);
+
+    const [fileUploading, setFileUploading] = useState(false);
+    const [fileUploadingSuccess, setFileUploadingSuccess] = useState(false);
+    const [fileUploadError, setFileUploadError] = useState(false);
+    const [fileUploadErrorMessage, setFileUploadErrorMessage] = useState("");
+    const [conetntAddError, setContentAddError] = useState(false);
+    const [conetntAddErrorMessage, setContentAddErrorMessage] = useState("");
+    const {
+      setHeroBannerContent,
+      heroBannerContent,
+      heroBannerImageurls,
+      setHeroBannerImages,
+    } = useAddNewTour();
+
+    const [activeImage, setActiveImage] = useState("");
+    const [activeImageInEmptyBannerData, setActiveImageInEmptyBannerData] =
+      useState("");
+
+    useEffect(() => {
+      if (heroBannerImageurls.length !== 0) {
+        setActiveImage(heroBannerImageurls[0].url);
+      } else {
+        return;
+      }
+    }, []);
+    const handleFileUplaod = async (e: ChangeEvent<HTMLInputElement>) => {
+      e.preventDefault();
+      const fileSelected = e.target.files?.[0];
+      // check
+      if (!fileSelected) {
+        return <p>Please select a file</p>;
+      }
+      // create a new form data
+      const formData = new FormData();
+      // append it with the selected file
+      formData.append("file", fileSelected);
+
+      // send http req
+      try {
+        setFileUploading(true);
+        setFileUploadError(false);
+        const res = await fetch("/api/tour/upload-media", {
+          method: "POST",
+          body: formData,
+        });
+
+        const response = await res.json();
+        if (response.success) {
+          setFileUploading(false);
+          setActiveImageInEmptyBannerData(response.url);
+          setImageUrl((prev) => [...prev, { url: response.url }]);
+          setFileUploadingSuccess(true);
+        } else {
+          setFileUploading(false);
+          setFileUploadError(true);
+          setFileUploadErrorMessage(response.message);
+        }
+      } catch (error) {
+        setFileUploading(false);
+        setFileUploadError(true);
+        setFileUploadErrorMessage("Something went wrong.");
+      }
+    };
+    return (
+      <>
+        <div className="hover:bg-zinc-200 transition-all w-80 h-10 flex items-center hover:cursor-pointer px-4 rounded">
+          {heroBannerContent.briefParagraph.length !== 0 &&
+          heroBannerContent.heading.length !== 0 &&
+          heroBannerImageurls.length !== 0 ? (
+            <div
+              className="hover:cursor-pointer text-green-600 font-semibold flex items-center"
+              onClick={onOpen}
+            >
+              Banner content added <CheckCircle size={18} className="ml-1" />
+            </div>
+          ) : (
+            <div
+              onClick={onOpen}
+              className="hover:cursor-pointer font-semibold"
+            >
+              Set hero banner contents
+            </div>
+          )}
+        </div>
+        <Modal isOpen={isOpen} onOpenChange={onOpenChange} size="3xl">
+          <ModalContent>
+            {(onClose) => (
+              <>
+                <ModalHeader className="flex flex-col gap-1">
+                  Fill the banner conetnt below
+                </ModalHeader>
+                <ModalBody>
+                  {heroBannerContent.briefParagraph.length !== 0 &&
+                  heroBannerContent.heading.length !== 0 &&
+                  heroBannerImageurls.length !== 0 ? (
+                    <>
+                      <Textarea
+                        label="Heading"
+                        defaultValue={heroBannerContent.heading}
+                        onChange={(e) => {
+                          setHeading(e.target.value);
+                        }}
+                      />
+
+                      <Textarea
+                        label="Brief paragraph"
+                        defaultValue={heroBannerContent.briefParagraph}
+                        onChange={(e) => {
+                          setPara(e.target.value);
+                        }}
+                      />
+                      <Input
+                        type="file"
+                        onChange={(e) => {
+                          handleFileUplaod(e);
+                        }}
+                      />
+                      {fileUploading && (
+                        <p className="flex items-center text-zinc-700">
+                          Uploading... <Spinner size="sm" className="mr-1" />
+                        </p>
+                      )}
+                      {fileUploadError && <p>{fileUploadErrorMessage}</p>}
+                      {fileUploadingSuccess && <p>FIle uploaded</p>}
+                      {conetntAddError && (
+                        <p className="text-sm font-semibold text-red-600">
+                          {conetntAddErrorMessage}
+                        </p>
+                      )}
+
+                      <div>
+                        <div>
+                          <p className="text-center text-xs font-semibold">
+                            To change this image or upload a select a new image.
+                          </p>
+                        </div>
+                        {activeImage.length !== 0 && (
+                          <div className="flex justify-center">
+                            <Image
+                              src={activeImage}
+                              alt="banner_image"
+                              width={400}
+                              height={400}
+                              className="rounded"
+                            />
+                          </div>
+                        )}
+
+                        {heroBannerImageurls.length !== 0 && (
+                          <div className="flex py-2 space-x-1 justify-center">
+                            {heroBannerImageurls.map((urls, index) => (
+                              <Image
+                                src={urls.url}
+                                alt="banner_image"
+                                width={60}
+                                height={60}
+                                onClick={() => {
+                                  setActiveImage(urls.url);
+                                }}
+                                key={index}
+                                className="rounded hover:cursor-pointer border p-0.5"
+                              />
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <Textarea
+                        label="Heading"
+                        onChange={(e) => {
+                          setHeading(e.target.value);
+                        }}
+                      />
+
+                      <Textarea
+                        label="Brief paragraph"
+                        onChange={(e) => {
+                          setPara(e.target.value);
+                        }}
+                      />
+                      <Input
+                        type="file"
+                        onChange={(e) => {
+                          handleFileUplaod(e);
+                        }}
+                      />
+                      {fileUploading && (
+                        <p className="flex items-center text-xs text-zinc-700">
+                          Uploading... <Spinner size="sm" className="mr-1" />
+                        </p>
+                      )}
+                      {fileUploadError && <p>{fileUploadErrorMessage}</p>}
+                      {fileUploadingSuccess && <p>FIle uploaded</p>}
+                      {conetntAddError && (
+                        <p className="text-sm font-semibold text-red-600">
+                          {conetntAddErrorMessage}
+                        </p>
+                      )}
+                      {activeImageInEmptyBannerData.length !== 0 && (
+                        <div className="flex py-2 space-x-1 justify-center">
+                          <Image
+                            src={activeImageInEmptyBannerData}
+                            alt="banner_image"
+                            height={400}
+                            width={400}
+                          />
+                        </div>
+                      )}
+                      {imageUrl.length !== 0 && (
+                        <div className="flex py-2 space-x-1 justify-center">
+                          {imageUrl.map((urls, index) => (
+                            <Image
+                              src={urls.url}
+                              alt="banner_image"
+                              width={60}
+                              height={60}
+                              onClick={() => {
+                                setActiveImageInEmptyBannerData(urls.url);
+                              }}
+                              key={index}
+                              className="rounded hover:cursor-pointer border p-0.5"
+                            />
+                          ))}
+                        </div>
+                      )}
+                    </>
+                  )}
+                </ModalBody>
+                <ModalFooter>
+                  <Button color="danger" variant="light" onPress={onClose}>
+                    Close
+                  </Button>
+                  <Button
+                    color="primary"
+                    className="font-semibold"
+                    onPress={() => {
+                      if (
+                        para.length === 0 ||
+                        heading.length === 0 ||
+                        imageUrl.length === 0
+                      ) {
+                        setContentAddError(true);
+                        setContentAddErrorMessage("All fields are required.");
+                        return;
+                      }
+                      setHeroBannerContent({ briefParagraph: para, heading });
+                      setHeroBannerImages({ imageUrl: imageUrl });
+                    }}
+                  >
+                    Set content
+                  </Button>
+                </ModalFooter>
+              </>
+            )}
+          </ModalContent>
+        </Modal>
+      </>
     );
   }
 
-  // main page return
+
   return (
-    <div className="flex justify-between space-x-2 p-4">
-      <div className="">
-        <PlaceName />
-        <AddMainbackImage />
-        <AddHeroBannerContent />
+    <div className="flex justify-between">
+      {/* FOR ADDING CONTENT */}
+      <div className="p-5">
+        <SetPlaceName />
+        <SetMainBackgroundImage />
+        <HeroBannerContent />
       </div>
+      {/* FOR SHOWING CONTENT */}
       <div>
-        <div className="border p-4 shadow-md">
-          {placeName.length !== 0 && <h2>{placeName}</h2>}
+        <div className="border shadow-md">
           {mainBackImageUrl.length !== 0 && (
-            <div className="relative min-h-[70vh] flex items-center justify-center">
-              {/* HERO NACKGROUND IMAGE AND HEADERS */}
+            <div className="relative min-h-[30vh] w-[1080px] flex items-center justify-center">
+              {/* HERO BACKGROUND IMAGE AND HEADERS */}
               <div className="absolute inset-0 z-0">
                 <Image
                   src={mainBackImageUrl}
@@ -423,44 +565,110 @@ export default function AddNewTourV2() {
               </div>
 
               {/* Content */}
-              <div className="relative z-10 text-center px-4 sm:px-6 max-w-4xl mx-auto">
-                <div className="text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-6">{
-                  heroBannerContent.heading.length !== 0 && (<p>{heroBannerContent.heading}</p>)
-                  }</div>
-                <p className="text-xl md:text-2xl text-white/90 mb-8 max-w-2xl mx-auto">
-                  Discover amazing features and services that will transform
-                  your experience. Join us today and start your journey.
-                </p>
-                <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                  <Link
-                    href="#"
-                    className="bg-white text-black font-medium px-8 py-3 rounded-lg hover:bg-white/90 transition-colors"
-                  >
-                    Get Started
-                  </Link>
-                  <Link
-                    href="#"
-                    className="bg-transparent border border-white text-white font-medium px-8 py-3 rounded-lg hover:bg-white/10 transition-colors"
-                  >
-                    Learn More
-                  </Link>
+              <div className="relative z-10 text-center px-4 sm:px-6">
+                <div className="text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-6">
+                  {placeName.length !== 0 && <p>{placeName}</p>}
+                </div>
+                <div className="text-4xl sm:text-3xl md:text-4xl font-bold text-white mb-6">
+                  {heroBannerContent.heading.length !== 0 && (
+                    <p>{heroBannerContent.heading}</p>
+                  )}
+                </div>
+
+                <div className="flex flex-col gap-4 justify-center items-center">
                   <div>
-                    {
-                      heroBannerImageurls.map((image, index) => (
-                        <Image 
-                        src={image[0]}
+                    {heroBannerContent.briefParagraph.length !== 0 && (
+                      <p className="text-white">
+                        {heroBannerContent.briefParagraph}
+                      </p>
+                    )}
+                  </div>
+                  <div>
+                    <Image
+                      src={activeBannerImage}
+                      alt="active_banner_image"
+                      width={400}
+                      height={400}
+                    />
+                  </div>
+
+                  <div className="flex">
+                    {heroBannerImageurls.map((image, index) => (
+                      <Image
+                        src={image.url}
                         alt="dbv"
-                        width={400}
-                        height={400}
+                        width={60}
+                        height={60}
                         key={index}
-                        />
-                      ))
-                    }
+                        onClick={() => {
+                          setActiveBannerImage(image.url);
+                        }}
+                      />
+                    ))}
                   </div>
                 </div>
               </div>
             </div>
           )}
+        </div>
+
+        <div className="w-48 mt-[-20px] z-50 absolute">
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias
+          laborum ut minima eligendi dolor, ab magnam, voluptates at velit
+          labore qui eveniet! Dignissimos laborum ipsa quia atque error aut
+          tempora ea, dolore quod impedit quaerat sequi ex possimus officia
+          fugit fugiat! Odit, aspernatur vitae quasi enim delectus autem quo
+          labore? Tenetur impedit officiis ullam reprehenderit architecto? Vel
+          odit magnam similique tempora ipsam qui, suscipit earum aperiam esse
+          iste, cum reiciendis debitis eum ullam quibusdam quia hic assumenda
+          aliquam dolor illo? Atque ducimus, quos facilis vitae nesciunt dolore
+          blanditiis quia ullam temporibus. Doloremque temporibus id facilis sit
+          suscipit et sunt itaque repudiandae eligendi, ipsa voluptates, vitae
+          tenetur, aperiam illo porro? Delectus laborum sint recusandae incidunt
+          illum deserunt sit, iusto expedita explicabo architecto beatae neque,
+          ullam saepe odio magni temporibus corporis, nam doloribus est qui
+          dolore maxime. Ab dolore sequi maiores blanditiis officiis cumque
+          dolores nobis obcaecati. Eum rem eaque quos, accusamus quod ipsa
+          laboriosam! Dolores rerum deserunt dolorem ratione accusamus! Eligendi
+          provident nemo vel veniam. Ea laboriosam ipsum obcaecati sunt,
+          reprehenderit eius porro fuga ducimus! Dolores porro consectetur ipsam
+          accusamus animi natus maiores nobis sapiente unde nemo eius, aut sit
+          rerum quidem fugit ad quae, voluptatibus dolorem minima non? Voluptate
+          error atque veniam temporibus ab unde, illum quos fugiat, deleniti
+          blanditiis assumenda inventore eius? Nihil nesciunt nobis ad quae
+          libero ipsa architecto quo sed sint asperiores, velit soluta
+          laudantium officia eum facilis vel veritatis eligendi ut commodi
+          magnam eveniet! Eligendi libero corporis beatae omnis similique.
+          Nostrum commodi doloremque ratione culpa, incidunt amet fugit autem
+          earum similique repellendus odit explicabo voluptatem cupiditate aut
+          laudantium quod dolorem quidem delectus, non quasi dignissimos
+          excepturi ut. A quo aut nam quis, beatae sint libero laboriosam sequi
+          repellendus qui rerum nulla quas magni laborum! Eos autem, obcaecati
+          ea illo necessitatibus sit, illum incidunt optio doloribus possimus,
+          praesentium cumque officia quibusdam! Numquam, culpa dignissimos,
+          rerum vel veniam quia laborum cupiditate ad aperiam eveniet assumenda
+          cum accusamus qui dolorum eligendi? Laboriosam deleniti aspernatur
+          corrupti non tenetur quos reprehenderit molestias accusamus neque,
+          modi minus amet numquam ratione quam beatae temporibus omnis, pariatur
+          obcaecati fugiat explicabo voluptatum? Veritatis eveniet similique
+          autem tempore fuga mollitia, deleniti iste temporibus nostrum
+          molestias nihil, ullam dolor tempora expedita quaerat repellendus
+          dignissimos eos, reprehenderit reiciendis distinctio earum neque
+          tenetur explicabo! Ducimus sapiente ipsum doloribus voluptatem
+          voluptas ipsa eos totam harum eius dicta, voluptatum quas repudiandae
+          praesentium itaque facere impedit aliquid atque excepturi dolorem
+          natus neque, consectetur quo obcaecati! Modi, ratione facere
+          temporibus iusto exercitationem consequatur mollitia deserunt at
+          eaque, et laudantium dolore sequi excepturi aliquam sit vero rerum
+          vitae sed provident aperiam. Ipsam laborum quas explicabo odit, eos
+          deserunt enim dolorum dolorem aliquam. Ipsum tempora velit iusto,
+          architecto magni quasi quisquam voluptatibus animi fugit voluptatem
+          aut amet sunt minima excepturi nihil magnam laboriosam hic aliquam! In
+          porro facilis expedita laborum praesentium. Velit quos corporis
+          quisquam reprehenderit neque molestiae ea, aperiam, possimus earum
+          similique nihil consequatur illum est a, repellendus placeat atque
+          iusto expedita assumenda dolores dolor quae eum at laudantium? Sed
+          mollitia quis laudantium inventore.
         </div>
       </div>
     </div>

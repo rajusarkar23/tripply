@@ -70,9 +70,9 @@ export const tour = pgTable("tour", {
 
 export const tourV2 = pgTable("tourV2", ({
   id: serial("id").primaryKey(),
-  placeName: text("place_name").notNull(),
-  mainBackImage: text("main_back_image").notNull(),
-  slug: text("slug").notNull(),
+  placeName: text("place_name").notNull(), // DONE
+  mainBackImage: text("main_back_image").notNull(), // DONE
+  slug: text("slug").notNull(), // DONE
   heroBannerContent: jsonb("hero_banner_content").$type<HeroBannerContent>().notNull(),
   thingsToDoArr: jsonb("things_to_do_arr").$type<ThingsToDoArr>().notNull(),
   visitTimings: jsonb("visit_timings").$type<VisitTimings>().notNull(),
