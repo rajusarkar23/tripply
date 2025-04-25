@@ -570,7 +570,7 @@ export default function AddNewTourV2() {
     const [briefParagraph, setBriefParagraph] = useState("");
     const [rating, setRating] = useState<number>();
     const [imageUrl, setImageUrl] = useState("");
-    const {setThingsTodo} = useAddNewTour();
+    const { setThingsTodo } = useAddNewTour();
 
     // local component arr
     const [thingsTodoArr, setThingsToDoArr] = useState<ThingsToDoArr[]>([]);
@@ -579,8 +579,9 @@ export default function AddNewTourV2() {
     const [fileUploadError, setFileUploadError] = useState(false);
     const [fileUploadErrorMessage, setFileUploadErrorMessage] = useState("");
 
-    const [thingsTodoArrAddError, setThingsTodoArrAddError] = useState(false)
-    const [thingsTodoArrAddErrorMessage, setThingsTodoArrAddErrorMessage] = useState("")
+    const [thingsTodoArrAddError, setThingsTodoArrAddError] = useState(false);
+    const [thingsTodoArrAddErrorMessage, setThingsTodoArrAddErrorMessage] =
+      useState("");
 
     // handle file upload
     const handleFileUplaod = async (e: ChangeEvent<HTMLInputElement>) => {
@@ -686,9 +687,11 @@ export default function AddNewTourV2() {
                       Uploading... <Spinner size="sm" color="default" />{" "}
                     </p>
                   )}
-                  {
-                    thingsTodoArrAddError && (<p className="font-semibold text-sm text-red-600">{thingsTodoArrAddErrorMessage}</p>)
-                  }
+                  {thingsTodoArrAddError && (
+                    <p className="font-semibold text-sm text-red-600">
+                      {thingsTodoArrAddErrorMessage}
+                    </p>
+                  )}
                   {fileUploadError && <p>{fileUploadErrorMessage}</p>}
                   {fileUploadingSuccess && imageUrl.length !== 0 && (
                     <div className="flex justify-center flex-col items-center">
@@ -711,10 +714,18 @@ export default function AddNewTourV2() {
                       color="default"
                       className="font-bold"
                       onPress={() => {
-                        if (heading.length === 0 || briefParagraph.length === 0 || imageUrl.length === 0 || typeof rating !== "number" || subHeading.length === 0) {
-                          setThingsTodoArrAddError(true)
-                          setThingsTodoArrAddErrorMessage("All fields are required.")
-                          return
+                        if (
+                          heading.length === 0 ||
+                          briefParagraph.length === 0 ||
+                          imageUrl.length === 0 ||
+                          typeof rating !== "number" ||
+                          subHeading.length === 0
+                        ) {
+                          setThingsTodoArrAddError(true);
+                          setThingsTodoArrAddErrorMessage(
+                            "All fields are required."
+                          );
+                          return;
                         }
                         setThingsToDoArr([
                           ...thingsTodoArr,
@@ -744,16 +755,19 @@ export default function AddNewTourV2() {
                               // setBriefParagraph(todo.briefParagraph)
                             }}
                             className="bg-neutral-600/20 rounded p-2"
+                            key={index}
                           >
-                            <p className="text-md font-semibold">{todo.heading}</p>
+                            <p className="text-md font-semibold">
+                              {todo.heading}
+                            </p>
                             <p>{todo.subHeading}</p>
                             <p>{todo.briefParagraph}</p>
                             <p>{todo.rating}</p>
-                            <Image 
-                            src={todo.imageUrl}
-                            alt="image"
-                            width={80}
-                            height={80}
+                            <Image
+                              src={todo.imageUrl}
+                              alt="image"
+                              width={80}
+                              height={80}
                             />
                           </div>
                         ))}
@@ -770,11 +784,13 @@ export default function AddNewTourV2() {
                     className="font-semibold"
                     onPress={() => {
                       if (thingsTodoArr.length === 0) {
-                        setThingsTodoArrAddError(true)
-                        setThingsTodoArrAddErrorMessage("First add the content")
-                        return
+                        setThingsTodoArrAddError(true);
+                        setThingsTodoArrAddErrorMessage(
+                          "First add the content"
+                        );
+                        return;
                       }
-                      setThingsTodo({tta: thingsTodoArr})
+                      setThingsTodo({ tta: thingsTodoArr });
                     }}
                   >
                     Set Things to do
@@ -835,13 +851,15 @@ export default function AddNewTourV2() {
                     )}
                   </div>
                   <div>
-                    <Image
-                      src={activeBannerImage}
-                      alt="active_banner_image"
-                      width={400}
-                      height={400}
-                      className="rounded"
-                    />
+                    {activeBannerImage.length !== 0 && (
+                      <Image
+                        src={activeBannerImage}
+                        alt="active_banner_image"
+                        width={400}
+                        height={400}
+                        className="rounded"
+                      />
+                    )}
                   </div>
 
                   <div className="flex space-x-1 p-1">
@@ -865,20 +883,18 @@ export default function AddNewTourV2() {
           )}
 
           <div className="grid grid-cols-2 gap-2 w-[1080px]">
-            {
-              useAddNewTour.getState().thingsTodoArr.map((things, index) => (
-                <div key={index} className="bg-yellow-100 rounded p-2">
-                  <h2>{things.heading}</h2>
-                  <Image 
+            {useAddNewTour.getState().thingsTodoArr.map((things, index) => (
+              <div key={index} className="bg-yellow-100 rounded p-2">
+                <h2>{things.heading}</h2>
+                <Image
                   src={things.imageUrl}
                   alt="thingstodo_image"
                   width={400}
                   height={400}
-                  />
-                  <p>{things.subHeading}</p>
-                </div>
-              ))
-            }
+                />
+                <p>{things.subHeading}</p>
+              </div>
+            ))}
           </div>
         </div>
       </div>
