@@ -54,11 +54,12 @@ const useAddNewTour = create(
         }));
       },
       setHeroBannerImages: ({ imageUrl }) => {
-        set((state) => ({
-          heroBannerImageurls: [
-            ...state.heroBannerImageurls.concat(imageUrl)
-          ],
-        }));
+        // set((state) => ({
+        //   heroBannerImageurls: [
+        //     imageUrl
+        //   ],
+        // }));
+        set({heroBannerImageurls: imageUrl})
       },
     }),
     { name: "add-new-tour" }

@@ -346,7 +346,14 @@ export default function AddNewTourV2() {
           heroBannerImageurls.length !== 0 ? (
             <div
               className="hover:cursor-pointer text-green-600 font-semibold flex items-center"
-              onClick={onOpen}
+              onClick={() => {
+                onOpen();
+                setHeading(useAddNewTour.getState().heroBannerContent.heading);
+                setPara(
+                  useAddNewTour.getState().heroBannerContent.briefParagraph
+                );
+                setImageUrl(useAddNewTour.getState().heroBannerImageurls);
+              }}
             >
               Banner content added <CheckCircle size={18} className="ml-1" />
             </div>
@@ -373,7 +380,7 @@ export default function AddNewTourV2() {
                     <>
                       <Textarea
                         label="Heading"
-                        defaultValue={heroBannerContent.heading}
+                        defaultValue={heading}
                         onChange={(e) => {
                           setHeading(e.target.value);
                         }}
@@ -381,7 +388,7 @@ export default function AddNewTourV2() {
 
                       <Textarea
                         label="Brief paragraph"
-                        defaultValue={heroBannerContent.briefParagraph}
+                        defaultValue={para}
                         onChange={(e) => {
                           setPara(e.target.value);
                         }}
@@ -423,9 +430,9 @@ export default function AddNewTourV2() {
                           </div>
                         )}
 
-                        {heroBannerImageurls.length !== 0 && (
+                        {imageUrl.length !== 0 && (
                           <div className="flex py-2 space-x-1 justify-center">
-                            {heroBannerImageurls.map((urls, index) => (
+                            {imageUrl.map((urls, index) => (
                               <Image
                                 src={urls.url}
                                 alt="banner_image"
@@ -523,7 +530,9 @@ export default function AddNewTourV2() {
                         return;
                       }
                       setHeroBannerContent({ briefParagraph: para, heading });
-                      setHeroBannerImages({ imageUrl: imageUrl });
+                      const newArr = [...useAddNewTour.getState().heroBannerImageurls, ...imageUrl]
+                      const imagesUrls = [...new Set(newArr)]
+                      setHeroBannerImages({ imageUrl: imagesUrls });
                     }}
                   >
                     Set content
@@ -536,7 +545,6 @@ export default function AddNewTourV2() {
       </>
     );
   }
-
 
   return (
     <div className="flex justify-between">
