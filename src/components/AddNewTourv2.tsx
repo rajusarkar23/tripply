@@ -20,6 +20,13 @@ import { ChangeEvent, useEffect, useState } from "react";
 interface HeroBannerImageUrl {
   url: string;
 }
+interface ThingsToDoArr {
+  heading: string;
+  subHeading: string;
+  briefParagraph: string;
+  rating: number;
+  imageUrl: string;
+}
 
 export default function AddNewTourV2() {
   const {
@@ -174,6 +181,7 @@ export default function AddNewTourV2() {
           setFileUploadErrorMessage(response.message);
         }
       } catch (error) {
+        console.log(error);
         setFileUploading(false);
         setFileUploadError(true);
         setFileUploadErrorMessage("Something went wrong.");
@@ -339,6 +347,7 @@ export default function AddNewTourV2() {
           setFileUploadErrorMessage(response.message);
         }
       } catch (error) {
+        console.log(error);
         setFileUploading(false);
         setFileUploadError(true);
         setFileUploadErrorMessage("Something went wrong.");
@@ -554,6 +563,230 @@ export default function AddNewTourV2() {
       </>
     );
   }
+  function ThingsToDo() {
+    const { isOpen, onOpen, onOpenChange } = useDisclosure();
+    const [heading, setHeading] = useState("");
+    const [subHeading, setSubHeading] = useState("");
+    const [briefParagraph, setBriefParagraph] = useState("");
+    const [rating, setRating] = useState<number>();
+    const [imageUrl, setImageUrl] = useState("");
+    const {setThingsTodo} = useAddNewTour();
+
+    // local component arr
+    const [thingsTodoArr, setThingsToDoArr] = useState<ThingsToDoArr[]>([]);
+    const [fileUploading, setFileUploading] = useState(false);
+    const [fileUploadingSuccess, setFileUploadingSuccess] = useState(false);
+    const [fileUploadError, setFileUploadError] = useState(false);
+    const [fileUploadErrorMessage, setFileUploadErrorMessage] = useState("");
+
+    const [thingsTodoArrAddError, setThingsTodoArrAddError] = useState(false)
+    const [thingsTodoArrAddErrorMessage, setThingsTodoArrAddErrorMessage] = useState("")
+
+    // handle file upload
+    const handleFileUplaod = async (e: ChangeEvent<HTMLInputElement>) => {
+      e.preventDefault();
+      const fileSelected = e.target.files?.[0];
+      // check
+      if (!fileSelected) {
+        return <p>Please select a file</p>;
+      }
+      // create a new form data
+      const formData = new FormData();
+      // append it with the selected file
+      formData.append("file", fileSelected);
+
+      // send http req
+      try {
+        setFileUploading(true);
+        setFileUploadError(false);
+        const res = await fetch("/api/tour/upload-media", {
+          method: "POST",
+          body: formData,
+        });
+
+        const response = await res.json();
+        if (response.success) {
+          setFileUploading(false);
+          setImageUrl(response.url);
+          setFileUploadingSuccess(true);
+        } else {
+          setFileUploading(false);
+          setFileUploadError(true);
+          setFileUploadErrorMessage(response.message);
+        }
+      } catch (error) {
+        console.log(error);
+        setFileUploading(false);
+        setFileUploadError(true);
+        setFileUploadErrorMessage("Something went wrong.");
+      }
+    };
+
+    return (
+      <>
+        <div className="hover:bg-zinc-200 transition-all w-80 h-10 flex items-center hover:cursor-pointer px-4 rounded">
+          <div onClick={onOpen} className="hover:cursor-pointer font-semibold">
+            Set Things to do.
+          </div>
+        </div>
+        <Modal isOpen={isOpen} onOpenChange={onOpenChange} size="2xl">
+          <ModalContent>
+            {(onClose) => (
+              <>
+                <ModalHeader className="flex flex-col gap-1">
+                  Write Place Name Below
+                </ModalHeader>
+                <ModalBody>
+                  <Textarea
+                    label="Heading"
+                    labelPlacement="outside"
+                    placeholder="Write heading"
+                    value={heading}
+                    onChange={(e) => {
+                      setHeading(e.target.value);
+                    }}
+                  />
+                  <Textarea
+                    label="Sub Heading"
+                    labelPlacement="outside"
+                    placeholder="Write sub heading"
+                    value={subHeading}
+                    onChange={(e) => {
+                      setSubHeading(e.target.value);
+                    }}
+                  />
+                  <Textarea
+                    label="Brief Paragraph"
+                    labelPlacement="outside"
+                    placeholder="Write a brief paragraph"
+                    value={briefParagraph}
+                    onChange={(e) => {
+                      setBriefParagraph(e.target.value);
+                    }}
+                  />
+                  <NumberInput
+                    label="Rating"
+                    labelPlacement="outside"
+                    placeholder="Give it a rating betweeb 0-5"
+                    minValue={0}
+                    maxValue={5}
+                    hideStepper
+                    value={rating}
+                    onValueChange={setRating}
+                  />
+                  <Input
+                    label="Select an image"
+                    type="file"
+                    onChange={(e) => {
+                      handleFileUplaod(e);
+                    }}
+                  />
+                  {fileUploading && (
+                    <p className="font-bold flex items-center text-zinc-700 mb-2">
+                      Uploading... <Spinner size="sm" color="default" />{" "}
+                    </p>
+                  )}
+                  {
+                    thingsTodoArrAddError && (<p className="font-semibold text-sm text-red-600">{thingsTodoArrAddErrorMessage}</p>)
+                  }
+                  {fileUploadError && <p>{fileUploadErrorMessage}</p>}
+                  {fileUploadingSuccess && imageUrl.length !== 0 && (
+                    <div className="flex justify-center flex-col items-center">
+                      <p className="text-xs font-semibold text-zinc-700">
+                        To change this image upload a new image.
+                      </p>
+                      <Image
+                        src={imageUrl}
+                        alt="main_background_image"
+                        width={400}
+                        height={400}
+                        className="rounded"
+                      />
+                    </div>
+                  )}
+
+                  <div>
+                    <Button
+                      variant="flat"
+                      color="default"
+                      className="font-bold"
+                      onPress={() => {
+                        if (heading.length === 0 || briefParagraph.length === 0 || imageUrl.length === 0 || typeof rating !== "number" || subHeading.length === 0) {
+                          setThingsTodoArrAddError(true)
+                          setThingsTodoArrAddErrorMessage("All fields are required.")
+                          return
+                        }
+                        setThingsToDoArr([
+                          ...thingsTodoArr,
+                          {
+                            heading,
+                            briefParagraph,
+                            imageUrl,
+                            rating: rating!,
+                            subHeading,
+                          },
+                        ]);
+                      }}
+                    >
+                      Add
+                    </Button>
+                  </div>
+
+                  <div>
+                    {thingsTodoArr.length !== 0 && (
+                      <div className="grid grid-cols-2 gap-2">
+                        {thingsTodoArr.map((todo, index) => (
+                          <div
+                            onClick={() => {
+                              console.log("clicked");
+                              // setHeading(todo.heading)
+                              // setSubHeading(todo.subHeading)
+                              // setBriefParagraph(todo.briefParagraph)
+                            }}
+                            className="bg-neutral-600/20 rounded p-2"
+                          >
+                            <p className="text-md font-semibold">{todo.heading}</p>
+                            <p>{todo.subHeading}</p>
+                            <p>{todo.briefParagraph}</p>
+                            <p>{todo.rating}</p>
+                            <Image 
+                            src={todo.imageUrl}
+                            alt="image"
+                            width={80}
+                            height={80}
+                            />
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </ModalBody>
+                <ModalFooter>
+                  <Button color="danger" variant="light" onPress={onClose}>
+                    Close
+                  </Button>
+                  <Button
+                    color="primary"
+                    className="font-semibold"
+                    onPress={() => {
+                      if (thingsTodoArr.length === 0) {
+                        setThingsTodoArrAddError(true)
+                        setThingsTodoArrAddErrorMessage("First add the content")
+                        return
+                      }
+                      setThingsTodo({tta: thingsTodoArr})
+                    }}
+                  >
+                    Set Things to do
+                  </Button>
+                </ModalFooter>
+              </>
+            )}
+          </ModalContent>
+        </Modal>
+      </>
+    );
+  }
 
   return (
     <div className="flex justify-between">
@@ -562,6 +795,7 @@ export default function AddNewTourV2() {
         <SetPlaceName />
         <SetMainBackgroundImage />
         <HeroBannerContent />
+        <ThingsToDo />
       </div>
       {/* FOR SHOWING CONTENT */}
       <div>
@@ -629,65 +863,23 @@ export default function AddNewTourV2() {
               </div>
             </div>
           )}
-        </div>
 
-        <div className="w-48 mt-[-20px] z-50 absolute">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias
-          laborum ut minima eligendi dolor, ab magnam, voluptates at velit
-          labore qui eveniet! Dignissimos laborum ipsa quia atque error aut
-          tempora ea, dolore quod impedit quaerat sequi ex possimus officia
-          fugit fugiat! Odit, aspernatur vitae quasi enim delectus autem quo
-          labore? Tenetur impedit officiis ullam reprehenderit architecto? Vel
-          odit magnam similique tempora ipsam qui, suscipit earum aperiam esse
-          iste, cum reiciendis debitis eum ullam quibusdam quia hic assumenda
-          aliquam dolor illo? Atque ducimus, quos facilis vitae nesciunt dolore
-          blanditiis quia ullam temporibus. Doloremque temporibus id facilis sit
-          suscipit et sunt itaque repudiandae eligendi, ipsa voluptates, vitae
-          tenetur, aperiam illo porro? Delectus laborum sint recusandae incidunt
-          illum deserunt sit, iusto expedita explicabo architecto beatae neque,
-          ullam saepe odio magni temporibus corporis, nam doloribus est qui
-          dolore maxime. Ab dolore sequi maiores blanditiis officiis cumque
-          dolores nobis obcaecati. Eum rem eaque quos, accusamus quod ipsa
-          laboriosam! Dolores rerum deserunt dolorem ratione accusamus! Eligendi
-          provident nemo vel veniam. Ea laboriosam ipsum obcaecati sunt,
-          reprehenderit eius porro fuga ducimus! Dolores porro consectetur ipsam
-          accusamus animi natus maiores nobis sapiente unde nemo eius, aut sit
-          rerum quidem fugit ad quae, voluptatibus dolorem minima non? Voluptate
-          error atque veniam temporibus ab unde, illum quos fugiat, deleniti
-          blanditiis assumenda inventore eius? Nihil nesciunt nobis ad quae
-          libero ipsa architecto quo sed sint asperiores, velit soluta
-          laudantium officia eum facilis vel veritatis eligendi ut commodi
-          magnam eveniet! Eligendi libero corporis beatae omnis similique.
-          Nostrum commodi doloremque ratione culpa, incidunt amet fugit autem
-          earum similique repellendus odit explicabo voluptatem cupiditate aut
-          laudantium quod dolorem quidem delectus, non quasi dignissimos
-          excepturi ut. A quo aut nam quis, beatae sint libero laboriosam sequi
-          repellendus qui rerum nulla quas magni laborum! Eos autem, obcaecati
-          ea illo necessitatibus sit, illum incidunt optio doloribus possimus,
-          praesentium cumque officia quibusdam! Numquam, culpa dignissimos,
-          rerum vel veniam quia laborum cupiditate ad aperiam eveniet assumenda
-          cum accusamus qui dolorum eligendi? Laboriosam deleniti aspernatur
-          corrupti non tenetur quos reprehenderit molestias accusamus neque,
-          modi minus amet numquam ratione quam beatae temporibus omnis, pariatur
-          obcaecati fugiat explicabo voluptatum? Veritatis eveniet similique
-          autem tempore fuga mollitia, deleniti iste temporibus nostrum
-          molestias nihil, ullam dolor tempora expedita quaerat repellendus
-          dignissimos eos, reprehenderit reiciendis distinctio earum neque
-          tenetur explicabo! Ducimus sapiente ipsum doloribus voluptatem
-          voluptas ipsa eos totam harum eius dicta, voluptatum quas repudiandae
-          praesentium itaque facere impedit aliquid atque excepturi dolorem
-          natus neque, consectetur quo obcaecati! Modi, ratione facere
-          temporibus iusto exercitationem consequatur mollitia deserunt at
-          eaque, et laudantium dolore sequi excepturi aliquam sit vero rerum
-          vitae sed provident aperiam. Ipsam laborum quas explicabo odit, eos
-          deserunt enim dolorum dolorem aliquam. Ipsum tempora velit iusto,
-          architecto magni quasi quisquam voluptatibus animi fugit voluptatem
-          aut amet sunt minima excepturi nihil magnam laboriosam hic aliquam! In
-          porro facilis expedita laborum praesentium. Velit quos corporis
-          quisquam reprehenderit neque molestiae ea, aperiam, possimus earum
-          similique nihil consequatur illum est a, repellendus placeat atque
-          iusto expedita assumenda dolores dolor quae eum at laudantium? Sed
-          mollitia quis laudantium inventore.
+          <div className="grid grid-cols-2 gap-2 w-[1080px]">
+            {
+              useAddNewTour.getState().thingsTodoArr.map((things, index) => (
+                <div key={index} className="bg-yellow-100 rounded p-2">
+                  <h2>{things.heading}</h2>
+                  <Image 
+                  src={things.imageUrl}
+                  alt="thingstodo_image"
+                  width={400}
+                  height={400}
+                  />
+                  <p>{things.subHeading}</p>
+                </div>
+              ))
+            }
+          </div>
         </div>
       </div>
     </div>

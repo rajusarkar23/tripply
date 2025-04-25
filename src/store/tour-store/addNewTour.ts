@@ -10,6 +10,14 @@ interface HeroBannerContent {
 interface HeroBannerImageUrl {
   url: string;
 }
+// things to do arr type
+interface ThingsToDoArr {
+  heading: string,
+  subHeading: string,
+  briefParagraph: string,
+  rating: number
+  imageUrl: string,
+}
 
 // FINAL STORE DATA TYPES
 interface AddNewtour {
@@ -17,6 +25,7 @@ interface AddNewtour {
   mainBackImageUrl: string;
   heroBannerContent: HeroBannerContent;
   heroBannerImageurls: HeroBannerImageUrl[];
+  thingsTodoArr: ThingsToDoArr[]
   setPlaceName: ({ placeName }: { placeName: string }) => Promise<void>;
   setMainBackImageUrl: ({ imageUrl }: { imageUrl: string }) => Promise<void>;
   setHeroBannerContent: ({
@@ -26,7 +35,8 @@ interface AddNewtour {
     heading: string;
     briefParagraph: string;
   }) => Promise<void>;
-  setHeroBannerImages: ({ imageUrl }: { imageUrl: any }) => void;
+  setHeroBannerImages: ({ imageUrl }: { imageUrl: HeroBannerImageUrl[] }) => void;
+  setThingsTodo: ({tta}: {tta: ThingsToDoArr[]}) => void
 }
 
 const useAddNewTour = create(
@@ -39,6 +49,7 @@ const useAddNewTour = create(
         briefParagraph: "",
       },
       heroBannerImageurls: [],
+      thingsTodoArr: [],
       setPlaceName: async ({ placeName }) => {
         set({ placeName: placeName });
       },
@@ -54,13 +65,13 @@ const useAddNewTour = create(
         }));
       },
       setHeroBannerImages: ({ imageUrl }) => {
-        // set((state) => ({
-        //   heroBannerImageurls: [
-        //     imageUrl
-        //   ],
-        // }));
         set({heroBannerImageurls: imageUrl})
       },
+      setThingsTodo: ({tta}) => {
+        set((state) => ({
+          thingsTodoArr: [...state.thingsTodoArr, ...tta]
+        }))
+      }
     }),
     { name: "add-new-tour" }
   )
