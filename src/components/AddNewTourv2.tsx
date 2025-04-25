@@ -49,7 +49,10 @@ export default function AddNewTourV2() {
           {placeName.length !== 0 ? (
             <div
               className=" text-green-600 font-semibold flex items-center"
-              onClick={onOpen}
+              onClick={() => {
+                onOpen();
+                setPlace(useAddNewTour.getState().placeName);
+              }}
             >
               Place Name added <CheckCircle size={18} className="ml-1" />
             </div>
@@ -182,7 +185,10 @@ export default function AddNewTourV2() {
           {mainBackImageUrl.length !== 0 ? (
             <div
               className="hover:cursor-pointer text-green-600 font-semibold flex items-center"
-              onClick={onOpen}
+              onClick={() => {
+                onOpen();
+                setImageUrl(useAddNewTour.getState().mainBackImageUrl);
+              }}
             >
               Main Background Image Added{" "}
               <CheckCircle size={18} className="ml-1" />
@@ -530,8 +536,11 @@ export default function AddNewTourV2() {
                         return;
                       }
                       setHeroBannerContent({ briefParagraph: para, heading });
-                      const newArr = [...useAddNewTour.getState().heroBannerImageurls, ...imageUrl]
-                      const imagesUrls = [...new Set(newArr)]
+                      const newArr = [
+                        ...useAddNewTour.getState().heroBannerImageurls,
+                        ...imageUrl,
+                      ];
+                      const imagesUrls = [...new Set(newArr)];
                       setHeroBannerImages({ imageUrl: imagesUrls });
                     }}
                   >
@@ -597,10 +606,11 @@ export default function AddNewTourV2() {
                       alt="active_banner_image"
                       width={400}
                       height={400}
+                      className="rounded"
                     />
                   </div>
 
-                  <div className="flex">
+                  <div className="flex space-x-1 p-1">
                     {heroBannerImageurls.map((image, index) => (
                       <Image
                         src={image.url}
@@ -611,6 +621,7 @@ export default function AddNewTourV2() {
                         onClick={() => {
                           setActiveBannerImage(image.url);
                         }}
+                        className="border p-1 border-zinc-500 rounded hover:cursor-pointer"
                       />
                     ))}
                   </div>
