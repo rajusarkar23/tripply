@@ -9,6 +9,8 @@ import {
   ModalFooter,
   ModalHeader,
   NumberInput,
+  Select,
+  SelectItem,
   Spinner,
   Textarea,
   useDisclosure,
@@ -26,6 +28,21 @@ interface ThingsToDoArr {
   briefParagraph: string;
   rating: number;
   imageUrl: string;
+}
+
+type VisitTimings = {
+  best: {
+    start: string,
+    end: string
+  },
+  good: {
+    start: string,
+    end: string
+  },
+  notRecomended: {
+    start: string,
+    end: string
+  }
 }
 
 export default function AddNewTourV2() {
@@ -626,11 +643,26 @@ export default function AddNewTourV2() {
     return (
       <>
         <div className="hover:bg-zinc-200 transition-all w-80 h-10 flex items-center hover:cursor-pointer px-4 rounded">
-          <div onClick={onOpen} className="hover:cursor-pointer font-semibold">
-            Set Things to do.
+          <div>
+            {useAddNewTour.getState().thingsTodoArr.length !== 0 ? (
+              <div
+                onClick={onOpen}
+                className="hover:cursor-pointer font-semibold text-green-600 flex items-center"
+              >
+                Things to do added
+                <CheckCircle size={18} className="ml-1" />
+              </div>
+            ) : (
+              <div
+                onClick={onOpen}
+                className="hover:cursor-pointer font-semibold"
+              >
+                Set Things to do.
+              </div>
+            )}
           </div>
         </div>
-        <Modal isOpen={isOpen} onOpenChange={onOpenChange} size="2xl">
+        <Modal isOpen={isOpen} onOpenChange={onOpenChange} size="4xl">
           <ModalContent>
             {(onClose) => (
               <>
@@ -701,8 +733,8 @@ export default function AddNewTourV2() {
                       <Image
                         src={imageUrl}
                         alt="main_background_image"
-                        width={400}
-                        height={400}
+                        width={80}
+                        height={80}
                         className="rounded"
                       />
                     </div>
@@ -803,6 +835,197 @@ export default function AddNewTourV2() {
       </>
     );
   }
+  function VisitTiming() {
+    const months = [
+      { key: "january", label: "January" },
+      { key: "february", label: "February" },
+      { key: "march", label: "March" },
+      { key: "april", label: "April" },
+      { key: "may", label: "May" },
+      { key: "june", label: "June" },
+      { key: "july", label: "July" },
+      { key: "august", label: "August" },
+      { key: "september", label: "September" },
+      { key: "october", label: "October" },
+      { key: "november", label: "November" },
+      { key: "december", label: "December" },
+    ];
+
+    const [bestTimeToVisitStart, setBestTimeToVisitStart] = useState("")
+    const [bestTimeToVisitEnd, setBestTimeToVisitEnd] = useState("")
+    const [goodTimeToVisitStart, setGoodTimeToVisitStart] = useState("")
+    const [goodTimeToVisitEnd, setGoodTimeToVisitEnd] = useState("")
+    const [notRecomendedTimeToVisitStart, setNotRecomendedTimeToVisitStart] = useState("")
+    const [notRecomendedTimeToVisitEnd, setNotRecomendedTimeToVisitEnd] = useState("")
+    // final state for visit time
+    const [visitTime, setVisitTime] = useState<VisitTimings>()
+    const {setVisitTimings} = useAddNewTour()    
+
+    const { isOpen, onOpen, onOpenChange } = useDisclosure();
+    return (
+      <>
+        <div className="hover:bg-zinc-200 transition-all w-80 h-10 flex items-center hover:cursor-pointer px-4 rounded">
+          <div onClick={onOpen} className="hover:cursor-pointer font-semibold">
+            Set place Visit times
+          </div>
+        </div>
+        <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+          <ModalContent>
+            {(onClose) => (
+              <>
+                <ModalHeader className="flex flex-col gap-1">
+                  Write Place Name Below
+                </ModalHeader>
+                <ModalBody>
+                  <>
+                    <div>
+                      <p className="font-semibold text-sm">
+                        Set Best Time To Visit: <span className="text-blue-600/60">Start - End</span>
+                      </p>
+
+                      <div className="flex space-x-2 items-center">
+                        <Select
+                          label="Select Starting month"
+                          onChange={(e) => {
+                            setBestTimeToVisitStart(e.target.value)
+                          }}
+                        >
+                          {months.map((month) => (
+                            <SelectItem key={month.key}>
+                              {month.label}
+                            </SelectItem>
+                          ))}
+                        </Select>
+
+                        <Select
+                          label="Select Ending month"
+                          onChange={(e) => {
+                            setBestTimeToVisitEnd(e.target.value)
+                          }}
+                        >
+                          {months.map((month) => (
+                            <SelectItem key={month.key}>
+                              {month.label}
+                            </SelectItem>
+                          ))}
+                        </Select>
+                      </div>
+                      <div>
+                        {
+                          bestTimeToVisitStart.length !== 0 && bestTimeToVisitEnd.length !== 0 && (
+                            <p>Your selection: <span className="capitalize text-orange-600/60 text-sm font-semibold">{`${bestTimeToVisitStart} - ${bestTimeToVisitEnd}`}</span></p>
+                          )
+                        }
+                      </div>
+                    </div>
+                    <div>
+                      <p className="font-semibold text-sm">
+                        Set Good Time To Visit: <span className="text-blue-600/60">Start - End</span>
+                      </p>
+
+                      <div className="flex space-x-2 items-center">
+                        <Select
+                          label="Select Starting month"
+                          onChange={(e) => {
+                            setGoodTimeToVisitStart(e.target.value)
+                          }}
+                        >
+                          {months.map((month) => (
+                            <SelectItem key={month.key}>
+                              {month.label}
+                            </SelectItem>
+                          ))}
+                        </Select>
+
+                        <Select
+                          label="Select Ending month"
+                          onChange={(e) => {
+                            setGoodTimeToVisitEnd(e.target.value)
+                          }}
+                        >
+                          {months.map((month) => (
+                            <SelectItem key={month.key}>
+                              {month.label}
+                            </SelectItem>
+                          ))}
+                        </Select>
+                      </div>
+                      {
+                          goodTimeToVisitStart.length !== 0 && goodTimeToVisitEnd.length !== 0 && (
+                            <p>Your selection: <span className="capitalize text-orange-600/60 text-sm font-semibold">{`${goodTimeToVisitStart} - ${goodTimeToVisitEnd}`}</span></p>
+                          )
+                        }
+                    </div>
+                    <div>
+                      <p className="font-semibold text-sm">
+                        Not recomemded for Visit: <span className="text-blue-600/60">Start - End</span>
+                      </p>
+
+                      <div className="flex space-x-2 items-center">
+                        <Select
+                          label="Select Starting month"
+                          onChange={(e) => {
+                            console.log(e.target.value);
+                            
+                            setNotRecomendedTimeToVisitStart(e.target.value)
+                          }}
+                        >
+                          {months.map((month) => (
+                            <SelectItem key={month.key}>
+                              {month.label}
+                            </SelectItem>
+                          ))}
+                        </Select>
+
+                        <Select
+                          label="Select Ending month"
+                          onChange={(e) => {
+                            setNotRecomendedTimeToVisitEnd(e.target.value)
+                          }}
+                        >
+                          {months.map((month) => (
+                            <SelectItem key={month.key}>
+                              {month.label}
+                            </SelectItem>
+                          ))}
+                        </Select>
+                      </div>
+                      {
+                          notRecomendedTimeToVisitEnd.length !== 0 && notRecomendedTimeToVisitStart.length !== 0 && (
+                            <p>Your selection: <span className="capitalize text-orange-600/60 text-sm font-semibold">{`${notRecomendedTimeToVisitStart} - ${notRecomendedTimeToVisitEnd}`}</span></p>
+                          )
+                        }
+                    </div>
+                  </>
+                </ModalBody>
+                <ModalFooter>
+                  <Button color="danger" variant="light" onPress={onClose}>
+                    Close
+                  </Button>
+                  <Button
+                    color="primary"
+                    className="font-semibold"
+                    onPress={() => {
+                      setVisitTimings({
+                       bestEnd: bestTimeToVisitEnd,
+                       bestStart: bestTimeToVisitStart,
+                       goodEnd: goodTimeToVisitEnd,
+                       goodStart: goodTimeToVisitStart,
+                       notRecomendedEnd: notRecomendedTimeToVisitEnd,
+                       notRecomendedStart: notRecomendedTimeToVisitStart
+                      })
+                    }}
+                  >
+                    Add Timings
+                  </Button>
+                </ModalFooter>
+              </>
+            )}
+          </ModalContent>
+        </Modal>
+      </>
+    );
+  }
 
   return (
     <div className="flex justify-between">
@@ -812,6 +1035,7 @@ export default function AddNewTourV2() {
         <SetMainBackgroundImage />
         <HeroBannerContent />
         <ThingsToDo />
+        <VisitTiming />
       </div>
       {/* FOR SHOWING CONTENT */}
       <div>

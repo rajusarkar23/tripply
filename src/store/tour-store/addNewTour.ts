@@ -19,6 +19,23 @@ interface ThingsToDoArr {
   imageUrl: string,
 }
 
+// best time to visit
+type VisitTimings = {
+  best: {
+    start: string,
+    end: string
+  },
+  good: {
+    start: string,
+    end: string
+  },
+  notRecomended: {
+    start: string,
+    end: string
+  }
+}
+
+
 // FINAL STORE DATA TYPES
 interface AddNewtour {
   placeName: string;
@@ -26,6 +43,7 @@ interface AddNewtour {
   heroBannerContent: HeroBannerContent;
   heroBannerImageurls: HeroBannerImageUrl[];
   thingsTodoArr: ThingsToDoArr[]
+  visitTimings: VisitTimings
   setPlaceName: ({ placeName }: { placeName: string }) => Promise<void>;
   setMainBackImageUrl: ({ imageUrl }: { imageUrl: string }) => Promise<void>;
   setHeroBannerContent: ({
@@ -37,6 +55,7 @@ interface AddNewtour {
   }) => Promise<void>;
   setHeroBannerImages: ({ imageUrl }: { imageUrl: HeroBannerImageUrl[] }) => void;
   setThingsTodo: ({tta}: {tta: ThingsToDoArr[]}) => void
+  setVisitTimings : ({bestStart, bestEnd, goodStart, goodEnd, notRecomendedStart, notRecomendedEnd}: {bestStart:string, bestEnd:string, goodStart:string, goodEnd:string, notRecomendedStart:string, notRecomendedEnd:string}) => void
 }
 
 const useAddNewTour = create(
@@ -50,6 +69,20 @@ const useAddNewTour = create(
       },
       heroBannerImageurls: [],
       thingsTodoArr: [],
+      visitTimings: {
+        best: {
+          end: "",
+          start: ""
+        },
+        good: {
+          end: "",
+          start: ""
+        },
+        notRecomended: {
+          end: "",
+          start: ""
+        }
+      },
       setPlaceName: async ({ placeName }) => {
         set({ placeName: placeName });
       },
@@ -71,6 +104,22 @@ const useAddNewTour = create(
         set((state) => ({
           thingsTodoArr: [...state.thingsTodoArr, ...tta]
         }))
+      },
+      setVisitTimings: ({bestEnd,bestStart, goodEnd, goodStart, notRecomendedEnd, notRecomendedStart}) => {
+        set({visitTimings: {
+          best: {
+            end: bestEnd,
+            start: bestStart
+          },
+          good: {
+            end: goodEnd,
+            start: goodStart
+          },
+          notRecomended: {
+            end: notRecomendedEnd,
+            start: notRecomendedStart
+          }
+        }})
       }
     }),
     { name: "add-new-tour" }
