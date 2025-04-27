@@ -809,6 +809,38 @@ export default function AddNewTourV2() {
                         ))}
                       </div>
                     )}
+
+                    {useAddNewTour.getState().thingsTodoArr.length !== 0 && (
+                      <div className="grid grid-cols-3 gap-2">
+                        {useAddNewTour
+                          .getState()
+                          .thingsTodoArr.map((todo, index) => (
+                            <div
+                              onClick={() => {
+                                console.log("clicked");
+                                // setHeading(todo.heading)
+                                // setSubHeading(todo.subHeading)
+                                // setBriefParagraph(todo.briefParagraph)
+                              }}
+                              className="bg-neutral-600/20 rounded p-2"
+                              key={index}
+                            >
+                              <p className="text-md font-semibold">
+                                {todo.heading}
+                              </p>
+                              <p>{todo.subHeading}</p>
+                              <p>{todo.briefParagraph}</p>
+                              <p>{todo.rating}</p>
+                              <Image
+                                src={todo.imageUrl}
+                                alt="image"
+                                width={80}
+                                height={80}
+                              />
+                            </div>
+                          ))}
+                      </div>
+                    )}
                   </div>
                 </ModalBody>
                 <ModalFooter>
@@ -864,19 +896,55 @@ export default function AddNewTourV2() {
     const [notRecomendedTimeToVisitEnd, setNotRecomendedTimeToVisitEnd] =
       useState("");
     // final state for visit time
-    const [visitTime, setVisitTime] = useState<VisitTimings>();
     const { setVisitTimings } = useAddNewTour();
 
+    console.log(bestTimeToVisitEnd);
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
     return (
       <>
         <div className="hover:bg-zinc-200 transition-all w-80 h-10 flex items-center hover:cursor-pointer px-4 rounded">
-          <div
-            onClick={onOpen}
-            className="hover:cursor-pointer hover:text-blue-600 font-semibold"
-          >
-            Set place Visit times
-          </div>
+          {useAddNewTour.getState().visitTimings.best.end.length === 0 ||
+          useAddNewTour.getState().visitTimings.best.start.length === 0 ||
+          useAddNewTour.getState().visitTimings.good.end.length === 0 ||
+          useAddNewTour.getState().visitTimings.good.start.length === 0 ||
+          useAddNewTour.getState().visitTimings.notRecomended.end.length ===
+            0 ||
+          useAddNewTour.getState().visitTimings.notRecomended.start.length ===
+            0 ? (
+            <div
+              onClick={onOpen}
+              className="hover:cursor-pointer hover:text-blue-600 font-semibold"
+            >
+              Set place Visit times
+            </div>
+          ) : (
+            <div
+              onClick={() => {
+                onOpen();
+                setBestTimeToVisitEnd(
+                  useAddNewTour.getState().visitTimings.best.end
+                );
+                setBestTimeToVisitStart(
+                  useAddNewTour.getState().visitTimings.best.start
+                );
+                setGoodTimeToVisitEnd(
+                  useAddNewTour.getState().visitTimings.good.end
+                );
+                setGoodTimeToVisitStart(
+                  useAddNewTour.getState().visitTimings.good.start
+                );
+                setNotRecomendedTimeToVisitEnd(
+                  useAddNewTour.getState().visitTimings.notRecomended.end
+                );
+                setNotRecomendedTimeToVisitStart(
+                  useAddNewTour.getState().visitTimings.notRecomended.start
+                );
+              }}
+              className="hover:cursor-pointer hover:text-blue-600 font-semibold flex items-center text-green-600"
+            >
+              Visit times added <CheckCircle size={18} className="ml-1" />
+            </div>
+          )}
         </div>
         <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
           <ModalContent>
@@ -886,135 +954,288 @@ export default function AddNewTourV2() {
                   Write Place Name Below
                 </ModalHeader>
                 <ModalBody>
-                  <>
-                    <div>
-                      <p className="font-semibold text-sm">
-                        Set Best Time To Visit:{" "}
-                        <span className="text-blue-600/60">Start - End</span>
-                      </p>
+                  {useAddNewTour.getState().visitTimings.best.end.length ===
+                    0 &&
+                  useAddNewTour.getState().visitTimings.best.start.length ===
+                    0 &&
+                  useAddNewTour.getState().visitTimings.good.end.length === 0 &&
+                  useAddNewTour.getState().visitTimings.good.start.length ===
+                    0 &&
+                  useAddNewTour.getState().visitTimings.notRecomended.end
+                    .length === 0 &&
+                  useAddNewTour.getState().visitTimings.notRecomended.start
+                    .length === 0 ? (
+                    <>
+                      <div>
+                        <p className="font-semibold text-sm">
+                          Set Best Time To Visit:{" "}
+                          <span className="text-blue-600/60">Start - End</span>
+                        </p>
 
-                      <div className="flex space-x-2 items-center">
-                        <Select
-                          label="Select Starting month"
-                          onChange={(e) => {
-                            setBestTimeToVisitStart(e.target.value);
-                          }}
-                        >
-                          {months.map((month) => (
-                            <SelectItem key={month.key}>
-                              {month.label}
-                            </SelectItem>
-                          ))}
-                        </Select>
+                        <div className="flex space-x-2 items-center">
+                          <Select
+                            label="Select Starting month"
+                            onChange={(e) => {
+                              setBestTimeToVisitStart(e.target.value);
+                            }}
+                          >
+                            {months.map((month) => (
+                              <SelectItem key={month.key}>
+                                {month.label}
+                              </SelectItem>
+                            ))}
+                          </Select>
 
-                        <Select
-                          label="Select Ending month"
-                          onChange={(e) => {
-                            setBestTimeToVisitEnd(e.target.value);
-                          }}
-                        >
-                          {months.map((month) => (
-                            <SelectItem key={month.key}>
-                              {month.label}
-                            </SelectItem>
-                          ))}
-                        </Select>
+                          <Select
+                            label="Select Ending month"
+                            onChange={(e) => {
+                              setBestTimeToVisitEnd(e.target.value);
+                            }}
+                          >
+                            {months.map((month) => (
+                              <SelectItem key={month.key}>
+                                {month.label}
+                              </SelectItem>
+                            ))}
+                          </Select>
+                        </div>
+                        <div>
+                          {bestTimeToVisitStart.length !== 0 &&
+                            bestTimeToVisitEnd.length !== 0 && (
+                              <p>
+                                Your selection:{" "}
+                                <span className="capitalize text-orange-600/60 text-sm font-semibold">{`${bestTimeToVisitStart} - ${bestTimeToVisitEnd}`}</span>
+                              </p>
+                            )}
+                        </div>
                       </div>
                       <div>
-                        {bestTimeToVisitStart.length !== 0 &&
-                          bestTimeToVisitEnd.length !== 0 && (
+                        <p className="font-semibold text-sm">
+                          Set Good Time To Visit:{" "}
+                          <span className="text-blue-600/60">Start - End</span>
+                        </p>
+
+                        <div className="flex space-x-2 items-center">
+                          <Select
+                            label="Select Starting month"
+                            onChange={(e) => {
+                              setGoodTimeToVisitStart(e.target.value);
+                            }}
+                          >
+                            {months.map((month) => (
+                              <SelectItem key={month.key}>
+                                {month.label}
+                              </SelectItem>
+                            ))}
+                          </Select>
+
+                          <Select
+                            label="Select Ending month"
+                            onChange={(e) => {
+                              setGoodTimeToVisitEnd(e.target.value);
+                            }}
+                          >
+                            {months.map((month) => (
+                              <SelectItem key={month.key}>
+                                {month.label}
+                              </SelectItem>
+                            ))}
+                          </Select>
+                        </div>
+                        {goodTimeToVisitStart.length !== 0 &&
+                          goodTimeToVisitEnd.length !== 0 && (
                             <p>
                               Your selection:{" "}
-                              <span className="capitalize text-orange-600/60 text-sm font-semibold">{`${bestTimeToVisitStart} - ${bestTimeToVisitEnd}`}</span>
+                              <span className="capitalize text-orange-600/60 text-sm font-semibold">{`${goodTimeToVisitStart} - ${goodTimeToVisitEnd}`}</span>
                             </p>
                           )}
                       </div>
-                    </div>
-                    <div>
-                      <p className="font-semibold text-sm">
-                        Set Good Time To Visit:{" "}
-                        <span className="text-blue-600/60">Start - End</span>
-                      </p>
+                      <div>
+                        <p className="font-semibold text-sm">
+                          Not recomemded for Visit:{" "}
+                          <span className="text-blue-600/60">Start - End</span>
+                        </p>
 
-                      <div className="flex space-x-2 items-center">
-                        <Select
-                          label="Select Starting month"
-                          onChange={(e) => {
-                            setGoodTimeToVisitStart(e.target.value);
-                          }}
-                        >
-                          {months.map((month) => (
-                            <SelectItem key={month.key}>
-                              {month.label}
-                            </SelectItem>
-                          ))}
-                        </Select>
+                        <div className="flex space-x-2 items-center">
+                          <Select
+                            label="Select Starting month"
+                            onChange={(e) => {
+                              console.log(e.target.value);
 
-                        <Select
-                          label="Select Ending month"
-                          onChange={(e) => {
-                            setGoodTimeToVisitEnd(e.target.value);
-                          }}
-                        >
-                          {months.map((month) => (
-                            <SelectItem key={month.key}>
-                              {month.label}
-                            </SelectItem>
-                          ))}
-                        </Select>
+                              setNotRecomendedTimeToVisitStart(e.target.value);
+                            }}
+                          >
+                            {months.map((month) => (
+                              <SelectItem key={month.key}>
+                                {month.label}
+                              </SelectItem>
+                            ))}
+                          </Select>
+
+                          <Select
+                            label="Select Ending month"
+                            onChange={(e) => {
+                              setNotRecomendedTimeToVisitEnd(e.target.value);
+                            }}
+                          >
+                            {months.map((month) => (
+                              <SelectItem key={month.key}>
+                                {month.label}
+                              </SelectItem>
+                            ))}
+                          </Select>
+                        </div>
+                        {notRecomendedTimeToVisitEnd.length !== 0 &&
+                          notRecomendedTimeToVisitStart.length !== 0 && (
+                            <p>
+                              Your selection:{" "}
+                              <span className="capitalize text-orange-600/60 text-sm font-semibold">{`${notRecomendedTimeToVisitStart} - ${notRecomendedTimeToVisitEnd}`}</span>
+                            </p>
+                          )}
                       </div>
-                      {goodTimeToVisitStart.length !== 0 &&
-                        goodTimeToVisitEnd.length !== 0 && (
-                          <p>
-                            Your selection:{" "}
-                            <span className="capitalize text-orange-600/60 text-sm font-semibold">{`${goodTimeToVisitStart} - ${goodTimeToVisitEnd}`}</span>
-                          </p>
-                        )}
-                    </div>
-                    <div>
-                      <p className="font-semibold text-sm">
-                        Not recomemded for Visit:{" "}
-                        <span className="text-blue-600/60">Start - End</span>
-                      </p>
+                    </>
+                  ) : (
+                    <>
+                      <div>
+                        <p className="font-semibold text-sm">
+                          Set Best Time To :{""}
+                          <span className="text-blue-600/60">
+                            Start - End{" "}
+                            {useAddNewTour.getState().visitTimings.best.end}
+                          </span>
+                        </p>
 
-                      <div className="flex space-x-2 items-center">
-                        <Select
-                          label="Select Starting month"
-                          onChange={(e) => {
-                            console.log(e.target.value);
+                        <div className="flex space-x-2 items-center">
+                          <Select
+                            label="Select Starting month"
+                            defaultSelectedKeys={[bestTimeToVisitStart]}
+                            onChange={(e) => {
+                              setBestTimeToVisitStart(e.target.value);
+                            }}
+                          >
+                            {months.map((month) => (
+                              <SelectItem key={month.key}>
+                                {month.label}
+                              </SelectItem>
+                            ))}
+                          </Select>
 
-                            setNotRecomendedTimeToVisitStart(e.target.value);
-                          }}
-                        >
-                          {months.map((month) => (
-                            <SelectItem key={month.key}>
-                              {month.label}
-                            </SelectItem>
-                          ))}
-                        </Select>
-
-                        <Select
-                          label="Select Ending month"
-                          onChange={(e) => {
-                            setNotRecomendedTimeToVisitEnd(e.target.value);
-                          }}
-                        >
-                          {months.map((month) => (
-                            <SelectItem key={month.key}>
-                              {month.label}
-                            </SelectItem>
-                          ))}
-                        </Select>
+                          <Select
+                            label="Select Ending month"
+                            defaultSelectedKeys={[bestTimeToVisitEnd]}
+                            onChange={(e) => {
+                              setBestTimeToVisitEnd(e.target.value);
+                            }}
+                          >
+                            {months.map((month) => (
+                              <SelectItem key={month.key}>
+                                {month.label}
+                              </SelectItem>
+                            ))}
+                          </Select>
+                        </div>
+                        <div>
+                          {bestTimeToVisitStart.length !== 0 &&
+                            bestTimeToVisitEnd.length !== 0 && (
+                              <p>
+                                Your selection:{" "}
+                                <span className="capitalize text-orange-600/60 text-sm font-semibold">{`${bestTimeToVisitStart} - ${bestTimeToVisitEnd}`}</span>
+                              </p>
+                            )}
+                        </div>
                       </div>
-                      {notRecomendedTimeToVisitEnd.length !== 0 &&
-                        notRecomendedTimeToVisitStart.length !== 0 && (
-                          <p>
-                            Your selection:{" "}
-                            <span className="capitalize text-orange-600/60 text-sm font-semibold">{`${notRecomendedTimeToVisitStart} - ${notRecomendedTimeToVisitEnd}`}</span>
-                          </p>
-                        )}
-                    </div>
-                  </>
+                      <div>
+                        <p className="font-semibold text-sm">
+                          Set Good Time To Visit:{" "}
+                          <span className="text-blue-600/60">Start - End</span>
+                        </p>
+
+                        <div className="flex space-x-2 items-center">
+                          <Select
+                            label="Select Starting month"
+                            defaultSelectedKeys={[goodTimeToVisitStart]}
+                            onChange={(e) => {
+                              setGoodTimeToVisitStart(e.target.value);
+                            }}
+                          >
+                            {months.map((month) => (
+                              <SelectItem key={month.key}>
+                                {month.label}
+                              </SelectItem>
+                            ))}
+                          </Select>
+
+                          <Select
+                            label="Select Ending month"
+                            defaultSelectedKeys={[goodTimeToVisitEnd]}
+                            onChange={(e) => {
+                              setGoodTimeToVisitEnd(e.target.value);
+                            }}
+                          >
+                            {months.map((month) => (
+                              <SelectItem key={month.key}>
+                                {month.label}
+                              </SelectItem>
+                            ))}
+                          </Select>
+                        </div>
+                        {goodTimeToVisitStart.length !== 0 &&
+                          goodTimeToVisitEnd.length !== 0 && (
+                            <p>
+                              Your selection:{" "}
+                              <span className="capitalize text-orange-600/60 text-sm font-semibold">{`${goodTimeToVisitStart} - ${goodTimeToVisitEnd}`}</span>
+                            </p>
+                          )}
+                      </div>
+                      <div>
+                        <p className="font-semibold text-sm">
+                          Not recomemded for Visit:{" "}
+                          <span className="text-blue-600/60">Start - End</span>
+                        </p>
+
+                        <div className="flex space-x-2 items-center">
+                          <Select
+                            label="Select Starting month"
+                            defaultSelectedKeys={[
+                              notRecomendedTimeToVisitStart,
+                            ]}
+                            onChange={(e) => {
+                              console.log(e.target.value);
+
+                              setNotRecomendedTimeToVisitStart(e.target.value);
+                            }}
+                          >
+                            {months.map((month) => (
+                              <SelectItem key={month.key}>
+                                {month.label}
+                              </SelectItem>
+                            ))}
+                          </Select>
+
+                          <Select
+                            label="Select Ending month"
+                            defaultSelectedKeys={[notRecomendedTimeToVisitEnd]}
+                            onChange={(e) => {
+                              setNotRecomendedTimeToVisitEnd(e.target.value);
+                            }}
+                          >
+                            {months.map((month) => (
+                              <SelectItem key={month.key}>
+                                {month.label}
+                              </SelectItem>
+                            ))}
+                          </Select>
+                        </div>
+                        {notRecomendedTimeToVisitEnd.length !== 0 &&
+                          notRecomendedTimeToVisitStart.length !== 0 && (
+                            <p>
+                              Your selection:{" "}
+                              <span className="capitalize text-orange-600/60 text-sm font-semibold">{`${notRecomendedTimeToVisitStart} - ${notRecomendedTimeToVisitEnd}`}</span>
+                            </p>
+                          )}
+                      </div>
+                    </>
+                  )}
                 </ModalBody>
                 <ModalFooter>
                   <Button color="danger" variant="light" onPress={onClose}>
@@ -1092,7 +1313,7 @@ export default function AddNewTourV2() {
             {useAddNewTour.getState().isLoading ? (
               <Spinner color="default" />
             ) : (
-              <p >List this place</p>
+              <p>List this place</p>
             )}
           </Button>
         )}
