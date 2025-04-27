@@ -17,6 +17,7 @@ import {
 } from "@heroui/react";
 import { CheckCircle } from "lucide-react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { ChangeEvent, useEffect, useState } from "react";
 
 interface HeroBannerImageUrl {
@@ -51,9 +52,11 @@ export default function AddNewTourV2() {
     placeName,
     heroBannerContent,
     heroBannerImageurls,
+    addTourInDB
   } = useAddNewTour();
   const [activeBannerImage, setActiveBannerImage] = useState("");
   console.log(activeBannerImage);
+  const router = useRouter()
 
   useEffect(() => {
     if (useAddNewTour.getState().heroBannerImageurls.length !== 0) {
@@ -72,7 +75,7 @@ export default function AddNewTourV2() {
         <div className="hover:bg-zinc-200 transition-all w-80 h-10 flex items-center hover:cursor-pointer px-4 rounded">
           {placeName.length !== 0 ? (
             <div
-              className=" text-green-600 font-semibold flex items-center"
+              className=" text-green-600 hover:text-blue-600 font-semibold flex items-center"
               onClick={() => {
                 onOpen();
                 setPlace(useAddNewTour.getState().placeName);
@@ -83,7 +86,7 @@ export default function AddNewTourV2() {
           ) : (
             <div
               onClick={onOpen}
-              className="hover:cursor-pointer font-semibold"
+              className="hover:cursor-pointer font-semibold hover:text-blue-600"
             >
               Set place name
             </div>
@@ -209,7 +212,7 @@ export default function AddNewTourV2() {
         <div className="hover:bg-zinc-200 transition-all w-80 h-10 flex items-center hover:cursor-pointer px-4 rounded">
           {mainBackImageUrl.length !== 0 ? (
             <div
-              className="hover:cursor-pointer text-green-600 font-semibold flex items-center"
+              className="hover:cursor-pointer hover:text-blue-600 text-green-600 font-semibold flex items-center"
               onClick={() => {
                 onOpen();
                 setImageUrl(useAddNewTour.getState().mainBackImageUrl);
@@ -221,7 +224,7 @@ export default function AddNewTourV2() {
           ) : (
             <div
               onClick={onOpen}
-              className="hover:cursor-pointer font-semibold"
+              className="hover:cursor-pointer font-semibold hover:text-blue-600"
             >
               Set Main Background Image
             </div>
@@ -377,7 +380,7 @@ export default function AddNewTourV2() {
           heroBannerContent.heading.length !== 0 &&
           heroBannerImageurls.length !== 0 ? (
             <div
-              className="hover:cursor-pointer text-green-600 font-semibold flex items-center"
+              className="hover:cursor-pointer hover:text-blue-600 text-green-600 font-semibold flex items-center"
               onClick={() => {
                 onOpen();
                 setHeading(useAddNewTour.getState().heroBannerContent.heading);
@@ -392,7 +395,7 @@ export default function AddNewTourV2() {
           ) : (
             <div
               onClick={onOpen}
-              className="hover:cursor-pointer font-semibold"
+              className="hover:cursor-pointer font-semibold hover:text-blue-600"
             >
               Set hero banner contents
             </div>
@@ -647,7 +650,7 @@ export default function AddNewTourV2() {
             {useAddNewTour.getState().thingsTodoArr.length !== 0 ? (
               <div
                 onClick={onOpen}
-                className="hover:cursor-pointer font-semibold text-green-600 flex items-center"
+                className="hover:cursor-pointer hover:text-blue-600 font-semibold text-green-600 flex items-center"
               >
                 Things to do added
                 <CheckCircle size={18} className="ml-1" />
@@ -655,7 +658,7 @@ export default function AddNewTourV2() {
             ) : (
               <div
                 onClick={onOpen}
-                className="hover:cursor-pointer font-semibold"
+                className="hover:cursor-pointer font-semibold hover:text-blue-600"
               >
                 Set Things to do.
               </div>
@@ -865,7 +868,7 @@ export default function AddNewTourV2() {
     return (
       <>
         <div className="hover:bg-zinc-200 transition-all w-80 h-10 flex items-center hover:cursor-pointer px-4 rounded">
-          <div onClick={onOpen} className="hover:cursor-pointer font-semibold">
+          <div onClick={onOpen} className="hover:cursor-pointer hover:text-blue-600 font-semibold">
             Set place Visit times
           </div>
         </div>
@@ -873,7 +876,7 @@ export default function AddNewTourV2() {
           <ModalContent>
             {(onClose) => (
               <>
-                <ModalHeader className="flex flex-col gap-1">
+                <ModalHeader className="flex flex-col gap-1 hover:text-blue-600">
                   Write Place Name Below
                 </ModalHeader>
                 <ModalBody>
@@ -1036,9 +1039,19 @@ export default function AddNewTourV2() {
         <HeroBannerContent />
         <ThingsToDo />
         <VisitTiming />
+        <div>
+          <h4>Final submit</h4>
+          <Button
+          onPress={async () => {
+            addTourInDB({thingsTodo: useAddNewTour.getState().thingsTodoArr, mainBackImageUrl: useAddNewTour.getState().mainBackImageUrl, VisitTiming: useAddNewTour.getState().visitTimings, heroBannerImageurls: useAddNewTour.getState().heroBannerImageurls, heroBannerContentHeadAndPara: useAddNewTour.getState().heroBannerContent, placeName: useAddNewTour.getState().placeName, router})
+          }}
+          >
+            Submit
+          </Button>
+        </div>
       </div>
       {/* FOR SHOWING CONTENT */}
-      <div>
+      <div className="bg-zinc-800 min-h-[100vh] px-0.5">
         <div className="border shadow-md">
           {mainBackImageUrl.length !== 0 && (
             <div className="relative min-h-[30vh] w-[1080px] flex items-center justify-center">
@@ -1106,20 +1119,26 @@ export default function AddNewTourV2() {
             </div>
           )}
 
-          <div className="grid grid-cols-2 gap-2 w-[1080px]">
+          <div> 
+          <h2 className="text-5xl font-semibold text-white px-2 py-3">Things To Do</h2>
+            <div className="grid grid-cols-2 gap-2 w-[1080px]">
+          
             {useAddNewTour.getState().thingsTodoArr.map((things, index) => (
-              <div key={index} className="bg-yellow-100 rounded p-2">
+              <div key={index} className="bg-neutral-700 rounded-lg text-white flex justify-center flex-col items-center">
                 <h2>{things.heading}</h2>
                 <Image
                   src={things.imageUrl}
                   alt="thingstodo_image"
                   width={400}
                   height={400}
+                  className="rounded"
                 />
                 <p>{things.subHeading}</p>
               </div>
             ))}
           </div>
+            </div>
+           
         </div>
       </div>
     </div>

@@ -79,9 +79,9 @@ export default function UserSignup() {
               <Globe />
               Tripply - Signup
             </h2>
-            <p className="text-sm font-semibold">
+            {/* <p className="text-sm font-semibold">
               Please create your account to continue.
-            </p>
+            </p> */}
           </div>
           <Divider />
           <div className="py-1 text-center">

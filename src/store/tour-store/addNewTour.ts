@@ -1,5 +1,7 @@
+import { useRouter } from "next/navigation";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
+
 
 // hero banner content
 interface HeroBannerContent {
@@ -38,6 +40,9 @@ type VisitTimings = {
 
 // FINAL STORE DATA TYPES
 interface AddNewtour {
+  isLoading: boolean,
+  tourAddingError: boolean,
+  tourAddingErrorMessage: string | undefined,
   placeName: string;
   mainBackImageUrl: string;
   heroBannerContent: HeroBannerContent;
@@ -56,11 +61,15 @@ interface AddNewtour {
   setHeroBannerImages: ({ imageUrl }: { imageUrl: HeroBannerImageUrl[] }) => void;
   setThingsTodo: ({tta}: {tta: ThingsToDoArr[]}) => void
   setVisitTimings : ({bestStart, bestEnd, goodStart, goodEnd, notRecomendedStart, notRecomendedEnd}: {bestStart:string, bestEnd:string, goodStart:string, goodEnd:string, notRecomendedStart:string, notRecomendedEnd:string}) => void
+  addTourInDB: ({heroBannerContentHeadAndPara, heroBannerImageurls, thingsTodo, VisitTiming, mainBackImageUrl, placeName}: {heroBannerContentHeadAndPara: HeroBannerContent, heroBannerImageurls: HeroBannerImageUrl[], thingsTodo:ThingsToDoArr[], VisitTiming: VisitTimings, mainBackImageUrl: string, placeName: string, router: any}) => Promise<void>
 }
 
 const useAddNewTour = create(
   persist<AddNewtour>(
     (set) => ({
+      isLoading: false,
+      tourAddingError: false,
+      tourAddingErrorMessage: undefined,
       placeName: "",
       mainBackImageUrl: "",
       heroBannerContent: {
@@ -120,6 +129,31 @@ const useAddNewTour = create(
             start: notRecomendedStart
           }
         }})
+      },
+      addTourInDB: async ({VisitTiming, heroBannerContentHeadAndPara, heroBannerImageurls, thingsTodo, mainBackImageUrl, placeName, router}) => {
+        set({isLoading: true,tourAddingError: false, tourAddingErrorMessage: undefined})
+        try {
+          const sendReq = await fetch ("/api/tour/create-tour-v2", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/sjon"
+            },
+            body: JSON.stringify({VisitTiming, heroBannerImageurls, heroBannerContentHeadAndPara, thingsTodo, mainBackImageUrl, placeName})
+          })
+
+          
+          const res = await sendReq.json()
+          
+          if (res.success) {
+            set ({isLoading: false})
+            router.push("/admin/tours")
+          } else{
+            set({isLoading: false, tourAddingError: true, tourAddingErrorMessage: res.message})
+          }
+        } catch (error) {
+          console.log(error);
+          set({isLoading: false, tourAddingError: true, tourAddingErrorMessage: "Something went wrong"})
+        }
       }
     }),
     { name: "add-new-tour" }

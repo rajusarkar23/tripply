@@ -64,7 +64,7 @@ export default function UserSignin() {
         <div>
           <div className="flex flex-col justify-center text-center">
             <h2 className="text-2xl font-semibold flex justify-center items-center text-blue-600"><Globe />Tripply - Signin</h2>
-            <p className="text-xs font-semibold">Please signin to continue.</p>
+            {/* <p className="text-xs font-semibold">Please signin to continue.</p> */}
           </div>
           <Divider />
           <div className="py-1 text-center">
