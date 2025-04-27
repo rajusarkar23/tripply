@@ -33,18 +33,18 @@ interface ThingsToDoArr {
 
 type VisitTimings = {
   best: {
-    start: string,
-    end: string
-  },
+    start: string;
+    end: string;
+  };
   good: {
-    start: string,
-    end: string
-  },
+    start: string;
+    end: string;
+  };
   notRecomended: {
-    start: string,
-    end: string
-  }
-}
+    start: string;
+    end: string;
+  };
+};
 
 export default function AddNewTourV2() {
   const {
@@ -52,11 +52,12 @@ export default function AddNewTourV2() {
     placeName,
     heroBannerContent,
     heroBannerImageurls,
-    addTourInDB
+    addTourInDB,
   } = useAddNewTour();
   const [activeBannerImage, setActiveBannerImage] = useState("");
-  console.log(activeBannerImage);
-  const router = useRouter()
+  const [isBtnDisable, setIsBtnDisable] = useState(true);
+
+  const router = useRouter();
 
   useEffect(() => {
     if (useAddNewTour.getState().heroBannerImageurls.length !== 0) {
@@ -450,7 +451,7 @@ export default function AddNewTourV2() {
                       <div>
                         <div>
                           <p className="text-center text-xs font-semibold">
-                            To change this image or upload a select a new image.
+                            You can upload more images by selecting new images.
                           </p>
                         </div>
                         {activeImage.length !== 0 && (
@@ -854,21 +855,26 @@ export default function AddNewTourV2() {
       { key: "december", label: "December" },
     ];
 
-    const [bestTimeToVisitStart, setBestTimeToVisitStart] = useState("")
-    const [bestTimeToVisitEnd, setBestTimeToVisitEnd] = useState("")
-    const [goodTimeToVisitStart, setGoodTimeToVisitStart] = useState("")
-    const [goodTimeToVisitEnd, setGoodTimeToVisitEnd] = useState("")
-    const [notRecomendedTimeToVisitStart, setNotRecomendedTimeToVisitStart] = useState("")
-    const [notRecomendedTimeToVisitEnd, setNotRecomendedTimeToVisitEnd] = useState("")
+    const [bestTimeToVisitStart, setBestTimeToVisitStart] = useState("");
+    const [bestTimeToVisitEnd, setBestTimeToVisitEnd] = useState("");
+    const [goodTimeToVisitStart, setGoodTimeToVisitStart] = useState("");
+    const [goodTimeToVisitEnd, setGoodTimeToVisitEnd] = useState("");
+    const [notRecomendedTimeToVisitStart, setNotRecomendedTimeToVisitStart] =
+      useState("");
+    const [notRecomendedTimeToVisitEnd, setNotRecomendedTimeToVisitEnd] =
+      useState("");
     // final state for visit time
-    const [visitTime, setVisitTime] = useState<VisitTimings>()
-    const {setVisitTimings} = useAddNewTour()    
+    const [visitTime, setVisitTime] = useState<VisitTimings>();
+    const { setVisitTimings } = useAddNewTour();
 
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
     return (
       <>
         <div className="hover:bg-zinc-200 transition-all w-80 h-10 flex items-center hover:cursor-pointer px-4 rounded">
-          <div onClick={onOpen} className="hover:cursor-pointer hover:text-blue-600 font-semibold">
+          <div
+            onClick={onOpen}
+            className="hover:cursor-pointer hover:text-blue-600 font-semibold"
+          >
             Set place Visit times
           </div>
         </div>
@@ -883,14 +889,15 @@ export default function AddNewTourV2() {
                   <>
                     <div>
                       <p className="font-semibold text-sm">
-                        Set Best Time To Visit: <span className="text-blue-600/60">Start - End</span>
+                        Set Best Time To Visit:{" "}
+                        <span className="text-blue-600/60">Start - End</span>
                       </p>
 
                       <div className="flex space-x-2 items-center">
                         <Select
                           label="Select Starting month"
                           onChange={(e) => {
-                            setBestTimeToVisitStart(e.target.value)
+                            setBestTimeToVisitStart(e.target.value);
                           }}
                         >
                           {months.map((month) => (
@@ -903,7 +910,7 @@ export default function AddNewTourV2() {
                         <Select
                           label="Select Ending month"
                           onChange={(e) => {
-                            setBestTimeToVisitEnd(e.target.value)
+                            setBestTimeToVisitEnd(e.target.value);
                           }}
                         >
                           {months.map((month) => (
@@ -914,23 +921,26 @@ export default function AddNewTourV2() {
                         </Select>
                       </div>
                       <div>
-                        {
-                          bestTimeToVisitStart.length !== 0 && bestTimeToVisitEnd.length !== 0 && (
-                            <p>Your selection: <span className="capitalize text-orange-600/60 text-sm font-semibold">{`${bestTimeToVisitStart} - ${bestTimeToVisitEnd}`}</span></p>
-                          )
-                        }
+                        {bestTimeToVisitStart.length !== 0 &&
+                          bestTimeToVisitEnd.length !== 0 && (
+                            <p>
+                              Your selection:{" "}
+                              <span className="capitalize text-orange-600/60 text-sm font-semibold">{`${bestTimeToVisitStart} - ${bestTimeToVisitEnd}`}</span>
+                            </p>
+                          )}
                       </div>
                     </div>
                     <div>
                       <p className="font-semibold text-sm">
-                        Set Good Time To Visit: <span className="text-blue-600/60">Start - End</span>
+                        Set Good Time To Visit:{" "}
+                        <span className="text-blue-600/60">Start - End</span>
                       </p>
 
                       <div className="flex space-x-2 items-center">
                         <Select
                           label="Select Starting month"
                           onChange={(e) => {
-                            setGoodTimeToVisitStart(e.target.value)
+                            setGoodTimeToVisitStart(e.target.value);
                           }}
                         >
                           {months.map((month) => (
@@ -943,7 +953,7 @@ export default function AddNewTourV2() {
                         <Select
                           label="Select Ending month"
                           onChange={(e) => {
-                            setGoodTimeToVisitEnd(e.target.value)
+                            setGoodTimeToVisitEnd(e.target.value);
                           }}
                         >
                           {months.map((month) => (
@@ -953,15 +963,18 @@ export default function AddNewTourV2() {
                           ))}
                         </Select>
                       </div>
-                      {
-                          goodTimeToVisitStart.length !== 0 && goodTimeToVisitEnd.length !== 0 && (
-                            <p>Your selection: <span className="capitalize text-orange-600/60 text-sm font-semibold">{`${goodTimeToVisitStart} - ${goodTimeToVisitEnd}`}</span></p>
-                          )
-                        }
+                      {goodTimeToVisitStart.length !== 0 &&
+                        goodTimeToVisitEnd.length !== 0 && (
+                          <p>
+                            Your selection:{" "}
+                            <span className="capitalize text-orange-600/60 text-sm font-semibold">{`${goodTimeToVisitStart} - ${goodTimeToVisitEnd}`}</span>
+                          </p>
+                        )}
                     </div>
                     <div>
                       <p className="font-semibold text-sm">
-                        Not recomemded for Visit: <span className="text-blue-600/60">Start - End</span>
+                        Not recomemded for Visit:{" "}
+                        <span className="text-blue-600/60">Start - End</span>
                       </p>
 
                       <div className="flex space-x-2 items-center">
@@ -969,8 +982,8 @@ export default function AddNewTourV2() {
                           label="Select Starting month"
                           onChange={(e) => {
                             console.log(e.target.value);
-                            
-                            setNotRecomendedTimeToVisitStart(e.target.value)
+
+                            setNotRecomendedTimeToVisitStart(e.target.value);
                           }}
                         >
                           {months.map((month) => (
@@ -983,7 +996,7 @@ export default function AddNewTourV2() {
                         <Select
                           label="Select Ending month"
                           onChange={(e) => {
-                            setNotRecomendedTimeToVisitEnd(e.target.value)
+                            setNotRecomendedTimeToVisitEnd(e.target.value);
                           }}
                         >
                           {months.map((month) => (
@@ -993,11 +1006,13 @@ export default function AddNewTourV2() {
                           ))}
                         </Select>
                       </div>
-                      {
-                          notRecomendedTimeToVisitEnd.length !== 0 && notRecomendedTimeToVisitStart.length !== 0 && (
-                            <p>Your selection: <span className="capitalize text-orange-600/60 text-sm font-semibold">{`${notRecomendedTimeToVisitStart} - ${notRecomendedTimeToVisitEnd}`}</span></p>
-                          )
-                        }
+                      {notRecomendedTimeToVisitEnd.length !== 0 &&
+                        notRecomendedTimeToVisitStart.length !== 0 && (
+                          <p>
+                            Your selection:{" "}
+                            <span className="capitalize text-orange-600/60 text-sm font-semibold">{`${notRecomendedTimeToVisitStart} - ${notRecomendedTimeToVisitEnd}`}</span>
+                          </p>
+                        )}
                     </div>
                   </>
                 </ModalBody>
@@ -1010,13 +1025,13 @@ export default function AddNewTourV2() {
                     className="font-semibold"
                     onPress={() => {
                       setVisitTimings({
-                       bestEnd: bestTimeToVisitEnd,
-                       bestStart: bestTimeToVisitStart,
-                       goodEnd: goodTimeToVisitEnd,
-                       goodStart: goodTimeToVisitStart,
-                       notRecomendedEnd: notRecomendedTimeToVisitEnd,
-                       notRecomendedStart: notRecomendedTimeToVisitStart
-                      })
+                        bestEnd: bestTimeToVisitEnd,
+                        bestStart: bestTimeToVisitStart,
+                        goodEnd: goodTimeToVisitEnd,
+                        goodStart: goodTimeToVisitStart,
+                        notRecomendedEnd: notRecomendedTimeToVisitEnd,
+                        notRecomendedStart: notRecomendedTimeToVisitStart,
+                      });
                     }}
                   >
                     Add Timings
@@ -1029,6 +1044,61 @@ export default function AddNewTourV2() {
       </>
     );
   }
+  function ListThisPlaceBtn() {
+    return (
+      <div>
+        {useAddNewTour.getState().heroBannerContent.briefParagraph.length ===
+          0 ||
+        useAddNewTour.getState().heroBannerContent.heading.length === 0 ||
+        useAddNewTour.getState().heroBannerImageurls.length === 0 ||
+        useAddNewTour.getState().mainBackImageUrl.length === 0 ||
+        useAddNewTour.getState().placeName.length === 0 ||
+        useAddNewTour.getState().thingsTodoArr.length === 0 ||
+        useAddNewTour.getState().visitTimings.best.end.length === 0 ||
+        useAddNewTour.getState().visitTimings.best.start.length === 0 ||
+        useAddNewTour.getState().visitTimings.good.end.length === 0 ||
+        useAddNewTour.getState().visitTimings.good.start.length === 0 ||
+        useAddNewTour.getState().visitTimings.notRecomended.end.length === 0 ||
+        useAddNewTour.getState().visitTimings.notRecomended.start.length ===
+          0 ? (
+          <Button
+            color="success"
+            className="w-full text-black font-bold"
+            isDisabled
+            variant="ghost"
+          >
+            List this place
+          </Button>
+        ) : (
+          <Button
+            color="success"
+            variant="ghost"
+            className="w-full text-black font-bold"
+            isDisabled={useAddNewTour.getState().isLoading}
+            onPress={async () => {
+              addTourInDB({
+                thingsTodo: useAddNewTour.getState().thingsTodoArr,
+                mainBackImageUrl: useAddNewTour.getState().mainBackImageUrl,
+                VisitTiming: useAddNewTour.getState().visitTimings,
+                heroBannerImageurls:
+                  useAddNewTour.getState().heroBannerImageurls,
+                heroBannerContentHeadAndPara:
+                  useAddNewTour.getState().heroBannerContent,
+                placeName: useAddNewTour.getState().placeName,
+                router,
+              });
+            }}
+          >
+            {useAddNewTour.getState().isLoading ? (
+              <Spinner color="default" />
+            ) : (
+              <p >List this place</p>
+            )}
+          </Button>
+        )}
+      </div>
+    );
+  }
 
   return (
     <div className="flex justify-between">
@@ -1039,108 +1109,110 @@ export default function AddNewTourV2() {
         <HeroBannerContent />
         <ThingsToDo />
         <VisitTiming />
-        <div>
-          <h4>Final submit</h4>
-          <Button
-          onPress={async () => {
-            addTourInDB({thingsTodo: useAddNewTour.getState().thingsTodoArr, mainBackImageUrl: useAddNewTour.getState().mainBackImageUrl, VisitTiming: useAddNewTour.getState().visitTimings, heroBannerImageurls: useAddNewTour.getState().heroBannerImageurls, heroBannerContentHeadAndPara: useAddNewTour.getState().heroBannerContent, placeName: useAddNewTour.getState().placeName, router})
-          }}
-          >
-            Submit
-          </Button>
-        </div>
+        <ListThisPlaceBtn />
       </div>
       {/* FOR SHOWING CONTENT */}
-      <div className="bg-zinc-800 min-h-[100vh] px-0.5">
-        <div className="border shadow-md">
-          {mainBackImageUrl.length !== 0 && (
-            <div className="relative min-h-[30vh] w-[1080px] flex items-center justify-center">
-              {/* HERO BACKGROUND IMAGE AND HEADERS */}
-              <div className="absolute inset-0 z-0">
-                <Image
-                  src={mainBackImageUrl}
-                  alt="Background image"
-                  fill
-                  priority
-                  className="object-cover"
-                />
-                {/* Overlay with blur effect */}
-                <div className="absolute inset-0 bg-black/40 backdrop-blur-sm"></div>
-              </div>
-
-              {/* Content */}
-              <div className="relative z-10 text-center px-4 sm:px-6">
-                <div className="text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-6">
-                  {placeName.length !== 0 && <p>{placeName}</p>}
-                </div>
-                <div className="text-4xl sm:text-3xl md:text-4xl font-bold text-white mb-6">
-                  {heroBannerContent.heading.length !== 0 && (
-                    <p>{heroBannerContent.heading}</p>
-                  )}
-                </div>
-
-                <div className="flex flex-col gap-4 justify-center items-center">
-                  <div>
-                    {heroBannerContent.briefParagraph.length !== 0 && (
-                      <p className="text-white">
-                        {heroBannerContent.briefParagraph}
-                      </p>
-                    )}
-                  </div>
-                  <div>
-                    {activeBannerImage.length !== 0 && (
-                      <Image
-                        src={activeBannerImage}
-                        alt="active_banner_image"
-                        width={400}
-                        height={400}
-                        className="rounded"
-                      />
-                    )}
+      {useAddNewTour.getState().placeName.length !== 0 &&
+        useAddNewTour.getState().mainBackImageUrl.length !== 0 && (
+          <div className="bg-zinc-800 min-h-[100vh] px-0.5">
+            <div className="border shadow-md">
+              {mainBackImageUrl.length !== 0 && (
+                <div className="relative min-h-[30vh] w-[1080px] flex items-center justify-center">
+                  {/* HERO BACKGROUND IMAGE AND HEADERS */}
+                  <div className="absolute inset-0 z-0">
+                    <Image
+                      src={mainBackImageUrl}
+                      alt="Background image"
+                      fill
+                      priority
+                      className="object-cover"
+                    />
+                    {/* Overlay with blur effect */}
+                    <div className="absolute inset-0 bg-black/40 backdrop-blur-sm"></div>
                   </div>
 
-                  <div className="flex space-x-1 p-1">
-                    {heroBannerImageurls.map((image, index) => (
-                      <Image
-                        src={image.url}
-                        alt="dbv"
-                        width={60}
-                        height={60}
+                  {/* Content */}
+                  <div className="relative z-10 text-center px-4 sm:px-6">
+                    <div className="text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-6">
+                      {placeName.length !== 0 && <p>{placeName}</p>}
+                    </div>
+                    <div className="text-4xl sm:text-3xl md:text-4xl font-bold text-white mb-6">
+                      {heroBannerContent.heading.length !== 0 && (
+                        <p>{heroBannerContent.heading}</p>
+                      )}
+                    </div>
+
+                    <div className="flex flex-col gap-4 justify-center items-center">
+                      <div>
+                        {heroBannerContent.briefParagraph.length !== 0 && (
+                          <p className="text-white">
+                            {heroBannerContent.briefParagraph}
+                          </p>
+                        )}
+                      </div>
+                      <div>
+                        {activeBannerImage.length !== 0 && (
+                          <Image
+                            src={activeBannerImage}
+                            alt="active_banner_image"
+                            width={400}
+                            height={400}
+                            className="rounded"
+                          />
+                        )}
+                      </div>
+
+                      <div className="flex space-x-1 p-1">
+                        {heroBannerImageurls.map((image, index) => (
+                          <Image
+                            src={image.url}
+                            alt="dbv"
+                            width={60}
+                            height={60}
+                            key={index}
+                            onClick={() => {
+                              setActiveBannerImage(image.url);
+                            }}
+                            className="border p-1 border-zinc-500 rounded hover:cursor-pointer"
+                          />
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              <div>
+                {useAddNewTour.getState().thingsTodoArr.length !== 0 && (
+                  <h2 className="text-5xl font-semibold text-white px-2 py-3">
+                    Things To Do
+                  </h2>
+                )}
+
+                <div className="grid grid-cols-2 gap-2 w-[1080px]">
+                  {useAddNewTour
+                    .getState()
+                    .thingsTodoArr.map((things, index) => (
+                      <div
                         key={index}
-                        onClick={() => {
-                          setActiveBannerImage(image.url);
-                        }}
-                        className="border p-1 border-zinc-500 rounded hover:cursor-pointer"
-                      />
+                        className="bg-neutral-700 rounded-lg text-white flex justify-center flex-col items-center"
+                      >
+                        <h2>{things.heading}</h2>
+                        <Image
+                          src={things.imageUrl}
+                          alt="thingstodo_image"
+                          width={400}
+                          height={400}
+                          className="rounded"
+                        />
+                        <p>{things.subHeading}</p>
+                      </div>
                     ))}
-                  </div>
                 </div>
               </div>
             </div>
-          )}
-
-          <div> 
-          <h2 className="text-5xl font-semibold text-white px-2 py-3">Things To Do</h2>
-            <div className="grid grid-cols-2 gap-2 w-[1080px]">
-          
-            {useAddNewTour.getState().thingsTodoArr.map((things, index) => (
-              <div key={index} className="bg-neutral-700 rounded-lg text-white flex justify-center flex-col items-center">
-                <h2>{things.heading}</h2>
-                <Image
-                  src={things.imageUrl}
-                  alt="thingstodo_image"
-                  width={400}
-                  height={400}
-                  className="rounded"
-                />
-                <p>{things.subHeading}</p>
-              </div>
-            ))}
           </div>
-            </div>
-           
-        </div>
-      </div>
+        )}
     </div>
   );
 }
