@@ -1033,7 +1033,7 @@ export default function AddNewTourV2() {
   return (
     <div className="flex justify-between">
       {/* FOR ADDING CONTENT */}
-      <div className="p-5">
+      <div className="p-5 sticky top-0 overflow-y-auto h-screen">
         <SetPlaceName />
         <SetMainBackgroundImage />
         <HeroBannerContent />
