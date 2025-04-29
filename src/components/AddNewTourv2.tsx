@@ -781,7 +781,7 @@ export default function AddNewTourV2() {
 
                   <div>
                     {thingsTodoArr.length !== 0 && (
-                      <div className="grid grid-cols-2 gap-2">
+                      <div className="grid grid-cols-4 gap-2">
                         {thingsTodoArr.map((todo, index) => (
                           <div
                             onClick={() => {
@@ -811,7 +811,7 @@ export default function AddNewTourV2() {
                     )}
 
                     {useAddNewTour.getState().thingsTodoArr.length !== 0 && (
-                      <div className="grid grid-cols-3 gap-2">
+                      <div className="grid grid-cols-4 gap-2">
                         {useAddNewTour
                           .getState()
                           .thingsTodoArr.map((todo, index) => (
@@ -1336,7 +1336,7 @@ export default function AddNewTourV2() {
       {useAddNewTour.getState().placeName.length !== 0 &&
         useAddNewTour.getState().mainBackImageUrl.length !== 0 && (
           <div className="bg-zinc-800 min-h-[100vh] px-0.5">
-            <div className="border shadow-md">
+            <div className="shadow-md">
               {mainBackImageUrl.length !== 0 && (
                 <div className="relative min-h-[30vh] w-[1080px] flex items-center justify-center">
                   {/* HERO BACKGROUND IMAGE AND HEADERS */}
@@ -1355,9 +1355,9 @@ export default function AddNewTourV2() {
                   {/* Content */}
                   <div className="relative z-10 text-center px-4 sm:px-6">
                     <div className="text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-6">
-                      {placeName.length !== 0 && <p>{placeName}</p>}
+                      {/* {placeName.length !== 0 && <p>{placeName}</p>} */}
                     </div>
-                    <div className="text-4xl sm:text-3xl md:text-4xl font-bold text-white mb-6">
+                    <div className="text-4xl sm:text-3xl md:text-4xl font-bold text-white">
                       {heroBannerContent.heading.length !== 0 && (
                         <p>{heroBannerContent.heading}</p>
                       )}
@@ -1366,7 +1366,7 @@ export default function AddNewTourV2() {
                     <div className="flex flex-col gap-4 justify-center items-center">
                       <div>
                         {heroBannerContent.briefParagraph.length !== 0 && (
-                          <p className="text-white">
+                          <p className="text-white w-96 text-left">
                             {heroBannerContent.briefParagraph}
                           </p>
                         )}

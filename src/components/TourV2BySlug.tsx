@@ -1,0 +1,159 @@
+"use client";
+import { useTourStoreV2 } from "@/store/tour-store/tourStoreV2";
+import { Divider } from "@heroui/react";
+import { Spinner } from "@heroui/spinner";
+import { Star } from "lucide-react";
+import Image from "next/image";
+import { useEffect, useState } from "react";
+
+export default function TourV2BySlug() {
+  const { fetchTour, tour, isLoading } = useTourStoreV2();
+  const [loading, setLoading] = useState(true);
+  const [activeImage, setActiveImage] = useState("");
+  console.log(activeImage);
+
+  useEffect(() => {
+    (async () => {
+      setLoading(true);
+      await fetchTour({ slug: "test-slug" });
+      setLoading(false);
+    })();
+  }, []);
+
+  useEffect(() => {
+    if (tour?.heroBannerContent.heroBannerImageUrls.length! > 0) {
+      setActiveImage(tour?.heroBannerContent.heroBannerImageUrls[0].url!);
+    }
+  }, [tour]);
+
+  if (loading) {
+    return (
+      <div className="flex min-h-[100vh] justify-center">
+        <Spinner />
+      </div>
+    );
+  }
+
+  function StartRating({ count }: { count: number }) {
+    return (
+      <div className="flex gap-1">
+        {[
+          ...Array(5).map((_, index) => (
+            <Star key={index} size={18} className="text-yellow-400" />
+          )),
+        ]}
+        <h1>edfkh</h1>
+      </div>
+    );
+  }
+
+  return (
+    <div>
+      <div className="relative min-h-[45vh] flex items-center justify-center">
+        {/* SHOW IMAGE */}
+        <div className="absolute inset-0 z-0">
+          <Image
+            src={tour?.mainBackImage!}
+            alt="main_back_image"
+            fill
+            priority
+            className="object-cover"
+          />
+          <div className="absolute inset-0 bg-black/40 backdrop-blur-sm"></div>
+        </div>
+        {/* BANNER CONTENT */}
+        <div className="relative z-10 text-center flex gap-48">
+          <div>
+            <p className="w-80 text-left text-4xl sm:text-7xl md:text-7xl font-bold text-white">
+              {tour?.heroBannerContent.heading}
+            </p>
+            <p className="w-80 text-left text-white font-semibold">
+              {tour?.heroBannerContent.briefParagraph}
+            </p>
+          </div>
+          <div className="space-y-1">
+            <div>
+              <Image
+                src={activeImage}
+                alt="banner_image"
+                width={400}
+                height={350}
+                className="rounded"
+              />
+            </div>
+            <div className="flex space-x-1">
+              {tour?.heroBannerContent.heroBannerImageUrls.map(
+                (urls, index) => (
+                  <div
+                    className="flex flex-col hover:cursor-pointer border p-0.5 rounded"
+                    key={index}
+                    onClick={() => {
+                      setActiveImage(urls.url);
+                    }}
+                  >
+                    <Image
+                      src={urls.url}
+                      alt="banner_image"
+                      width={60}
+                      height={40}
+                    />
+                  </div>
+                )
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+      {/* BELOW OF THE BANNER */}
+      <div className="bg-black text-white flex flex-col justify-center items-center">
+        <div className="bg-stone-900 w-full max-w-[1300px] mt-8 rounded-xl py-10 px-8">
+          <div>
+            <h3 className="text-4xl font-semibold pb-4">
+              Things to do in{" "}
+              <span className="text-blue-600">{tour?.placeName}</span>
+            </h3>
+          </div>
+          <div className="grid grid-cols-3 gap-8">
+            {tour?.thingsToDoArr.map((ttd, index) => (
+              <div
+                className="bg-neutral-800 py-2 px-4 rounded-xl w-[400px] h-[500px] flex flex-col justify-center"
+                key={index}
+              >
+                <div>
+                  <Image
+                    src={ttd.imageUrl}
+                    alt="todo_image"
+                    width={400}
+                    height={200}
+                    className="rounded-t-xl my-2"
+                  />
+                  <h2 className="text-2xl font-bold text-white">
+                    {ttd.heading}
+                  </h2>
+                  <p className="text-sm text-yellow-400/80 font-semibold">
+                    {ttd.subHeading}
+                  </p>
+                </div>
+                <p className="text-gray-100 text-sm mb-2 line-clamp-4">
+                  {ttd.briefParagraph}
+                </p>
+                <Divider className="bg-yellow-400 "/>
+                <div className="flex flex-col items-center py-2">
+                  <div>
+                    <h2 className="text-sm font-semibold text-white/70">Rated by travelers across the world</h2>
+                  </div>
+                  <div className="flex">
+                    {[...Array(ttd.rating)].map((_, index) => (
+                      <Star className="text-yellow-400 fill-yellow-400" key={index}/>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+      {/* VISIT TIMINGS */}
+    </div>
+  );
+}
