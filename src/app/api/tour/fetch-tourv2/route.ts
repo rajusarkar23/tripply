@@ -3,7 +3,7 @@ import { tourV2 } from "@/lib/schema/schema";
 import { eq } from "drizzle-orm";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(req: NextRequest, res:NextResponse) {
+export async function GET(req: NextRequest) {
     console.log("ran");
     
     const slugFromUrl = req.nextUrl.searchParams.get("slug")

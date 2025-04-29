@@ -31,32 +31,15 @@ interface ThingsToDoArr {
   imageUrl: string;
 }
 
-type VisitTimings = {
-  best: {
-    start: string;
-    end: string;
-  };
-  good: {
-    start: string;
-    end: string;
-  };
-  notRecomended: {
-    start: string;
-    end: string;
-  };
-};
 
 export default function AddNewTourV2() {
   const {
     mainBackImageUrl,
-    placeName,
     heroBannerContent,
     heroBannerImageurls,
     addTourInDB,
   } = useAddNewTour();
   const [activeBannerImage, setActiveBannerImage] = useState("");
-  const [isBtnDisable, setIsBtnDisable] = useState(true);
-
   const router = useRouter();
 
   useEffect(() => {

@@ -1,3 +1,4 @@
+import { useRouter } from "next/navigation";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
@@ -60,7 +61,7 @@ interface AddNewtour {
   setHeroBannerImages: ({ imageUrl }: { imageUrl: HeroBannerImageUrl[] }) => void;
   setThingsTodo: ({tta}: {tta: ThingsToDoArr[]}) => void
   setVisitTimings : ({bestStart, bestEnd, goodStart, goodEnd, notRecomendedStart, notRecomendedEnd}: {bestStart:string, bestEnd:string, goodStart:string, goodEnd:string, notRecomendedStart:string, notRecomendedEnd:string}) => void
-  addTourInDB: ({heroBannerContentHeadAndPara, heroBannerImageurls, thingsTodo, VisitTiming, mainBackImageUrl, placeName}: {heroBannerContentHeadAndPara: HeroBannerContent, heroBannerImageurls: HeroBannerImageUrl[], thingsTodo:ThingsToDoArr[], VisitTiming: VisitTimings, mainBackImageUrl: string, placeName: string, router: any}) => Promise<void>
+  addTourInDB: ({heroBannerContentHeadAndPara, heroBannerImageurls, thingsTodo, VisitTiming, mainBackImageUrl, placeName, router}: {heroBannerContentHeadAndPara: HeroBannerContent, heroBannerImageurls: HeroBannerImageUrl[], thingsTodo:ThingsToDoArr[], VisitTiming: VisitTimings, mainBackImageUrl: string, placeName: string, router: ReturnType<typeof useRouter>}) => Promise<void>
 }
 
 const useAddNewTour = create(

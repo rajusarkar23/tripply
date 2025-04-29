@@ -2,9 +2,8 @@ import { db } from "@/lib/db/db";
 import { tourV2 } from "@/lib/schema/schema";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function POST(req: NextRequest, res: NextResponse){
+export async function POST(req: NextRequest){
     const {VisitTiming, heroBannerImageurls, heroBannerContentHeadAndPara, thingsTodo, mainBackImageUrl, placeName} = await req.json()
-    // console.log(VisitTiming, heroBannerImageurls, heroBannerContentHeadAndPara, thingsTodo);
 
     try {
         const create = await db.insert(tourV2).values({
@@ -15,7 +14,7 @@ export async function POST(req: NextRequest, res: NextResponse){
             },
             mainBackImage: mainBackImageUrl,
             placeName,
-            slug: "test-slug",
+            slug: "test-slug-2",
             thingsToDoArr: thingsTodo,
             visitTimings: VisitTiming,
             createdBy: 1

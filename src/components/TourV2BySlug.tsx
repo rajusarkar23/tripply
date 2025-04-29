@@ -7,7 +7,7 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 
 export default function TourV2BySlug() {
-  const { fetchTour, tour, isLoading } = useTourStoreV2();
+  const { fetchTour, tour } = useTourStoreV2();
   const [loading, setLoading] = useState(true);
   const [activeImage, setActiveImage] = useState("");
   console.log(activeImage);
@@ -15,14 +15,14 @@ export default function TourV2BySlug() {
   useEffect(() => {
     (async () => {
       setLoading(true);
-      await fetchTour({ slug: "test-slug" });
+      await fetchTour({ slug: "test-slug-2" });
       setLoading(false);
     })();
   }, []);
 
   useEffect(() => {
-    if (tour?.heroBannerContent.heroBannerImageUrls.length! > 0) {
-      setActiveImage(tour?.heroBannerContent.heroBannerImageUrls[0].url!);
+    if (tour!.heroBannerContent.heroBannerImageUrls.length! > 0) {
+      setActiveImage(tour!.heroBannerContent.heroBannerImageUrls[0].url!);
     }
   }, [tour]);
 
@@ -34,18 +34,6 @@ export default function TourV2BySlug() {
     );
   }
 
-  function StartRating({ count }: { count: number }) {
-    return (
-      <div className="flex gap-1">
-        {[
-          ...Array(5).map((_, index) => (
-            <Star key={index} size={18} className="text-yellow-400" />
-          )),
-        ]}
-        <h1>edfkh</h1>
-      </div>
-    );
-  }
 
   return (
     <div>
@@ -53,7 +41,7 @@ export default function TourV2BySlug() {
         {/* SHOW IMAGE */}
         <div className="absolute inset-0 z-0">
           <Image
-            src={tour?.mainBackImage!}
+            src={tour!.mainBackImage!}
             alt="main_back_image"
             fill
             priority
@@ -65,10 +53,10 @@ export default function TourV2BySlug() {
         <div className="relative z-10 text-center flex gap-48">
           <div>
             <p className="w-80 text-left text-4xl sm:text-7xl md:text-7xl font-bold text-white">
-              {tour?.heroBannerContent.heading}
+              {tour!.heroBannerContent.heading}
             </p>
             <p className="w-80 text-left text-white font-semibold">
-              {tour?.heroBannerContent.briefParagraph}
+              {tour!.heroBannerContent.briefParagraph}
             </p>
           </div>
           <div className="space-y-1">
@@ -82,7 +70,7 @@ export default function TourV2BySlug() {
               />
             </div>
             <div className="flex space-x-1">
-              {tour?.heroBannerContent.heroBannerImageUrls.map(
+              {tour!.heroBannerContent.heroBannerImageUrls.map(
                 (urls, index) => (
                   <div
                     className="flex flex-col hover:cursor-pointer border p-0.5 rounded"
@@ -110,11 +98,11 @@ export default function TourV2BySlug() {
           <div>
             <h3 className="text-4xl font-semibold pb-4">
               Things to do in{" "}
-              <span className="text-blue-600">{tour?.placeName}</span>
+              <span className="text-blue-600">{tour!.placeName}</span>
             </h3>
           </div>
           <div className="grid grid-cols-3 gap-8">
-            {tour?.thingsToDoArr.map((ttd, index) => (
+            {tour!.thingsToDoArr.map((ttd, index) => (
               <div
                 className="bg-neutral-800 py-2 px-4 rounded-xl w-[400px] h-[500px] flex flex-col justify-center"
                 key={index}
