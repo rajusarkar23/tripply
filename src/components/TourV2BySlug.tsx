@@ -1,8 +1,17 @@
 "use client";
 import { useTourStoreV2 } from "@/store/tour-store/tourStoreV2";
-import { Divider } from "@heroui/react";
+import {
+  Button,
+  Divider,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  useDisclosure,
+} from "@heroui/react";
 import { Spinner } from "@heroui/spinner";
-import { Star } from "lucide-react";
+import { Star, TicketsPlane } from "lucide-react";
 import Image from "next/image";
 import { useParams, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -11,12 +20,12 @@ export default function TourV2BySlug() {
   const { fetchTour, tour } = useTourStoreV2();
   const [loading, setLoading] = useState(true);
   const [activeImage, setActiveImage] = useState("");
-  const params = useParams()
+  const params = useParams();
 
   useEffect(() => {
     (async () => {
       setLoading(true);
-      await fetchTour({ slug:params.slug?.toString()! });
+      await fetchTour({ slug: params.slug?.toString()! });
       setLoading(false);
     })();
   }, []);
@@ -32,6 +41,61 @@ export default function TourV2BySlug() {
       <div className="flex min-h-[100vh] justify-center">
         <Spinner />
       </div>
+    );
+  }
+
+  function BookNowModal({placeName}: {placeName: string}) {
+    const { isOpen, onOpen, onClose } = useDisclosure();
+
+    return (
+      <>
+        <div className="flex flex-wrap gap-3">
+          <Button
+            onPress={onOpen}
+            color="primary"
+            className="rounded-full font-bold flex items-center justify-center"
+          >
+            Book your spot now <TicketsPlane className="text-yellow-400" />
+          </Button>
+        </div>
+        <Modal isOpen={isOpen} size={"3xl"} onClose={onClose}>
+          <ModalContent>
+            {(onClose) => (
+              <>
+                <ModalHeader className="flex flex-col gap-1">
+                  Book your spot for a vacation in {placeName}
+                </ModalHeader>
+                <ModalBody>
+                  <p>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                    Nullam pulvinar risus non risus hendrerit venenatis.
+                    Pellentesque sit amet hendrerit risus, sed porttitor quam.
+                  </p>
+                  <p>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                    Nullam pulvinar risus non risus hendrerit venenatis.
+                    Pellentesque sit amet hendrerit risus, sed porttitor quam.
+                  </p>
+                  <p>
+                    Magna exercitation reprehenderit magna aute tempor cupidatat
+                    consequat elit dolor adipisicing. Mollit dolor eiusmod sunt
+                    ex incididunt cillum quis. Velit duis sit officia eiusmod
+                    Lorem aliqua enim laboris do dolor eiusmod.
+                  </p>
+                </ModalBody>
+                <ModalFooter>
+                  <Button color="danger" variant="light" onPress={onClose}>
+                    Close
+                  </Button>
+                  <Button color="primary" onPress={onClose}>
+                    Action
+                  </Button>
+                </ModalFooter>
+              </>
+            )}
+          </ModalContent>
+        </Modal>
+      </>
     );
   }
 
@@ -96,11 +160,16 @@ export default function TourV2BySlug() {
       {/* BELOW OF THE BANNER */}
       <div className="bg-black text-white flex flex-col justify-center items-center">
         <div className="bg-stone-900 w-full max-w-[1300px] mt-8 rounded-xl py-10 px-8">
-          <div>
-            <h3 className="text-4xl font-semibold pb-4">
-              Things to do in{" "}
-              <span className="text-blue-600">{tour!.placeName}</span>
-            </h3>
+          <div className="flex justify-between">
+            <div>
+              <h3 className="text-4xl font-semibold pb-4">
+                Things to do in{" "}
+                <span className="text-blue-600">{tour!.placeName}</span>
+              </h3>
+            </div>
+            <div>
+              <BookNowModal placeName={tour!.placeName}/>
+            </div>
           </div>
           <div className="md:grid md:grid-cols-3 md:gap-8 flex flex-col space-y-5  justify-center items-center">
             {tour!.thingsToDoArr.map((ttd, index) => (
@@ -150,23 +219,53 @@ export default function TourV2BySlug() {
         <div className="bg-stone-900 w-full max-w-[1300px] mt-8 mb-8 rounded-xl px-8 py-8 flex justify-center items-center flex-col">
           <div>
             <h3 className="text-4xl">Best time to visit</h3>
-            <p className="text-xs">Guide to make your travel at the right time</p>
+            <p className="text-xs">
+              Guide to make your travel at the right time
+            </p>
           </div>
 
-          <div className="mt-4 bg-neutral-800 rounded-lg px-4 py-2 md:flex md:flex-row flex flex-col justify-center gap-8 md:w-auto md:h-auto w-[340px] h-[400]">
+          <div className="mt-4 bg-neutral-800 rounded-lg px-4 py-2 md:flex md:flex-row flex flex-col justify-center gap-8 md:w-auto md:h-auto w-[340px] h-[400px]">
             <div>
-              <h3 className="uppercase font-bold text-yellow-400">{tour!.visitTimings.best.start } - {tour!.visitTimings.best.end}</h3>
-              <p className="w-40 text-green-600 font-semibold text-sm">Best time to visit <span className="text-blue-600 text-lg font-semibold">{tour!.placeName}</span></p>
+              <h3 className="uppercase font-bold text-yellow-400">
+                {tour!.visitTimings.best.start} - {tour!.visitTimings.best.end}
+              </h3>
+              <p className="w-40 text-green-600 font-semibold text-sm">
+                Best time to visit{" "}
+                <span className="text-blue-600 text-lg font-semibold">
+                  {tour!.placeName}
+                </span>
+              </p>
             </div>
             <div>
-              <h3 className="uppercase font-bold text-yellow-400">{tour!.visitTimings.good.start } - {tour!.visitTimings.good.end}</h3>
-              <p className="w-40 text-neutral-300 font-semibold text-sm">Good time to visit <span className="text-blue-600 text-lg font-semibold">{tour!.placeName}</span></p>
+              <h3 className="uppercase font-bold text-yellow-400">
+                {tour!.visitTimings.good.start} - {tour!.visitTimings.good.end}
+              </h3>
+              <p className="w-40 text-neutral-300 font-semibold text-sm">
+                Good time to visit{" "}
+                <span className="text-blue-600 text-lg font-semibold">
+                  {tour!.placeName}
+                </span>
+              </p>
             </div>
 
             <div>
-              <h3 className="uppercase font-bold text-yellow-400">{tour!.visitTimings.notRecomended.start } - {tour!.visitTimings.notRecomended.end}</h3>
-              <p className="w-40 text-red-600/70 font-semibold text-sm">Not recomended   <span className="text-blue-600 text-lg font-semibold">{tour!.placeName}</span></p>
+              <h3 className="uppercase font-bold text-yellow-400">
+                {tour!.visitTimings.notRecomended.start} -{" "}
+                {tour!.visitTimings.notRecomended.end}
+              </h3>
+              <p className="w-40 text-red-600/70 font-semibold text-sm">
+                Not recomended{" "}
+                <span className="text-blue-600 text-lg font-semibold">
+                  {tour!.placeName}
+                </span>
+              </p>
             </div>
+          </div>
+        </div>
+        {/* booking section */}
+        <div className="bg-stone-900 w-full max-w-[1300px] mt-8 mb-8 rounded-xl px-8 py-8 flex justify-center items-center">
+          <div className="bg-neutral-800 rounded-lg px-4 py-2  w-[340px] flex justify-center">
+            <BookNowModal placeName={tour!.placeName}/>
           </div>
         </div>
       </div>

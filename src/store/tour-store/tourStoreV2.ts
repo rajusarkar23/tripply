@@ -40,6 +40,7 @@ interface VisitTimings {
 interface TourStates {
   placeName: string;
   mainBackImage: string;
+  pricing: number,
   slug: string ;
   heroBannerContent: HeroBannerContent;
   thingsToDoArr: ThingsToDo[];
@@ -66,6 +67,7 @@ const useTourStoreV2 = create(
           briefParagraph: "",
           heroBannerImageUrls: [],
         },
+        pricing:0,
         thingsToDoArr: [],
         visitTimings: {
           best: {
