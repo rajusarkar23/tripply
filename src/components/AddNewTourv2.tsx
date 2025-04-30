@@ -128,7 +128,6 @@ export default function AddNewTourV2() {
                     color="primary"
                     className="font-semibold"
                     onPress={() => {
-                      console.log(place);
                       setPlaceName({ placeName: place });
                     }}
                   >
@@ -881,7 +880,6 @@ export default function AddNewTourV2() {
     // final state for visit time
     const { setVisitTimings } = useAddNewTour();
 
-    console.log(bestTimeToVisitEnd);
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
     return (
       <>

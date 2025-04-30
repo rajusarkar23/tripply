@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 
 export async function GET() {
     try {
-        const getData = await db.select().from(tourV2)
+        const getData = await db.select({placeName: tourV2.placeName, mainBackImage: tourV2.mainBackImage, skug: tourV2.slug, heroBannerContent: tourV2.heroBannerContent}).from(tourV2)
         if (getData.length === 0) {
             return NextResponse.json({
                 success: false,

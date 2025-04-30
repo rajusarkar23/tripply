@@ -88,7 +88,6 @@ export default function AddNewTour() {
         return router.push("/admin/tours");
       } else {
         setLoading(false);
-        console.log(response);
         setIsAddError(true);
         setAddErrorMessage(response.message);
         router.refresh();

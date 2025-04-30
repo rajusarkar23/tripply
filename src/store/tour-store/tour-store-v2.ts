@@ -10,8 +10,6 @@ interface HeroBanner {
 // tour data
 interface fetchedTourData {
     placeName: string,
-    briefParagraph:string,
-    rating: number,
     mainBackImage: string,
     slug: string
     heroBannerContent: HeroBanner

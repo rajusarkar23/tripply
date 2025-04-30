@@ -51,8 +51,6 @@ export default function AdminFailedBookings() {
     }
   }
 
-  console.log(failedBookings);
-
   useEffect(() => {
     fetchBookings();
   }, []);
