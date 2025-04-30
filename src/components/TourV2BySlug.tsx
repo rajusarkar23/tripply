@@ -58,21 +58,21 @@ export default function TourV2BySlug() {
               {tour!.heroBannerContent.briefParagraph}
             </p>
           </div>
-          <div>
-            <div>
+          <div className="md:pb-0 pb-1">
+            <div className="md:px-0 px-4">
               <Image
                 src={activeImage}
                 alt="banner_image"
                 width={450}
                 height={350}
-                className="md:px-0 px-4"
+                className="rounded-t-xl"
               />
             </div>
-            <div className="flex bg-stone-800 md:px-0 px-4 md:mx-0 mx-4 py-0.5">
+            <div className="flex bg-stone-800 md:px-0 px-4 md:mx-0 mx-4 py-0.5 rounded-b-lg gap-1">
               {tour!.heroBannerContent.heroBannerImageUrls.map(
                 (urls, index) => (
                   <div
-                    className="flex flex-col hover:cursor-pointer border p-0.5 rounded"
+                    className="flex flex-col hover:cursor-pointer border border-blue-300 p-0.5 rounded"
                     key={index}
                     onClick={() => {
                       setActiveImage(urls.url);

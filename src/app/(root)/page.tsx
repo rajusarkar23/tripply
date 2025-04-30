@@ -1,14 +1,14 @@
 import CTASection from "@/components/CTASection";
+import DestinationV2 from "@/components/DestinationV2";
 import Features from "@/components/Features";
 import Hero from "@/components/Hero";
 import InfiniteReviewCarousel from "@/components/InfiniteScrollReviews";
-import PopularDestination from "@/components/PopularDestination";
 
 export default function Home() {
   return (
     <div>
       <Hero />
-      <PopularDestination />
+      <DestinationV2 />
       <CTASection />
       <Features />
       <InfiniteReviewCarousel />
