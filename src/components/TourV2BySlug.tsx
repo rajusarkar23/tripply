@@ -34,7 +34,6 @@ export default function TourV2BySlug() {
     );
   }
 
-
   return (
     <div>
       <div className="relative min-h-[45vh] flex items-center justify-center">
@@ -69,7 +68,7 @@ export default function TourV2BySlug() {
                 className="rounded"
               />
             </div>
-            <div className="flex space-x-1">
+            <div className="flex bg-stone-800">
               {tour!.heroBannerContent.heroBannerImageUrls.map(
                 (urls, index) => (
                   <div
@@ -125,14 +124,19 @@ export default function TourV2BySlug() {
                 <p className="text-gray-100 text-sm mb-2 line-clamp-4">
                   {ttd.briefParagraph}
                 </p>
-                <Divider className="bg-yellow-400 "/>
+                <Divider className="bg-yellow-400 " />
                 <div className="flex flex-col items-center py-2">
                   <div>
-                    <h2 className="text-sm font-semibold text-white/70">Rated by travelers across the world</h2>
+                    <h2 className="text-sm font-semibold text-white/70">
+                      Rated by travelers across the world
+                    </h2>
                   </div>
                   <div className="flex">
                     {[...Array(ttd.rating)].map((_, index) => (
-                      <Star className="text-yellow-400 fill-yellow-400" key={index}/>
+                      <Star
+                        className="text-yellow-400 fill-yellow-400"
+                        key={index}
+                      />
                     ))}
                   </div>
                 </div>
@@ -140,8 +144,30 @@ export default function TourV2BySlug() {
             ))}
           </div>
         </div>
+        {/* VISIT TIMINGS */}
+        <div className="bg-stone-900 w-full max-w-[1300px] mt-8 mb-8 rounded-xl px-8 py-8">
+          <div>
+            <h3 className="text-4xl">Best time to visit</h3>
+            <p className="text-xs">Guide to make your travel at the right time</p>
+          </div>
+
+          <div className="mt-4 bg-neutral-800 rounded-lg px-4 py-2 flex justify-center gap-8">
+            <div>
+              <h3 className="uppercase font-bold text-yellow-400">{tour!.visitTimings.best.start } - {tour!.visitTimings.best.end}</h3>
+              <p className="w-40 text-green-600 font-semibold text-sm">Best time to visit <span className="text-blue-600 text-lg font-semibold">{tour!.placeName}</span></p>
+            </div>
+            <div>
+              <h3 className="uppercase font-bold text-yellow-400">{tour!.visitTimings.good.start } - {tour!.visitTimings.good.end}</h3>
+              <p className="w-40 text-neutral-300 font-semibold text-sm">Good time to visit <span className="text-blue-600 text-lg font-semibold">{tour!.placeName}</span></p>
+            </div>
+
+            <div>
+              <h3 className="uppercase font-bold text-yellow-400">{tour!.visitTimings.notRecomended.start } - {tour!.visitTimings.notRecomended.end}</h3>
+              <p className="w-40 text-red-600/70 font-semibold text-sm">Not recomended   <span className="text-blue-600 text-lg font-semibold">{tour!.placeName}</span></p>
+            </div>
+          </div>
+        </div>
       </div>
-      {/* VISIT TIMINGS */}
     </div>
   );
 }
