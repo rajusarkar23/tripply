@@ -4,18 +4,19 @@ import { Divider } from "@heroui/react";
 import { Spinner } from "@heroui/spinner";
 import { Star } from "lucide-react";
 import Image from "next/image";
+import { useParams, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function TourV2BySlug() {
   const { fetchTour, tour } = useTourStoreV2();
   const [loading, setLoading] = useState(true);
   const [activeImage, setActiveImage] = useState("");
-  console.log(activeImage);
+  const params = useParams()
 
   useEffect(() => {
     (async () => {
       setLoading(true);
-      await fetchTour({ slug: "test-slug-2" });
+      await fetchTour({ slug:params.slug?.toString()! });
       setLoading(false);
     })();
   }, []);
