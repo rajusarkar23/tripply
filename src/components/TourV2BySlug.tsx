@@ -49,26 +49,26 @@ export default function TourV2BySlug() {
           <div className="absolute inset-0 bg-black/40 backdrop-blur-sm"></div>
         </div>
         {/* BANNER CONTENT */}
-        <div className="relative z-10 text-center flex gap-48">
-          <div>
+        <div className="relative z-10 text-center md:flex md:flex-row flex flex-col md:gap-48 gap-6">
+          <div className="md:px-0 px-4 md:pt-0 pt-2">
             <p className="w-80 text-left text-4xl sm:text-7xl md:text-7xl font-bold text-white">
               {tour!.heroBannerContent.heading}
             </p>
-            <p className="w-80 text-left text-white font-semibold">
+            <p className="w-80 text-left md:text-white text-white/70 font-semibold">
               {tour!.heroBannerContent.briefParagraph}
             </p>
           </div>
-          <div className="space-y-1">
+          <div>
             <div>
               <Image
                 src={activeImage}
                 alt="banner_image"
-                width={400}
+                width={450}
                 height={350}
-                className="rounded"
+                className="md:px-0 px-4"
               />
             </div>
-            <div className="flex bg-stone-800">
+            <div className="flex bg-stone-800 md:px-0 px-4 md:mx-0 mx-4 py-0.5">
               {tour!.heroBannerContent.heroBannerImageUrls.map(
                 (urls, index) => (
                   <div
@@ -83,6 +83,7 @@ export default function TourV2BySlug() {
                       alt="banner_image"
                       width={60}
                       height={40}
+                      className="hover:scale-105 transition-all"
                     />
                   </div>
                 )
@@ -100,10 +101,10 @@ export default function TourV2BySlug() {
               <span className="text-blue-600">{tour!.placeName}</span>
             </h3>
           </div>
-          <div className="grid grid-cols-3 gap-8">
+          <div className="md:grid md:grid-cols-3 md:gap-8 flex flex-col space-y-5  justify-center items-center">
             {tour!.thingsToDoArr.map((ttd, index) => (
               <div
-                className="bg-neutral-800 py-2 px-4 rounded-xl w-[400px] h-[500px] flex flex-col justify-center"
+                className="bg-neutral-800 py-2 px-4 rounded-xl md:w-[400px] md:h-[500px] w-[340px] h-[400] flex flex-col justify-center"
                 key={index}
               >
                 <div>
@@ -145,13 +146,13 @@ export default function TourV2BySlug() {
           </div>
         </div>
         {/* VISIT TIMINGS */}
-        <div className="bg-stone-900 w-full max-w-[1300px] mt-8 mb-8 rounded-xl px-8 py-8">
+        <div className="bg-stone-900 w-full max-w-[1300px] mt-8 mb-8 rounded-xl px-8 py-8 flex justify-center items-center flex-col">
           <div>
             <h3 className="text-4xl">Best time to visit</h3>
             <p className="text-xs">Guide to make your travel at the right time</p>
           </div>
 
-          <div className="mt-4 bg-neutral-800 rounded-lg px-4 py-2 flex justify-center gap-8">
+          <div className="mt-4 bg-neutral-800 rounded-lg px-4 py-2 md:flex md:flex-row flex flex-col justify-center gap-8 md:w-auto md:h-auto w-[340px] h-[400]">
             <div>
               <h3 className="uppercase font-bold text-yellow-400">{tour!.visitTimings.best.start } - {tour!.visitTimings.best.end}</h3>
               <p className="w-40 text-green-600 font-semibold text-sm">Best time to visit <span className="text-blue-600 text-lg font-semibold">{tour!.placeName}</span></p>
