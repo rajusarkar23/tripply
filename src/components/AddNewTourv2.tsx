@@ -2,6 +2,7 @@
 import { useAddNewTour } from "@/store/tour-store/addNewTour";
 import { Button } from "@heroui/button";
 import {
+  Divider,
   Input,
   Modal,
   ModalBody,
@@ -15,7 +16,7 @@ import {
   Textarea,
   useDisclosure,
 } from "@heroui/react";
-import { CheckCircle } from "lucide-react";
+import { CheckCircle, UserSearch } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { ChangeEvent, useEffect, useState } from "react";
@@ -38,6 +39,7 @@ export default function AddNewTourV2() {
     heroBannerContent,
     heroBannerImageurls,
     addTourInDB,
+    reset
   } = useAddNewTour();
   const [activeBannerImage, setActiveBannerImage] = useState("");
   const router = useRouter();
@@ -1267,18 +1269,19 @@ export default function AddNewTourV2() {
             color="success"
             className="w-full text-black font-bold"
             isDisabled
-            variant="ghost"
+            variant="solid"
           >
             List this place
           </Button>
         ) : (
           <Button
             color="success"
-            variant="ghost"
+            variant="solid"
+          
             className="w-full text-black font-bold"
             isDisabled={useAddNewTour.getState().isLoading}
             onPress={async () => {
-              addTourInDB({
+              await addTourInDB({
                 thingsTodo: useAddNewTour.getState().thingsTodoArr,
                 mainBackImageUrl: useAddNewTour.getState().mainBackImageUrl,
                 VisitTiming: useAddNewTour.getState().visitTimings,
@@ -1287,8 +1290,10 @@ export default function AddNewTourV2() {
                 heroBannerContentHeadAndPara:
                   useAddNewTour.getState().heroBannerContent,
                 placeName: useAddNewTour.getState().placeName,
+                price: useAddNewTour.getState().pricing,
                 router,
               });
+              reset()
             }}
           >
             {useAddNewTour.getState().isLoading ? (
@@ -1301,16 +1306,133 @@ export default function AddNewTourV2() {
       </div>
     );
   }
+  function AddPricing() {
+    const { isOpen, onOpen, onOpenChange } = useDisclosure();
+    const [price, setPrice] = useState<number>(0);
+    const [personCount, setPersonCount] = useState<number>(0);
+    const { setPricing, pricing } = useAddNewTour();
+
+    const [isError, setIsError] = useState(false)
+    const [errorMessage, setErrorMessage] = useState("")
+    return (
+      <>
+        <div className="hover:bg-zinc-200 transition-all w-80 h-10 flex items-center hover:cursor-pointer px-4 rounded">
+          {pricing !==0 ? (
+            <div
+              className=" text-green-600 hover:text-blue-600 font-semibold flex items-center"
+              onClick={() => {
+                onOpen();
+                setPrice(useAddNewTour.getState().pricing);
+              }}
+            >
+              Price added <CheckCircle size={18} className="ml-1" />
+            </div>
+          ) : (
+            <div
+              onClick={onOpen}
+              className="hover:cursor-pointer font-semibold hover:text-blue-600"
+            >
+              Set Pricing
+            </div>
+          )}
+        </div>
+        <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+          <ModalContent>
+            {(onClose) => (
+              <>
+                <ModalHeader className="flex flex-col gap-1">
+                  Enter price per head
+                </ModalHeader>
+                <ModalBody>
+                  {pricing!== 0 ? (
+                    <>
+                    <div>
+                    <Input
+                        label="Price"
+                        defaultValue={pricing.toString()}
+                        onChange={(e) => {
+                          setIsError(false)
+                          setPrice(Number(e.target.value));
+                        }}
+                      />
+                      <p>
+                        Price per head:{" "}
+                        <span className="text-green-600 font-semibold">
+                          {price}
+                        </span>
+                      </p>
+                    </div>
+                     
+                    </>
+                  ) : (
+                    <>
+                    <div>
+                    <Input
+                        label="Pricing"
+                        onChange={(e) => {
+                          setIsError(false)
+                          setPrice(Number(e.target.value));
+                        }}
+                      />
+
+                      {price !== 0 && (
+                        <p>
+                          Price per head:{" "}
+                          <span className="text-green-600 font-semibold">
+                            {price}
+                          </span>
+                        </p>
+                      )}
+                    </div>
+                    
+                    </>
+                  )}
+                  {
+                    isError && (<p className="text-red-600 text-xs font-semibold">{errorMessage}</p>)
+                  }
+                </ModalBody>
+                <ModalFooter>
+                  <Button color="danger" variant="light" onPress={onClose}>
+                    Close
+                  </Button>
+                  <Button
+                    color="primary"
+                    className="font-semibold"
+                    onPress={() => {
+                      if (personCount < 0 || price < 0) {
+                        setIsError(true)
+                        setErrorMessage("Values must be in positive")
+                        return
+                      }
+                      setPricing({price });
+                    }}
+                  >
+                    Set Place Name
+                  </Button>
+                </ModalFooter>
+              </>
+            )}
+          </ModalContent>
+        </Modal>
+      </>
+    );
+  }
 
   return (
     <div className="flex justify-between">
       {/* FOR ADDING CONTENT */}
-      <div className="p-5 sticky top-0 overflow-y-auto h-screen">
+      <div className="p-5 sticky top-0 overflow-y-auto h-screen space-y-2">
         <SetPlaceName />
+        <Divider />
         <SetMainBackgroundImage />
+        <Divider />
         <HeroBannerContent />
+        <Divider />
         <ThingsToDo />
+        <Divider />
         <VisitTiming />
+        <Divider />
+        <AddPricing />
         <ListThisPlaceBtn />
       </div>
       {/* FOR SHOWING CONTENT */}

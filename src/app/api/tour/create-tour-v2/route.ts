@@ -3,7 +3,16 @@ import { tourV2 } from "@/lib/schema/schema";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest){
-    const {VisitTiming, heroBannerImageurls, heroBannerContentHeadAndPara, thingsTodo, mainBackImageUrl, placeName} = await req.json()
+    const {VisitTiming, heroBannerImageurls, heroBannerContentHeadAndPara, thingsTodo, mainBackImageUrl, placeName, price} = await req.json()
+
+    function slugify(str:string) {
+        str = str.replace(/^\s+|\s+$/g, ''); // trim leading/trailing white space
+        str = str.toLowerCase(); // convert string to lowercase
+        str = str.replace(/[^a-z0-9 -]/g, '') // remove any non-alphanumeric characters
+                 .replace(/\s+/g, '-') // replace spaces with hyphens
+                 .replace(/-+/g, '-'); // remove consecutive hyphens
+        return str;
+    }
 
     try {
         const create = await db.insert(tourV2).values({
@@ -14,9 +23,10 @@ export async function POST(req: NextRequest){
             },
             mainBackImage: mainBackImageUrl,
             placeName,
-            slug: "test-slug-2",
+            slug: slugify(placeName),
             thingsToDoArr: thingsTodo,
             visitTimings: VisitTiming,
+            pricing: price,
             createdBy: 1
         }).returning()
         if (create.length === 0) {

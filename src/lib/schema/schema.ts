@@ -76,6 +76,7 @@ export const tourV2 = pgTable("tourV2", ({
   heroBannerContent: jsonb("hero_banner_content").$type<HeroBannerContent>().notNull(),
   thingsToDoArr: jsonb("things_to_do_arr").$type<ThingsToDoArr>().notNull(),
   visitTimings: jsonb("visit_timings").$type<VisitTimings>().notNull(),
+  pricing: integer("price"),
   createdBy: integer("created_by").references(() => admin.id, {onDelete: "cascade"}),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").$onUpdate(() => new Date())

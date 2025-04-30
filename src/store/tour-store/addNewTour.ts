@@ -48,7 +48,8 @@ interface AddNewtour {
   heroBannerContent: HeroBannerContent;
   heroBannerImageurls: HeroBannerImageUrl[];
   thingsTodoArr: ThingsToDoArr[]
-  visitTimings: VisitTimings
+  visitTimings: VisitTimings,
+  pricing: number,
   setPlaceName: ({ placeName }: { placeName: string }) => Promise<void>;
   setMainBackImageUrl: ({ imageUrl }: { imageUrl: string }) => Promise<void>;
   setHeroBannerContent: ({
@@ -61,7 +62,9 @@ interface AddNewtour {
   setHeroBannerImages: ({ imageUrl }: { imageUrl: HeroBannerImageUrl[] }) => void;
   setThingsTodo: ({tta}: {tta: ThingsToDoArr[]}) => void
   setVisitTimings : ({bestStart, bestEnd, goodStart, goodEnd, notRecomendedStart, notRecomendedEnd}: {bestStart:string, bestEnd:string, goodStart:string, goodEnd:string, notRecomendedStart:string, notRecomendedEnd:string}) => void
-  addTourInDB: ({heroBannerContentHeadAndPara, heroBannerImageurls, thingsTodo, VisitTiming, mainBackImageUrl, placeName, router}: {heroBannerContentHeadAndPara: HeroBannerContent, heroBannerImageurls: HeroBannerImageUrl[], thingsTodo:ThingsToDoArr[], VisitTiming: VisitTimings, mainBackImageUrl: string, placeName: string, router: ReturnType<typeof useRouter>}) => Promise<void>
+  addTourInDB: ({heroBannerContentHeadAndPara, heroBannerImageurls, thingsTodo, VisitTiming, mainBackImageUrl, placeName, router, price}: {heroBannerContentHeadAndPara: HeroBannerContent, heroBannerImageurls: HeroBannerImageUrl[], thingsTodo:ThingsToDoArr[], VisitTiming: VisitTimings, mainBackImageUrl: string, placeName: string,price: number, router: ReturnType<typeof useRouter>}) => Promise<void>
+  setPricing: ({price}: {price: number}) => void,
+  reset: () => void
 }
 
 const useAddNewTour = create(
@@ -91,6 +94,10 @@ const useAddNewTour = create(
           end: "",
           start: ""
         }
+      },
+      pricing: 0,
+      reset: () => {
+        set({heroBannerContent: {briefParagraph: "",heading: ""}, heroBannerImageurls: [], mainBackImageUrl: "", placeName: "",pricing: 0, thingsTodoArr: [], visitTimings: {best: {end: "", start: ""}, good: {end: "", start: ""},notRecomended: {end: "", start: ""}},})
       },
       setPlaceName: async ({ placeName }) => {
         set({ placeName: placeName });
@@ -130,7 +137,7 @@ const useAddNewTour = create(
           }
         }})
       },
-      addTourInDB: async ({VisitTiming, heroBannerContentHeadAndPara, heroBannerImageurls, thingsTodo, mainBackImageUrl, placeName, router}) => {
+      addTourInDB: async ({VisitTiming, heroBannerContentHeadAndPara, heroBannerImageurls, thingsTodo, mainBackImageUrl, placeName, router, price}) => {
         set({isLoading: true,tourAddingError: false, tourAddingErrorMessage: undefined})
         try {
           const sendReq = await fetch ("/api/tour/create-tour-v2", {
@@ -138,7 +145,7 @@ const useAddNewTour = create(
             headers: {
               "Content-Type": "application/sjon"
             },
-            body: JSON.stringify({VisitTiming, heroBannerImageurls, heroBannerContentHeadAndPara, thingsTodo, mainBackImageUrl, placeName})
+            body: JSON.stringify({VisitTiming, heroBannerImageurls, heroBannerContentHeadAndPara, thingsTodo, mainBackImageUrl, placeName, price})
           })
 
           
@@ -154,6 +161,9 @@ const useAddNewTour = create(
           console.log(error);
           set({isLoading: false, tourAddingError: true, tourAddingErrorMessage: "Something went wrong"})
         }
+      },
+      setPricing: ({price}) => {
+        set({pricing: price})
       }
     }),
     { name: "add-new-tour" }

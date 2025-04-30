@@ -1,0 +1,1 @@
+ALTER TABLE "tourV2" ADD COLUMN "price" integer;
