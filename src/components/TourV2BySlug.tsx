@@ -13,7 +13,7 @@ import {
 import { Spinner } from "@heroui/spinner";
 import { Star, TicketsPlane } from "lucide-react";
 import Image from "next/image";
-import { useParams, useSearchParams } from "next/navigation";
+import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function TourV2BySlug() {
@@ -25,7 +25,7 @@ export default function TourV2BySlug() {
   useEffect(() => {
     (async () => {
       setLoading(true);
-      await fetchTour({ slug: params.slug?.toString()! });
+      await fetchTour({ slug: params.slug!.toString()! });
       setLoading(false);
     })();
   }, []);

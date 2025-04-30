@@ -16,7 +16,7 @@ import {
   Textarea,
   useDisclosure,
 } from "@heroui/react";
-import { CheckCircle, UserSearch } from "lucide-react";
+import { CheckCircle } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { ChangeEvent, useEffect, useState } from "react";
@@ -1309,7 +1309,6 @@ export default function AddNewTourV2() {
   function AddPricing() {
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
     const [price, setPrice] = useState<number>(0);
-    const [personCount, setPersonCount] = useState<number>(0);
     const { setPricing, pricing } = useAddNewTour();
 
     const [isError, setIsError] = useState(false)
@@ -1399,7 +1398,7 @@ export default function AddNewTourV2() {
                     color="primary"
                     className="font-semibold"
                     onPress={() => {
-                      if (personCount < 0 || price < 0) {
+                      if (price < 0) {
                         setIsError(true)
                         setErrorMessage("Values must be in positive")
                         return
