@@ -51,6 +51,12 @@ type VisitTimings = {
   }
 }
 
+// pricing
+type Pricing = {
+  premium: number,
+  standard: number
+}
+
 export const tour = pgTable("tour", {
   id: serial("id").primaryKey(),
   tourName: text("tour_name").notNull(),
@@ -77,6 +83,7 @@ export const tourV2 = pgTable("tourV2", ({
   thingsToDoArr: jsonb("things_to_do_arr").$type<ThingsToDoArr>().notNull(),
   visitTimings: jsonb("visit_timings").$type<VisitTimings>().notNull(),
   pricing: integer("price"),
+  tourPricing: jsonb("tour_pricing").$type<Pricing>(),
   createdBy: integer("created_by").references(() => admin.id, {onDelete: "cascade"}),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").$onUpdate(() => new Date())
