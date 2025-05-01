@@ -17,13 +17,16 @@ import {
   useDisclosure,
 } from "@heroui/react";
 import { Spinner } from "@heroui/spinner";
-import { DateValue } from "@react-types/datepicker";
-import { RangeValue } from "@react-types/shared";
-import { parseDate } from "@internationalized/date";
 import { Star, TicketsPlane } from "lucide-react";
 import Image from "next/image";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
+
+interface Date {
+  day: number;
+  month: number;
+  year: number;
+}
 
 export default function TourV2BySlug() {
   const { fetchTour, tour } = useTourStoreV2();
@@ -56,14 +59,18 @@ export default function TourV2BySlug() {
   function BookNowModal({ placeName }: { placeName: string }) {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [totalCost, setTotalCost] = useState<number>(0);
-    const [dateValue, setDateValue] = useState<RangeValue<DateValue> | null>({
-      start: parseDate("2025-04-01"),
-      end: parseDate("2025-04-08"),
-    });
+
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [canBeAccepted, setCanBeAccepted] = useState(false);
     const [consentProvided, setConsentProvided] = useState(false);
+
+    const [endDate, setEndDate] = useState<Date>({ day: 0, month: 0, year: 0 });
+    const [startDate, setStartDate] = useState<Date>({
+      day: 0,
+      month: 0,
+      year: 0,
+    });
 
     useEffect(() => {
       if (totalCost !== 0 && name.length !== 0 && email.length !== 0) {
@@ -111,7 +118,7 @@ export default function TourV2BySlug() {
                       </ul>
                       <div className="flex w-full max-w-[670px] mx-auto mt-4">
                         <h4 className="text-blue-700 font-bold">
-                          Book premium class at ${50} today!
+                          Book premium class at ${} today!
                         </h4>
                       </div>
                       <div className="flex w-full max-w-[670px] mx-auto gap-5 font-semibold text-black/60">
@@ -137,8 +144,10 @@ export default function TourV2BySlug() {
                           labelPlacement="outside"
                           size="sm"
                           radius="full"
-                          value={dateValue}
-                          onChange={setDateValue}
+                          onChange={(e) => {
+                            setEndDate(e!.end);
+                            setStartDate(e!.start);
+                          }}
                         />
                       </div>
                       <div className="w-full max-w-[670px] mx-auto my-4">
@@ -184,9 +193,12 @@ export default function TourV2BySlug() {
                       </div>
                       <div className="flex justify-center items-center mt-6">
                         {canBeAccepted && (
-                          <Checkbox className="text-xs font-semibold" onValueChange={() => {
-                            setConsentProvided(!consentProvided)
-                          }}>
+                          <Checkbox
+                            className="text-xs font-semibold"
+                            onValueChange={() => {
+                              setConsentProvided(!consentProvided);
+                            }}
+                          >
                             I have double checked above data.
                           </Checkbox>
                         )}
@@ -203,7 +215,7 @@ export default function TourV2BySlug() {
                   </Button>
                   <Button
                     color="primary"
-                    isDisabled= {!consentProvided}
+                    isDisabled={!consentProvided}
                     onPress={onClose}
                     className="font-semibold"
                   >
