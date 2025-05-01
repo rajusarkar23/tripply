@@ -72,6 +72,9 @@ export default function TourV2BySlug() {
       year: 0,
     });
 
+    console.log(endDate, startDate);
+    
+
     useEffect(() => {
       if (totalCost !== 0 && name.length !== 0 && email.length !== 0) {
         setCanBeAccepted(true);
