@@ -1306,7 +1306,6 @@ export default function AddNewTourV2() {
   }
   function AddPricing() {
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
-    const [price, setPrice] = useState<number>(0);
     const [standardPrice, setStandardPrice] = useState<number>(0);
     const [premiumPrice, setPremiumPrice] = useState<number>(0);
     const { setPricing, pricing } = useAddNewTour();
@@ -1439,7 +1438,7 @@ export default function AddNewTourV2() {
                     color="primary"
                     className="font-semibold"
                     onPress={() => {
-                      if (price < 0) {
+                      if (premiumPrice < 0 && standardPrice < 0) {
                         setIsError(true);
                         setErrorMessage("Values must be in positive");
                         return;
