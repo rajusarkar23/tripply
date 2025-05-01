@@ -56,7 +56,15 @@ export default function TourV2BySlug() {
     );
   }
 
-  function BookNowModal({ placeName }: { placeName: string }) {
+  function BookNowModal({
+    placeName,
+    standard_price,
+    premium_price,
+  }: {
+    placeName: string;
+    premium_price: number;
+    standard_price: number;
+  }) {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [totalCost, setTotalCost] = useState<number>(0);
 
@@ -73,7 +81,6 @@ export default function TourV2BySlug() {
     });
 
     console.log(endDate, startDate);
-    
 
     useEffect(() => {
       if (totalCost !== 0 && name.length !== 0 && email.length !== 0) {
@@ -107,7 +114,7 @@ export default function TourV2BySlug() {
                       <ul className="text-orange-700 font-semibold text-sm">
                         <div>
                           <h4 className="text-blue-700 font-semibold">
-                            Premium plan includes:
+                            <span className="text-emerald-600">Premium</span> plan includes:
                           </h4>
                         </div>
                         <li>Get personal service manager</li>
@@ -121,7 +128,7 @@ export default function TourV2BySlug() {
                       </ul>
                       <div className="flex w-full max-w-[670px] mx-auto mt-4">
                         <h4 className="text-blue-700 font-bold">
-                          Book premium class at ${} today!
+                          Book premium class at ${premium_price} today!
                         </h4>
                       </div>
                       <div className="flex w-full max-w-[670px] mx-auto gap-5 font-semibold text-black/60">
@@ -131,13 +138,15 @@ export default function TourV2BySlug() {
                           radius="full"
                           size="sm"
                           onChange={(e) => {
-                            setTotalCost(Number(e.target.value) * 50);
+                            setTotalCost(
+                              Number(e.target.value) * premium_price
+                            );
                           }}
                         />
                         <Input
                           label="Cost per head per night"
                           labelPlacement="outside"
-                          value="50"
+                          value={premium_price.toString()}
                           radius="full"
                           size="sm"
                         />
@@ -157,7 +166,7 @@ export default function TourV2BySlug() {
                         {totalCost > 0 && (
                           <Chip color="primary" size="md">
                             <span className="font-bold">
-                              Total cost{" "}
+                              Book now at{" "}
                               <span className="text-yellow-300">
                                 ${totalCost}
                               </span>{" "}
@@ -208,7 +217,108 @@ export default function TourV2BySlug() {
                       </div>
                     </Tab>
                     <Tab key={"standard"} title="Standard ">
-                      <Input label="Person " />
+                    <ul className="text-orange-700 font-semibold text-sm">
+                        <div>
+                          <h4 className="text-blue-700 font-semibold">
+                            <span className="text-emerald-600">Standard</span> plan includes:
+                          </h4>
+                        </div>
+                        <li>Access to customer support during business hours</li>
+                        <li>Shared group tours on scheduled dates</li>
+                        <li>Standard Transfers (comfortable shared transport)</li>
+                        <li>Room Upgrade Offers (subject to availability and promotions)</li>
+                        <li>
+                        Group Local Guides (knowledgeable guides for popular tours)</li>
+                      </ul>
+                      <div className="flex w-full max-w-[670px] mx-auto mt-4">
+                        <h4 className="text-blue-700 font-bold">
+                          Book standard class at ${standard_price} today!
+                        </h4>
+                      </div>
+                      <div className="flex w-full max-w-[670px] mx-auto gap-5 font-semibold text-black/60">
+                        <Input
+                          label="Person count"
+                          labelPlacement="outside"
+                          radius="full"
+                          size="sm"
+                          onChange={(e) => {
+                            setTotalCost(
+                              Number(e.target.value) * standard_price
+                            );
+                          }}
+                        />
+                        <Input
+                          label="Cost per head per night"
+                          labelPlacement="outside"
+                          value={standard_price.toString()}
+                          radius="full"
+                          size="sm"
+                        />
+                        <DateRangePicker
+                          className="max-w-xs"
+                          label="Stay duration"
+                          labelPlacement="outside"
+                          size="sm"
+                          radius="full"
+                          onChange={(e) => {
+                            setEndDate(e!.end);
+                            setStartDate(e!.start);
+                          }}
+                        />
+                      </div>
+                      <div className="w-full max-w-[670px] mx-auto my-4">
+                        {totalCost > 0 && (
+                          <Chip color="primary" size="md">
+                            <span className="font-bold">
+                              Book now at{" "}
+                              <span className="text-yellow-300">
+                                ${totalCost}
+                              </span>{" "}
+                            </span>
+                          </Chip>
+                        )}
+                      </div>
+                      <Divider className="w-full max-w-[670px] mx-auto" />
+
+                      <div className="w-full max-w-[670px] mx-auto mt-4">
+                        <h4 className="text-blue-700 font-bold">
+                          Your personal details:
+                        </h4>
+                      </div>
+                      <div className="flex w-full max-w-[670px] mx-auto gap-5 font-semibold text-black/60">
+                        <Input
+                          label="Your full name"
+                          labelPlacement="outside"
+                          type="text"
+                          radius="full"
+                          size="sm"
+                          onChange={(e) => {
+                            setName(e.target.value);
+                          }}
+                        />
+                        <Input
+                          label="Your email"
+                          labelPlacement="outside"
+                          type="email"
+                          radius="full"
+                          size="sm"
+                          onChange={(e) => {
+                            setEmail(e.target.value);
+                          }}
+                        />
+                      </div>
+                      <div className="flex justify-center items-center mt-6">
+                        {canBeAccepted && (
+                          <Checkbox
+                            className="text-xs font-semibold"
+                            onValueChange={() => {
+                              setConsentProvided(!consentProvided);
+                            }}
+                          >
+                            I have double checked above data.
+                          </Checkbox>
+                        )}
+                      </div>
                     </Tab>
                   </Tabs>
                 </ModalBody>
@@ -302,7 +412,11 @@ export default function TourV2BySlug() {
               </h3>
             </div>
             <div>
-              <BookNowModal placeName={tour!.placeName} />
+              <BookNowModal
+                placeName={tour!.placeName}
+                premium_price={tour!.tourPricing.premium}
+                standard_price={tour!.tourPricing.standard}
+              />
             </div>
           </div>
           <div className="md:grid md:grid-cols-3 md:gap-8 flex flex-col space-y-5  justify-center items-center">
@@ -399,7 +513,11 @@ export default function TourV2BySlug() {
         {/* booking section */}
         <div className="bg-stone-900 w-full max-w-[1300px] mt-8 mb-8 rounded-xl px-8 py-8 flex justify-center items-center">
           <div className="bg-neutral-800 rounded-lg px-4 py-2  w-[340px] flex justify-center">
-            <BookNowModal placeName={tour!.placeName} />
+            <BookNowModal
+              placeName={tour!.placeName}
+              premium_price={tour!.tourPricing.premium}
+              standard_price={tour!.tourPricing.standard}
+            />
           </div>
         </div>
       </div>

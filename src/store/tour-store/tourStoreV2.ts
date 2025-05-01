@@ -36,11 +36,17 @@ interface VisitTimings {
     end: string;
   };
 }
+
+// pricing
+interface Pricing {
+  standard: number,
+  premium: number
+}
 // tour state
 interface TourStates {
   placeName: string;
   mainBackImage: string;
-  pricing: number,
+  tourPricing: Pricing,
   slug: string ;
   heroBannerContent: HeroBannerContent;
   thingsToDoArr: ThingsToDo[];
@@ -67,7 +73,10 @@ const useTourStoreV2 = create(
           briefParagraph: "",
           heroBannerImageUrls: [],
         },
-        pricing:0,
+        tourPricing:{
+          premium: 0,
+          standard: 0
+        },
         thingsToDoArr: [],
         visitTimings: {
           best: {
@@ -89,7 +98,6 @@ const useTourStoreV2 = create(
         try {
           const sendReq = await fetch(`/api/tour/fetch-tourv2?slug=${slug}`);
           const res = await sendReq.json();
-
           if (res.success) {
             set({tour:res.tour[0], isLoading: false})
           } else {
