@@ -3,7 +3,7 @@ import { tourV2 } from "@/lib/schema/schema";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest){
-    const {VisitTiming, heroBannerImageurls, heroBannerContentHeadAndPara, thingsTodo, mainBackImageUrl, placeName, price} = await req.json()
+    const {VisitTiming, heroBannerImageurls, heroBannerContentHeadAndPara, thingsTodo, mainBackImageUrl, placeName, pricing} = await req.json()
 
     function slugify(str:string) {
         str = str.replace(/^\s+|\s+$/g, ''); // trim leading/trailing white space
@@ -26,7 +26,10 @@ export async function POST(req: NextRequest){
             slug: slugify(placeName),
             thingsToDoArr: thingsTodo,
             visitTimings: VisitTiming,
-            pricing: price,
+            tourPricing: {
+                standard: pricing.standard,
+                premium: pricing.premium
+            },
             createdBy: 1
         }).returning()
         if (create.length === 0) {

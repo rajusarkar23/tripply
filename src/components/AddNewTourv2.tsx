@@ -32,14 +32,13 @@ interface ThingsToDoArr {
   imageUrl: string;
 }
 
-
 export default function AddNewTourV2() {
   const {
     mainBackImageUrl,
     heroBannerContent,
     heroBannerImageurls,
     addTourInDB,
-    reset
+    reset,
   } = useAddNewTour();
   const [activeBannerImage, setActiveBannerImage] = useState("");
   const router = useRouter();
@@ -1277,7 +1276,6 @@ export default function AddNewTourV2() {
           <Button
             color="success"
             variant="solid"
-          
             className="w-full text-black font-bold"
             isDisabled={useAddNewTour.getState().isLoading}
             onPress={async () => {
@@ -1290,10 +1288,10 @@ export default function AddNewTourV2() {
                 heroBannerContentHeadAndPara:
                   useAddNewTour.getState().heroBannerContent,
                 placeName: useAddNewTour.getState().placeName,
-                price: useAddNewTour.getState().pricing,
+                pricing: useAddNewTour.getState().pricing,
                 router,
               });
-              reset()
+              reset();
             }}
           >
             {useAddNewTour.getState().isLoading ? (
@@ -1309,19 +1307,22 @@ export default function AddNewTourV2() {
   function AddPricing() {
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
     const [price, setPrice] = useState<number>(0);
+    const [standardPrice, setStandardPrice] = useState<number>(0);
+    const [premiumPrice, setPremiumPrice] = useState<number>(0);
     const { setPricing, pricing } = useAddNewTour();
 
-    const [isError, setIsError] = useState(false)
-    const [errorMessage, setErrorMessage] = useState("")
+    const [isError, setIsError] = useState(false);
+    const [errorMessage, setErrorMessage] = useState("");
     return (
       <>
         <div className="hover:bg-zinc-200 transition-all w-80 h-10 flex items-center hover:cursor-pointer px-4 rounded">
-          {pricing !==0 ? (
+          {pricing.premium !== 0 && pricing.standard !== 0 ? (
             <div
               className=" text-green-600 hover:text-blue-600 font-semibold flex items-center"
               onClick={() => {
                 onOpen();
-                setPrice(useAddNewTour.getState().pricing);
+                setStandardPrice(useAddNewTour.getState().pricing.standard);
+                setPremiumPrice(useAddNewTour.getState().pricing.premium)
               }}
             >
               Price added <CheckCircle size={18} className="ml-1" />
@@ -1340,55 +1341,95 @@ export default function AddNewTourV2() {
             {(onClose) => (
               <>
                 <ModalHeader className="flex flex-col gap-1">
-                  Enter price per head
+                  Enter price per head per night
                 </ModalHeader>
                 <ModalBody>
-                  {pricing!== 0 ? (
+                  {pricing.premium !== 0 && pricing.standard !== 0  ? (
                     <>
-                    <div>
-                    <Input
-                        label="Price"
-                        defaultValue={pricing.toString()}
-                        onChange={(e) => {
-                          setIsError(false)
-                          setPrice(Number(e.target.value));
-                        }}
-                      />
-                      <p>
-                        Price per head:{" "}
-                        <span className="text-green-600 font-semibold">
-                          {price}
-                        </span>
-                      </p>
-                    </div>
-                     
+                      <div>
+                        <Input
+                          label="Standard price"
+                          labelPlacement="outside"
+                          defaultValue={pricing.standard.toString()}
+                          onChange={(e) => {
+                            setIsError(false);
+                            setStandardPrice(Number(e.target.value));
+                          }}
+                        />
+                        <p>
+                          Standard price per head per night:{" "}
+                          <span className="text-green-600 font-semibold">
+                            ${standardPrice}
+                          </span>
+                        </p>
+                      </div>
+
+                      <div>
+                        <Input
+                          label="Premium price"
+                          labelPlacement="outside"
+                          defaultValue={pricing.premium.toString()}
+                          onChange={(e) => {
+                            setIsError(false);
+                            setPremiumPrice(Number(e.target.value));
+                          }}
+                        />
+                        <p>
+                          Premium price per head per night:{" "}
+                          <span className="text-green-600 font-semibold">
+                            ${premiumPrice}
+                          </span>
+                        </p>
+                      </div>
                     </>
                   ) : (
                     <>
-                    <div>
-                    <Input
-                        label="Pricing"
-                        onChange={(e) => {
-                          setIsError(false)
-                          setPrice(Number(e.target.value));
-                        }}
-                      />
+                      <div>
+                        <Input
+                          label="Standard price"
+                          labelPlacement="outside"
+                          onChange={(e) => {
+                            setIsError(false);
+                            setStandardPrice(Number(e.target.value));
+                          }}
+                        />
 
-                      {price !== 0 && (
-                        <p>
-                          Price per head:{" "}
-                          <span className="text-green-600 font-semibold">
-                            {price}
-                          </span>
-                        </p>
-                      )}
-                    </div>
-                    
+                        {standardPrice !== 0 && (
+                          <p>
+                            Standard price per head per night:{" "}
+                            <span className="text-green-600 font-semibold">
+                              ${standardPrice}
+                            </span>
+                          </p>
+                        )}
+                      </div>
+
+                      <div>
+                        <Input
+                          label="Premium price"
+                          labelPlacement="outside"
+                          onChange={(e) => {
+                            setIsError(false);
+                            setPremiumPrice(Number(e.target.value));
+                          }}
+                        />
+
+                        {premiumPrice !== 0 && (
+                          <p>
+                            Premium price per head per night:{" "}
+                            <span className="text-green-600 font-semibold">
+                              ${premiumPrice}
+                            </span>
+                          </p>
+                        )}
+                      </div>
                     </>
                   )}
-                  {
-                    isError && (<p className="text-red-600 text-xs font-semibold">{errorMessage}</p>)
-                  }
+                  {isError && (
+                    <p className="text-red-600 text-xs font-semibold">
+                      {errorMessage}
+                    </p>
+                  )}
                 </ModalBody>
                 <ModalFooter>
                   <Button color="danger" variant="light" onPress={onClose}>
@@ -1399,11 +1440,11 @@ export default function AddNewTourV2() {
                     className="font-semibold"
                     onPress={() => {
                       if (price < 0) {
-                        setIsError(true)
-                        setErrorMessage("Values must be in positive")
-                        return
+                        setIsError(true);
+                        setErrorMessage("Values must be in positive");
+                        return;
                       }
-                      setPricing({price });
+                      setPricing({ premiumPrice, standardPrice });
                     }}
                   >
                     Set Place Name
