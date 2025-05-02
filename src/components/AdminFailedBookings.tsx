@@ -56,15 +56,15 @@ export default function AdminFailedBookings() {
   }, []);
 
   return (
-    <div>
-      <div className="mt-10 mb-10">
-        <h2 className="text-center text-3xl font-semibold text-blue-950 underline underline-offset-8">Failed bookings</h2>
+    <div className="bg-gray-200/70">
+      <div className=" mb-8">
+        <h2 className="text-center text-3xl font-semibold text-blue-950 bg-yellow-400">Failed bookings</h2>
       </div>
        <div className="flex justify-center">
-      <div className="grid grid-cols-3 gap-2">
+      <div className="grid grid-cols-3 gap-4">
         {failedBookings.map((failedBooking, index) => (
           <div key={index}>
-            <Card className="max-w-[400px]">
+            <Card className="max-w-[400px] shadow-none border p-4">
               <CardHeader className="flex gap-3">
                 <div className="flex flex-col">
                   <p className="text-md">

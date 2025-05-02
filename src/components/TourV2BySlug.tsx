@@ -21,6 +21,7 @@ import { Star, TicketsPlane } from "lucide-react";
 import Image from "next/image";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import CheckoutButtonV2 from "./CheckoutButtonV2";
 
 interface Date {
   day: number;
@@ -60,13 +61,20 @@ export default function TourV2BySlug() {
     placeName,
     standard_price,
     premium_price,
+    tourId,
   }: {
     placeName: string;
     premium_price: number;
     standard_price: number;
+    tourId: number;
   }) {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [totalCost, setTotalCost] = useState<number>(0);
+    const [tourists, setTourists] = useState<number>(0);
+    const [tourCategory, setTourCategory] = useState<string | number>(
+      "premium"
+    );
+    console.log(totalCost);
 
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
@@ -80,15 +88,26 @@ export default function TourV2BySlug() {
       year: 0,
     });
 
-    console.log(endDate, startDate);
-
     useEffect(() => {
-      if (totalCost !== 0 && name.length !== 0 && email.length !== 0) {
+      if (totalCost !== 0 && name.length !== 0 && email.length !== 0 && startDate.day !== 0 && endDate.day !==0) {
         setCanBeAccepted(true);
       } else {
         setCanBeAccepted(false);
       }
     }, [name, email, totalCost]);
+
+    useEffect(() => {
+      if (endDate.day === 0) {
+        return
+      }
+      if (tourCategory === "premium") {
+        const duration = endDate.day - startDate.day + 1;
+        setTotalCost(duration * tourists * premium_price);
+      } else {
+        const duration = endDate.day - startDate.day + 1;
+        setTotalCost(duration * tourists * standard_price);
+      }
+    }, [endDate, tourists]);
 
     return (
       <>
@@ -109,12 +128,25 @@ export default function TourV2BySlug() {
                   Book your spot for a vacation in {placeName}
                 </ModalHeader>
                 <ModalBody>
-                  <Tabs color="primary" radius="full" className="font-semibold">
+                  <Tabs
+                    color="primary"
+                    radius="full"
+                    className="font-semibold"
+                    aria-label="Book now card tabs"
+                    selectedKey={tourCategory}
+                    onSelectionChange={(e) => {
+                      setTourCategory(e);
+                      setTotalCost(0);
+                      setTourists(0)
+                      setEndDate({ day: 0, month: 0, year: 0 });
+                    }}
+                  >
                     <Tab key={"premium"} title="Premium">
                       <ul className="text-orange-700 font-semibold text-sm">
                         <div>
                           <h4 className="text-blue-700 font-semibold">
-                            <span className="text-emerald-600">Premium</span> plan includes:
+                            <span className="text-emerald-600">Premium</span>{" "}
+                            plan includes:
                           </h4>
                         </div>
                         <li>Get personal service manager</li>
@@ -138,9 +170,7 @@ export default function TourV2BySlug() {
                           radius="full"
                           size="sm"
                           onChange={(e) => {
-                            setTotalCost(
-                              Number(e.target.value) * premium_price
-                            );
+                            setTourists(Number(e.target.value));
                           }}
                         />
                         <Input
@@ -206,7 +236,7 @@ export default function TourV2BySlug() {
                       <div className="flex justify-center items-center mt-6">
                         {canBeAccepted && (
                           <Checkbox
-                            className="text-xs font-semibold"
+                            className="text-xs"
                             onValueChange={() => {
                               setConsentProvided(!consentProvided);
                             }}
@@ -216,19 +246,35 @@ export default function TourV2BySlug() {
                         )}
                       </div>
                     </Tab>
-                    <Tab key={"standard"} title="Standard ">
-                    <ul className="text-orange-700 font-semibold text-sm">
+                    <Tab
+                      key={"standard"}
+                      title="Standard"
+                      onClick={() => {
+                        setTourCategory("standard");
+                      }}
+                    >
+                      <ul className="text-orange-700 font-semibold text-sm">
                         <div>
                           <h4 className="text-blue-700 font-semibold">
-                            <span className="text-emerald-600">Standard</span> plan includes:
+                            <span className="text-emerald-600">Standard</span>{" "}
+                            plan includes:
                           </h4>
                         </div>
-                        <li>Access to customer support during business hours</li>
-                        <li>Shared group tours on scheduled dates</li>
-                        <li>Standard Transfers (comfortable shared transport)</li>
-                        <li>Room Upgrade Offers (subject to availability and promotions)</li>
                         <li>
-                        Group Local Guides (knowledgeable guides for popular tours)</li>
+                          Access to customer support during business hours
+                        </li>
+                        <li>Shared group tours on scheduled dates</li>
+                        <li>
+                          Standard Transfers (comfortable shared transport)
+                        </li>
+                        <li>
+                          Room Upgrade Offers (subject to availability and
+                          promotions)
+                        </li>
+                        <li>
+                          Group Local Guides (knowledgeable guides for popular
+                          tours)
+                        </li>
                       </ul>
                       <div className="flex w-full max-w-[670px] mx-auto mt-4">
                         <h4 className="text-blue-700 font-bold">
@@ -242,9 +288,7 @@ export default function TourV2BySlug() {
                           radius="full"
                           size="sm"
                           onChange={(e) => {
-                            setTotalCost(
-                              Number(e.target.value) * standard_price
-                            );
+                            setTourists(Number(e.target.value));
                           }}
                         />
                         <Input
@@ -326,17 +370,25 @@ export default function TourV2BySlug() {
                   <Button color="danger" variant="light" onPress={onClose}>
                     Close
                   </Button>
-                  <Button
-                    color="primary"
-                    isDisabled={!consentProvided}
-                    onPress={onClose}
-                    className="font-semibold"
-                  >
-                    Go for booking
-                  </Button>
+                  <CheckoutButtonV2
+                    bookingEnd={`${endDate.day}-${endDate.month}-${endDate.year}`}
+                    bookingStart={`${startDate.day}-${startDate.month}-${startDate.year}`}
+                    bookingFor={tourId}
+                    email={email}
+                    name={name}
+                    totalPrice={totalCost}
+                    touristCount={tourists}
+                    category={tourCategory.toString()}
+                    placeName={placeName}
+                    isConsentprovided= {consentProvided}
+                  />
                 </ModalFooter>
+            <div className="flex justify-center items-center pb-2">
+              <p className="text-sm text-red-600 font-semibold">All above fields are required.</p>
+            </div>
               </>
             )}
+
           </ModalContent>
         </Modal>
       </>
@@ -416,6 +468,7 @@ export default function TourV2BySlug() {
                 placeName={tour!.placeName}
                 premium_price={tour!.tourPricing.premium}
                 standard_price={tour!.tourPricing.standard}
+                tourId={tour!.id}
               />
             </div>
           </div>
@@ -517,6 +570,7 @@ export default function TourV2BySlug() {
               placeName={tour!.placeName}
               premium_price={tour!.tourPricing.premium}
               standard_price={tour!.tourPricing.standard}
+              tourId={tour!.id}
             />
           </div>
         </div>

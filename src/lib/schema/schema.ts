@@ -135,7 +135,7 @@ export const bookings = pgTable("bookings", {
   id: serial("id").primaryKey(),
   bookingFor: integer("booking_for")
     .notNull()
-    .references(() => tour.id, {onDelete: "cascade"}),
+    .references(() => tourV2.id, {onDelete: "cascade"}),
   bookingBy: integer("booking_by")
     .notNull()
     .references(() => tourists.id, {onDelete: "cascade"}),
@@ -144,6 +144,8 @@ export const bookings = pgTable("bookings", {
   bookingDateEnd: text("booking_date_end").notNull(),
   totalTouristCount: integer("total_tourist_count").notNull(),
   bookingCost: integer("booking_cost").notNull(),
+  bookingPersonName: text("booking_person_name"),
+  bookingPersonEmail: text("booking_person_email"),
   isPaymentDone: boolean("is_payment_done").notNull().default(false),
   isBookingSuccess: boolean("is_booking_success").notNull().default(false),
   isBookingSuccessMailSent: boolean("is_booking_success_mail_sent").notNull().default(false),

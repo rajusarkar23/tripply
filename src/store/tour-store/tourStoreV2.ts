@@ -44,6 +44,7 @@ interface Pricing {
 }
 // tour state
 interface TourStates {
+  id: number,
   placeName: string;
   mainBackImage: string;
   tourPricing: Pricing,
@@ -65,6 +66,7 @@ const useTourStoreV2 = create(
     (set) => ({
       isLoading:false,
       tour: {
+        id: 0,
         placeName: "",
         mainBackImage: "",
         slug: "",

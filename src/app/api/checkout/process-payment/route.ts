@@ -49,8 +49,8 @@ export async function POST(req: NextRequest) {
     );
     // set cookie
     (await cookies()).set("_tripply_payment_session", jwt_token, {
-      maxAge: 10 * 60 * 100,
-      expires: 10 * 60 * 100,
+      maxAge: 10 * 60 * 1000,
+      expires: 10 * 60 * 1000,
       httpOnly: true,
     });
     // return res
