@@ -120,7 +120,7 @@ export default function TourV2BySlug() {
             Book your spot now <TicketsPlane className="text-yellow-400" />
           </Button>
         </div>
-        <Modal isOpen={isOpen} size={"3xl"} onClose={onClose}>
+        <Modal isOpen={isOpen} size={"2xl"} onClose={onClose}>
           <ModalContent>
             {(onClose) => (
               <>
@@ -163,7 +163,7 @@ export default function TourV2BySlug() {
                           Book premium class at ${premium_price} today!
                         </h4>
                       </div>
-                      <div className="flex w-full max-w-[670px] mx-auto gap-5 font-semibold text-black/60">
+                      <div className="md:flex md:flex-row flex flex-col w-full max-w-[670px] mx-auto gap-5 font-semibold text-black/60">
                         <Input
                           label="Person count"
                           labelPlacement="outside"
@@ -211,7 +211,7 @@ export default function TourV2BySlug() {
                           Your personal details:
                         </h4>
                       </div>
-                      <div className="flex w-full max-w-[670px] mx-auto gap-5 font-semibold text-black/60">
+                      <div className="md:flex md:flex-row flex flex-col w-full max-w-[670px] mx-auto gap-5 font-semibold text-black/60">
                         <Input
                           label="Your full name"
                           labelPlacement="outside"
@@ -281,7 +281,7 @@ export default function TourV2BySlug() {
                           Book standard class at ${standard_price} today!
                         </h4>
                       </div>
-                      <div className="flex w-full max-w-[670px] mx-auto gap-5 font-semibold text-black/60">
+                      <div className="md:flex md:flex-row flex flex-col w-full max-w-[670px] mx-auto gap-5 font-semibold text-black/60">
                         <Input
                           label="Person count"
                           labelPlacement="outside"
@@ -329,7 +329,7 @@ export default function TourV2BySlug() {
                           Your personal details:
                         </h4>
                       </div>
-                      <div className="flex w-full max-w-[670px] mx-auto gap-5 font-semibold text-black/60">
+                      <div className="md:flex md:flex-row flex flex-col w-full max-w-[670px] mx-auto gap-5 font-semibold text-black/60">
                         <Input
                           label="Your full name"
                           labelPlacement="outside"
