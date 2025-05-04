@@ -106,6 +106,7 @@ export const tourists = pgTable("tourists", {
   id: serial("id").primaryKey(),
   name: text("name").notNull(),
   email: text("email").notNull(),
+  profileImageUrl: text("profile_image_url"),
   password: text("password").notNull(),
   verificationOTP: text("verification_otp").notNull(),
   isVerified: boolean("is_verfied").default(false).notNull(),
