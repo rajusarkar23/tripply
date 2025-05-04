@@ -16,7 +16,7 @@ import {
   Textarea,
   useDisclosure,
 } from "@heroui/react";
-import { CheckCircle } from "lucide-react";
+import { CheckCircle, Star } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { ChangeEvent, useEffect, useState } from "react";
@@ -39,6 +39,8 @@ export default function AddNewTourV2() {
     heroBannerImageurls,
     addTourInDB,
     reset,
+    visitTimings,
+    pricing,
   } = useAddNewTour();
   const [activeBannerImage, setActiveBannerImage] = useState("");
   const router = useRouter();
@@ -572,7 +574,7 @@ export default function AddNewTourV2() {
     const [heading, setHeading] = useState("");
     const [subHeading, setSubHeading] = useState("");
     const [briefParagraph, setBriefParagraph] = useState("");
-    const [rating, setRating] = useState<number>();
+    const [rating, setRating] = useState<number>(0);
     const [imageUrl, setImageUrl] = useState("");
     const { setThingsTodo } = useAddNewTour();
 
@@ -657,43 +659,48 @@ export default function AddNewTourV2() {
                   Write Place Name Below
                 </ModalHeader>
                 <ModalBody>
-                  <Textarea
-                    label="Heading"
-                    labelPlacement="outside"
-                    placeholder="Write heading"
-                    value={heading}
-                    onChange={(e) => {
-                      setHeading(e.target.value);
-                    }}
-                  />
-                  <Textarea
-                    label="Sub Heading"
-                    labelPlacement="outside"
-                    placeholder="Write sub heading"
-                    value={subHeading}
-                    onChange={(e) => {
-                      setSubHeading(e.target.value);
-                    }}
-                  />
-                  <Textarea
-                    label="Brief Paragraph"
-                    labelPlacement="outside"
-                    placeholder="Write a brief paragraph"
-                    value={briefParagraph}
-                    onChange={(e) => {
-                      setBriefParagraph(e.target.value);
-                    }}
-                  />
-                  <NumberInput
-                    label="Rating"
-                    labelPlacement="outside"
-                    placeholder="Give it a rating betweeb 0-5"
-                    minValue={0}
-                    maxValue={5}
-                    hideStepper
-                    value={rating}
-                    onValueChange={setRating}
-                  />
+                  <div className="flex gap-4">
+                    <Input
+                      label="Heading"
+                      labelPlacement="outside"
+                      placeholder="Write heading"
+                      value={heading}
+                      onChange={(e) => {
+                        setHeading(e.target.value);
+                      }}
+                    />
+                    <Input
+                      label="Sub Heading"
+                      labelPlacement="outside"
+                      placeholder="Write sub heading"
+                      value={subHeading}
+                      onChange={(e) => {
+                        setSubHeading(e.target.value);
+                      }}
+                    />
+                  </div>
+                  <div className="flex items-center gap-4">
+                    <Textarea
+                      label="Brief Paragraph"
+                      labelPlacement="outside"
+                      placeholder="Write a brief paragraph"
+                      value={briefParagraph}
+                      onChange={(e) => {
+                        setBriefParagraph(e.target.value);
+                      }}
+                    />
+                    <NumberInput
+                      label="Rating"
+                      labelPlacement="outside"
+                      placeholder="Give it a rating betweeb 0-5"
+                      minValue={0}
+                      maxValue={5}
+                      hideStepper
+                      value={rating}
+                      onValueChange={setRating}
+                    />
+                  </div>
+
                   <Input
                     label="Select an image"
                     type="file"
@@ -756,6 +763,11 @@ export default function AddNewTourV2() {
                             subHeading,
                           },
                         ]);
+                        setHeading("");
+                        setBriefParagraph("");
+                        setImageUrl("");
+                        setRating(0);
+                        setSubHeading("");
                       }}
                     >
                       Add
@@ -1321,7 +1333,7 @@ export default function AddNewTourV2() {
               onClick={() => {
                 onOpen();
                 setStandardPrice(useAddNewTour.getState().pricing.standard);
-                setPremiumPrice(useAddNewTour.getState().pricing.premium)
+                setPremiumPrice(useAddNewTour.getState().pricing.premium);
               }}
             >
               Price added <CheckCircle size={18} className="ml-1" />
@@ -1343,7 +1355,7 @@ export default function AddNewTourV2() {
                   Enter price per head per night
                 </ModalHeader>
                 <ModalBody>
-                  {pricing.premium !== 0 && pricing.standard !== 0  ? (
+                  {pricing.premium !== 0 && pricing.standard !== 0 ? (
                     <>
                       <div>
                         <Input
@@ -1545,33 +1557,128 @@ export default function AddNewTourV2() {
                 </div>
               )}
 
+              {/* SHOW THINGS TO DO */}
               <div>
                 {useAddNewTour.getState().thingsTodoArr.length !== 0 && (
                   <h2 className="text-5xl font-semibold text-white px-2 py-3">
                     Things To Do
                   </h2>
                 )}
-
-                <div className="grid grid-cols-2 gap-2 w-[1080px]">
-                  {useAddNewTour
-                    .getState()
-                    .thingsTodoArr.map((things, index) => (
-                      <div
-                        key={index}
-                        className="bg-neutral-700 rounded-lg text-white flex justify-center flex-col items-center"
-                      >
-                        <h2>{things.heading}</h2>
-                        <Image
-                          src={things.imageUrl}
-                          alt="thingstodo_image"
-                          width={400}
-                          height={400}
-                          className="rounded"
-                        />
-                        <p>{things.subHeading}</p>
-                      </div>
-                    ))}
+                <div className="flex justify-center">
+                  <div className="grid grid-cols-2 w-[800px] gap-10">
+                    {useAddNewTour
+                      .getState()
+                      .thingsTodoArr.map((things, index) => (
+                        <div
+                          key={index}
+                          className="bg-neutral-700 rounded-lg text-white flex  flex-col p-4"
+                        >
+                          <div className="flex justify-center items-center">
+                            <Image
+                              src={things.imageUrl}
+                              alt="thingstodo_image"
+                              width={400}
+                              height={400}
+                              className="rounded"
+                            />
+                          </div>
+                          <h2 className="text-xl">
+                            <span className="text-white/70 mr-1">Heading:</span>
+                            {things.heading}
+                          </h2>
+                          <p>
+                            <span className="text-white/70 mr-1">
+                              Sub heading:
+                            </span>{" "}
+                            {things.subHeading}
+                          </p>
+                          <p>
+                            <span className="text-white/70 mr-1">
+                              Brief Para:
+                            </span>{" "}
+                            {things.briefParagraph}
+                          </p>
+                          <div className="flex">
+                            {[...Array(things.rating)].map((_, index) => (
+                              <Star
+                                key={index}
+                                className="fill-yellow-400 text-yellow-400"
+                              />
+                            ))}
+                          </div>
+                        </div>
+                      ))}
+                  </div>
                 </div>
+              </div>
+
+              {/* SHOW TIMINGS */}
+              <div>
+                {useAddNewTour.getState().visitTimings.best.start.length !==
+                  0 && (
+                  <div>
+                    <h2 className="text-5xl font-semibold text-white px-2 py-3">
+                      Visit timings
+                    </h2>
+
+                    <div className="flex justify-center items-center">
+                      <div className="text-white flex gap-4">
+                        <h4 className="text-green-400 text-lg font-semibold">
+                          Best time:{" "}
+                          <span className="capitalize text-yellow-400">
+                            {visitTimings.best.start} - {visitTimings.best.end}
+                          </span>
+                        </h4>
+
+                        <h4 className="text-purple-400 text-lg font-semibold">
+                          Good time:{" "}
+                          <span className="capitalize text-yellow-400">
+                            {visitTimings.good.start} - {visitTimings.good.end}
+                          </span>
+                        </h4>
+
+                        <h4 className="text-orange-400 text-lg font-semibold">
+                          Not recomended:{" "}
+                          <span className="capitalize text-yellow-400">
+                            {visitTimings.good.start} - {visitTimings.good.end}
+                          </span>
+                        </h4>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              <Divider className="bg-white/70 mt-2" />
+
+              {/* SHOW PRICES */}
+
+              <div>
+                {useAddNewTour.getState().pricing.premium !== 0 && (
+                  <div>
+                    <h2 className="text-5xl font-semibold text-white px-2">
+                      Pricings
+                    </h2>
+
+                    <div className="flex justify-center items-center">
+                      <div className="text-white flex gap-4">
+                        <h4 className="text-green-400 text-lg font-semibold">
+                          Standard price:{" "}
+                          <span className="capitalize text-yellow-400">
+                            {pricing.standard}
+                          </span>
+                        </h4>
+
+                        <h4 className="text-purple-400 text-lg font-semibold">
+                          Premium price:{" "}
+                          <span className="capitalize text-yellow-400">
+                            {pricing.premium}
+                          </span>
+                        </h4>
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           </div>

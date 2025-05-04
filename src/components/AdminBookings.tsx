@@ -118,13 +118,11 @@ export default function AdminSuccessBookings() {
               </CardBody>
               <Divider />
               <CardFooter className="flex justify-between px-4">
-                <div><Chip color="secondary">Mail not sent</Chip></div>
-                <div className="space-x-2">
-                  <Button color="warning" size="sm" className="font-semibold">Archive</Button>
-                  <Button color="success" size="sm" className="font-semibold">
-                    Send mail
-                  </Button>
-                </div>
+               <div className="space-x-1">
+                <Chip color="secondary">Mail not sent</Chip>
+                <Chip color="warning">Archive</Chip>
+                <Chip color="success">Send mail</Chip>
+               </div>
               </CardFooter>
             </Card>
           </div>
