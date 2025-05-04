@@ -112,7 +112,7 @@ export default function TouristProfile() {
               <Divider />
               <div className="py-1 flex flex-col text-sm ">
                 <Link
-                  href={"/profile"}
+                  href={"/my-account"}
                   className="hover:bg-gray-200 p-1 rounded transition-all duration-150 hover:px-2"
                 >
                   Profile

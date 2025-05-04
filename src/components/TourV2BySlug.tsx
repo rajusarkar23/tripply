@@ -456,20 +456,20 @@ export default function TourV2BySlug() {
       {/* BELOW OF THE BANNER */}
       <div className="bg-black text-white flex flex-col justify-center items-center">
         <div className="bg-stone-900 w-full max-w-[1300px] mt-8 rounded-xl py-10 px-8">
-          <div className="flex justify-between">
-            <div>
-              <h3 className="text-4xl font-semibold pb-4">
-                Things to do in{" "}
-                <span className="text-blue-600">{tour!.placeName}</span>
-              </h3>
-            </div>
-            <div>
+          <div>
+            <div className="flex justify-center">
               <BookNowModal
                 placeName={tour!.placeName}
                 premium_price={tour!.tourPricing.premium}
                 standard_price={tour!.tourPricing.standard}
                 tourId={tour!.id}
               />
+            </div>
+            <div>
+              <h3 className="sm:text-4xl text-3xl font-semibold pb-4">
+                Things to do in{" "}
+                <span className="text-blue-600">{tour!.placeName}</span>
+              </h3>
             </div>
           </div>
           <div className="md:grid md:grid-cols-3 md:gap-8 flex flex-col space-y-5  justify-center items-center">
