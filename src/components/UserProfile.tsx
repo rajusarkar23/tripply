@@ -448,7 +448,7 @@ export default function UserProfile() {
                 <Spinner />
               </Card>
             ) : (
-              <Card className="w-[480px]">
+              <Card className="md:w-[480px] w-[350px]">
                 <CardBody>
                   {/* show profile image */}
                   <div className="flex items-center">
@@ -514,7 +514,7 @@ export default function UserProfile() {
             )}
           </Tab>
           <Tab key="bookings" title="Bookings" className="font-semibold">
-            <Card className="w-[480px]">
+            <Card className="md:w-[480px] w-[350px]">
               <CardBody>
                 <div>
                   {useBookingStore.getState().bookings.map.length === 0 && (
