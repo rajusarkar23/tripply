@@ -142,7 +142,7 @@ export default function TourV2BySlug() {
                     }}
                   >
                     <Tab key={"premium"} title="Premium">
-                      <ul className="text-orange-700 font-semibold text-sm">
+                      <ul className="text-yellow-600/90 font-semibold text-sm">
                         <div>
                           <h4 className="text-blue-700 font-semibold">
                             <span className="text-emerald-600">Premium</span>{" "}
@@ -253,7 +253,7 @@ export default function TourV2BySlug() {
                         setTourCategory("standard");
                       }}
                     >
-                      <ul className="text-orange-700 font-semibold text-sm">
+                      <ul className="text-yellow-600/90 font-semibold text-sm">
                         <div>
                           <h4 className="text-blue-700 font-semibold">
                             <span className="text-emerald-600">Standard</span>{" "}
