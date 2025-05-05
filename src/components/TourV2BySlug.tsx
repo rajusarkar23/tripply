@@ -1,6 +1,8 @@
 "use client";
 import { useTourStoreV2 } from "@/store/tour-store/tourStoreV2";
 import {
+  Accordion,
+  AccordionItem,
   Button,
   Checkbox,
   Chip,
@@ -88,7 +90,13 @@ export default function TourV2BySlug() {
     });
 
     useEffect(() => {
-      if (totalCost !== 0 && name.length !== 0 && email.length !== 0 && startDate.day !== 0 && endDate.day !==0) {
+      if (
+        totalCost !== 0 &&
+        name.length !== 0 &&
+        email.length !== 0 &&
+        startDate.day !== 0 &&
+        endDate.day !== 0
+      ) {
         setCanBeAccepted(true);
       } else {
         setCanBeAccepted(false);
@@ -97,7 +105,7 @@ export default function TourV2BySlug() {
 
     useEffect(() => {
       if (endDate.day === 0) {
-        return
+        return;
       }
       if (tourCategory === "premium") {
         const duration = endDate.day - startDate.day + 1;
@@ -136,27 +144,40 @@ export default function TourV2BySlug() {
                     onSelectionChange={(e) => {
                       setTourCategory(e);
                       setTotalCost(0);
-                      setTourists(0)
+                      setTourists(0);
                       setEndDate({ day: 0, month: 0, year: 0 });
                     }}
                   >
                     <Tab key={"premium"} title="Premium">
-                      <ul className="text-yellow-600/90 font-semibold text-sm">
-                        <div>
-                          <h4 className="text-blue-700 font-semibold">
-                            <span className="text-emerald-600">Premium</span>{" "}
-                            plan includes:
-                          </h4>
-                        </div>
-                        <li>Get personal service manager</li>
-                        <li>Get personal tour guide 24 x 7</li>
-                        <li>Private Transfers (luxury car with chauffeur)</li>
-                        <li>Free Room Upgrades (when available)</li>
-                        <li>
-                          Private Local Guides (expert historians, foodies, or
-                          adventure guides)
-                        </li>
-                      </ul>
+                      <div>
+                        <Accordion className="font-bold rounded text-green-600 bg-blue-100 transition-all">
+                          <AccordionItem
+                            aria-label="Premium Plan Includes"
+                            title="Premium Plan Includes"
+                          >
+                            <ul className="text-yellow-600/90 font-semibold text-sm">
+                              <div>
+                                <h4 className="text-blue-700 font-semibold">
+                                  <span className="text-emerald-600">
+                                    Premium
+                                  </span>{" "}
+                                  plan includes:
+                                </h4>
+                              </div>
+                              <li>Get personal service manager</li>
+                              <li>Get personal tour guide 24 x 7</li>
+                              <li>
+                                Private Transfers (luxury car with chauffeur)
+                              </li>
+                              <li>Free Room Upgrades (when available)</li>
+                              <li>
+                                Private Local Guides (expert historians,
+                                foodies, or adventure guides)
+                              </li>
+                            </ul>
+                          </AccordionItem>
+                        </Accordion>
+                      </div>
                       <div className="flex w-full max-w-[670px] mx-auto mt-4">
                         <h4 className="text-blue-700 font-bold">
                           Book premium class at ${premium_price} today!
@@ -252,29 +273,42 @@ export default function TourV2BySlug() {
                         setTourCategory("standard");
                       }}
                     >
-                      <ul className="text-yellow-600/90 font-semibold text-sm">
-                        <div>
-                          <h4 className="text-blue-700 font-semibold">
-                            <span className="text-emerald-600">Standard</span>{" "}
-                            plan includes:
-                          </h4>
-                        </div>
-                        <li>
-                          Access to customer support during business hours
-                        </li>
-                        <li>Shared group tours on scheduled dates</li>
-                        <li>
-                          Standard Transfers (comfortable shared transport)
-                        </li>
-                        <li>
-                          Room Upgrade Offers (subject to availability and
-                          promotions)
-                        </li>
-                        <li>
-                          Group Local Guides (knowledgeable guides for popular
-                          tours)
-                        </li>
-                      </ul>
+                      <div>
+                        <Accordion className="font-bold rounded text-green-600 bg-blue-100 transition-all">
+                          <AccordionItem
+                            aria-label="Standard Plan Include"
+                            title="Standard Plan Include"
+                          >
+                            <ul className="text-yellow-600/90 font-semibold text-sm">
+                              <div>
+                                <h4 className="text-blue-700 font-semibold">
+                                  <span className="text-emerald-600">
+                                    Standard
+                                  </span>{" "}
+                                  plan includes:
+                                </h4>
+                              </div>
+                              <li>
+                                Access to customer support during business hours
+                              </li>
+                              <li>Shared group tours on scheduled dates</li>
+                              <li>
+                                Standard Transfers (comfortable shared
+                                transport)
+                              </li>
+                              <li>
+                                Room Upgrade Offers (subject to availability and
+                                promotions)
+                              </li>
+                              <li>
+                                Group Local Guides (knowledgeable guides for
+                                popular tours)
+                              </li>
+                            </ul>
+                          </AccordionItem>
+                        </Accordion>
+                      </div>
+
                       <div className="flex w-full max-w-[670px] mx-auto mt-4">
                         <h4 className="text-blue-700 font-bold">
                           Book standard class at ${standard_price} today!
@@ -379,15 +413,16 @@ export default function TourV2BySlug() {
                     touristCount={tourists}
                     category={tourCategory.toString()}
                     placeName={placeName}
-                    isConsentprovided= {consentProvided}
+                    isConsentprovided={consentProvided}
                   />
                 </ModalFooter>
-            <div className="flex justify-center items-center pb-2">
-              <p className="text-sm text-red-600 font-semibold">All above fields are required.</p>
-            </div>
+                <div className="flex justify-center items-center pb-2">
+                  <p className="text-sm text-red-600 font-semibold">
+                    All above fields are required.
+                  </p>
+                </div>
               </>
             )}
-
           </ModalContent>
         </Modal>
       </>
@@ -411,7 +446,7 @@ export default function TourV2BySlug() {
         {/* BANNER CONTENT */}
         <div className="relative z-10 text-center md:flex md:flex-row flex flex-col md:gap-48 gap-6">
           <div className="md:px-0 px-4 md:pt-0 pt-2">
-            <p className="w-80 text-left text-4xl sm:text-7xl md:text-7xl font-bold text-white">
+            <p className="w-80 text-left text-4xl font-bold text-white">
               {tour!.heroBannerContent.heading}
             </p>
             <p className="w-80 text-left md:text-white text-white/70 font-semibold">
@@ -456,7 +491,7 @@ export default function TourV2BySlug() {
       <div className="bg-black text-white flex flex-col justify-center items-center">
         <div className="bg-stone-900 w-full max-w-[1300px] mt-8 rounded-xl py-10 px-8">
           <div>
-            <div className="flex justify-center">
+            <div className="flex pb-2">
               <BookNowModal
                 placeName={tour!.placeName}
                 premium_price={tour!.tourPricing.premium}
@@ -465,7 +500,7 @@ export default function TourV2BySlug() {
               />
             </div>
             <div>
-              <h3 className="sm:text-4xl text-3xl font-semibold pb-4">
+              <h3 className="sm:text-4xl text-xl font-semibold pb-4">
                 Things to do in{" "}
                 <span className="text-blue-600">{tour!.placeName}</span>
               </h3>
