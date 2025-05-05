@@ -37,8 +37,6 @@ export default function CheckoutButton({
 
       const response = await res.json();
 
-      console.log(response);
-
       if (response.url) {
         window.location.href = response.url;
       } else {

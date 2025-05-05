@@ -780,7 +780,6 @@ export default function AddNewTourV2() {
                         {thingsTodoArr.map((todo, index) => (
                           <div
                             onClick={() => {
-                              console.log("clicked");
                               // setHeading(todo.heading)
                               // setSubHeading(todo.subHeading)
                               // setBriefParagraph(todo.briefParagraph)
@@ -812,7 +811,6 @@ export default function AddNewTourV2() {
                           .thingsTodoArr.map((todo, index) => (
                             <div
                               onClick={() => {
-                                console.log("clicked");
                                 // setHeading(todo.heading)
                                 // setSubHeading(todo.subHeading)
                                 // setBriefParagraph(todo.briefParagraph)
@@ -1054,8 +1052,6 @@ export default function AddNewTourV2() {
                           <Select
                             label="Select Starting month"
                             onChange={(e) => {
-                              console.log(e.target.value);
-
                               setNotRecomendedTimeToVisitStart(e.target.value);
                             }}
                           >

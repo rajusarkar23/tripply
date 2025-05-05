@@ -68,7 +68,6 @@ const useAdminTourStore = create(
           if (response.success) {
             set({ isLoading: false, isError: false, tours: response.tours });
           } else {
-            console.log(response);
             set({
               isLoading: false,
               isError: true,

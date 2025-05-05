@@ -4,14 +4,23 @@ import { bookings } from "@/lib/schema/schema";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
-  const {bookingFor,totalPrice,name,email,touristCount,bookingStart,bookingEnd,category} = await req.json();
+  const {
+    bookingFor,
+    totalPrice,
+    name,
+    email,
+    touristCount,
+    bookingStart,
+    bookingEnd,
+    category,
+  } = await req.json();
 
-  console.log(category);
-  
-    const userIdFromCookie = await userJwtSession()
+  const userIdFromCookie = await userJwtSession();
 
   try {
-    const createOrder = await db.insert(bookings).values({
+    const createOrder = await db
+      .insert(bookings)
+      .values({
         bookingBy: userIdFromCookie,
         bookingCategory: category,
         bookingCost: totalPrice,
@@ -20,24 +29,27 @@ export async function POST(req: NextRequest) {
         bookingFor,
         totalTouristCount: touristCount,
         bookingPersonName: name,
-        bookingPersonEmail: email
-    }).returning()
+        bookingPersonEmail: email,
+      })
+      .returning();
 
     if (createOrder.length === 0) {
-        return NextResponse.json({
-            success: false,
-            message: "Not able to take this order, try again"
-        })
+      return NextResponse.json({
+        success: false,
+        message: "Not able to take this order, try again",
+      });
     }
 
-    return NextResponse.json({success: true, message: "Order created", orderId: createOrder[0].id})
-    
+    return NextResponse.json({
+      success: true,
+      message: "Order created",
+      orderId: createOrder[0].id,
+    });
   } catch (error) {
     console.log(error);
     return NextResponse.json({
-        success: false,
-        message: "Internal server error, try agin after sometime"
-    })
+      success: false,
+      message: "Internal server error, try agin after sometime",
+    });
   }
-
 }

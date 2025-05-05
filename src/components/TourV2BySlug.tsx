@@ -74,7 +74,6 @@ export default function TourV2BySlug() {
     const [tourCategory, setTourCategory] = useState<string | number>(
       "premium"
     );
-    console.log(totalCost);
 
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");

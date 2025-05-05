@@ -24,13 +24,11 @@ import { useBookingStore } from "@/store/user-store/bookings/booking";
 
 export default function UserProfile() {
   const { fetchUserProfile, isProfileDataFetched } = useUserProfile();
-  console.log(isProfileDataFetched);
 
   const { fetchBooking, isBookingsFetched } = useBookingStore();
   const [loading, setLoading] = useState(false);
 
   const [currentTab, setCurrentTab] = useState<string | number>("account");
-  console.log(currentTab);
 
   useEffect(() => {
     (async () => {
@@ -298,8 +296,6 @@ export default function UserProfile() {
                               }
                             );
                             const response = await res.json();
-                            console.log(response);
-
                             if (response.success) {
                               setMailSending(false);
                               setIsMailSent(true);

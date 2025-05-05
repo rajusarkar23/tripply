@@ -14,7 +14,6 @@ export async function GET(req: NextRequest) {
 
     try {
         const find = await db.select().from(tourV2).where(eq(tourV2.slug, slugFromUrl))
-        console.log(find);
         if (find.length === 0) {
             return NextResponse.json({
                 success: false,

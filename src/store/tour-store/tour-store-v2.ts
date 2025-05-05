@@ -31,8 +31,6 @@ const useTourStore = create(persist<Tour>((set) => ({
         try {
             const sendReq = await fetch("/api/client/tourV2")
             const res = await sendReq.json()
-
-            console.log(res);
             
             if (res.success) {
                set({isLoading: false, fetchedTourDatas: res.tours})
