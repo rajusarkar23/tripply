@@ -1,7 +1,15 @@
 "use client";
 
 import { useAdminStore } from "@/store/admin-store/bookings";
-import { Button, Card, CardBody, Divider, Spinner, Tab, Tabs } from "@heroui/react";
+import {
+  Button,
+  Card,
+  CardBody,
+  Divider,
+  Spinner,
+  Tab,
+  Tabs,
+} from "@heroui/react";
 import { useEffect, useState } from "react";
 
 export default function SuccessBookingsAndFailedBookings() {
@@ -17,7 +25,10 @@ export default function SuccessBookingsAndFailedBookings() {
     "Successfull Bookings"
   );
 
-  const [currentFailedBookingPage, setCurrentFailedBookingPage] = useState(1);
+  const [currentFailedBookingPage, setCurrentFailedBookingPage] =
+    useState<number>(1);
+  const [currentSuccessFullBookingPage, setCurrentSuccessFullBookingPage] =
+    useState<number>(1);
 
   useEffect(() => {
     if (currentTab === "Failed Bookings") {
@@ -46,7 +57,7 @@ export default function SuccessBookingsAndFailedBookings() {
       useAdminStore.getState().failedBookings.length / itemsPerPage
     );
 
-    for (let i = 1; i < totalPages; i++) {
+    for (let i = 1; i <= totalPages; i++) {
       pageNumber.push(i);
     }
 
@@ -86,6 +97,58 @@ export default function SuccessBookingsAndFailedBookings() {
     return currentBookings;
   }
 
+  // for success bookings
+  function GetSuccessBookingsPageNumber() {
+    // how many items we are showing in a page, 10
+    // what is the length of our items
+    const pageNumber: number[] = [];
+    const itemsPerPage = 10;
+    const totalPages = Math.ceil(
+      useAdminStore.getState().successFullBookings.length / itemsPerPage
+    );
+
+    for (let i = 1; i <= totalPages; i++) {
+      pageNumber.push(i);
+    }
+
+    return (
+      <div className="flex justify-center space-x-0.5">
+        {pageNumber.map((page, index) => (
+          <div key={index} className="pt-1">
+            <Button
+              onPress={() => {
+                setCurrentSuccessFullBookingPage(page);
+              }}
+              size="sm"
+              className={`${
+                currentSuccessFullBookingPage === page
+                  ? "text-white bg-purple-600 font-semibold"
+                  : "font-normal"
+              }`}
+            >
+              {page}
+            </Button>
+          </div>
+        ))}
+      </div>
+    );
+  }
+
+  // for success bookings
+  function getCurrentSuccessBookings() {
+    // index of first page item
+    // index of last page item
+    const itemsPerPage = 10;
+    const indexOfLastBooking = itemsPerPage * currentSuccessFullBookingPage; // => 10
+    const indexOfFirstBooking = indexOfLastBooking - itemsPerPage; // 2 => 10 * 20 => 20 - 10 => 10
+
+    const currentBookings = useAdminStore
+      .getState()
+      .successFullBookings.slice(indexOfFirstBooking, indexOfLastBooking);
+
+    return currentBookings;
+  }
+
   return (
     <div className="flex justify-center items-center min-h-[90vh]">
       <div className="flex w-[600px] flex-col">
@@ -107,23 +170,32 @@ export default function SuccessBookingsAndFailedBookings() {
                   </div>
                 ) : (
                   <div>
-                    {useAdminStore
-                      .getState()
-                      .successFullBookings.map((booking, index) => (
-                        <div key={index} className="flex justify-between">
-                          <div className="flex gap-10">
-                            <p>{index}</p>
-                            <p>{booking.tourName}</p>
+                    {getCurrentSuccessBookings().map((booking, index) => (
+                      <>
+                        <div
+                          key={index}
+                          className="flex justify-between hover:bg-gray-200 p-2 transition-all text-lg hover:cursor-pointer"
+                        >
+                          <div className="flex justify-between w-44">
+                            <p className="font-semibold text-sm">
+                              {booking.index}.
+                            </p>
+                            <p className="font-semibold text-sm">
+                              {booking.tourName}
+                            </p>
                           </div>
                           <div>
-                            <p>
+                            <p className="font-semibold text-sm">
                               {dateFormatter.format(
                                 new Date(booking.bookingDate)
                               )}
                             </p>
                           </div>
                         </div>
-                      ))}
+                        <Divider />
+                      </>
+                    ))}
+                    <GetSuccessBookingsPageNumber />
                   </div>
                 )}
               </CardBody>
@@ -141,17 +213,28 @@ export default function SuccessBookingsAndFailedBookings() {
                   <div>
                     {getCurrentPageFailedBookings().map((booking, index) => (
                       <>
-                      <div key={index} className="flex justify-between hover:bg-gray-200 p-2 transition-all text-lg hover:cursor-pointer">
-                        <div className="flex justify-between w-44">
-                          <p className="font-semibold text-sm">{booking.index}.</p>
-                          <p className="font-semibold text-sm">{booking.tourName}</p>
+                        <div
+                          key={index}
+                          className="flex justify-between hover:bg-gray-200 p-2 transition-all text-lg hover:cursor-pointer"
+                        >
+                          <div className="flex justify-between w-44">
+                            <p className="font-semibold text-sm">
+                              {booking.index}.
+                            </p>
+                            <p className="font-semibold text-sm">
+                              {booking.tourName}
+                            </p>
+                          </div>
+                          <div>
+                            <p className="font-semibold text-sm">
+                              {dateFormatter.format(
+                                new Date(booking.bookingDate)
+                              )}
+                            </p>
+                          </div>
                         </div>
-                        <div>
-                          <p className="font-semibold text-sm">{(dateFormatter.format(new Date(booking.bookingDate)))}</p>
-                        </div>
-                      </div>
                         <Divider />
-                        </>
+                      </>
                     ))}
                     <GetFailedBookingPageNumber />
                   </div>

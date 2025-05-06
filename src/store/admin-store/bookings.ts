@@ -51,11 +51,16 @@ const useAdminStore = create(persist<Booking>((set) => ({
             const res = await sendReq.json()
 
             if (res.success) {
-                set({isSuccessFullBookingsFetched: true, successFullBookingsFetchError: false, successFullBookingsFetchErrorMessage: "", successFullBookings: res.bookings})
+                const updatedSuccessFullBookings = res.bookings.map((booking: Booking[], index: number) => ({
+                    ...booking,
+                    index: index + 1
+                }))
+                set({isSuccessFullBookingsFetched: true, successFullBookingsFetchError: false, successFullBookingsFetchErrorMessage: "", successFullBookings: updatedSuccessFullBookings})
             } else {
                 set({isSuccessFullBookingsFetched: false, successFullBookingsFetchError: true, successFullBookingsFetchErrorMessage: res.message, successFullBookings: []})
             }
         } catch (error) {
+            console.log(error);
             set({isSuccessFullBookingsFetched: false, successFullBookingsFetchError: true, successFullBookingsFetchErrorMessage: "Unknown error, try again"})
         }
     },
@@ -74,6 +79,7 @@ const useAdminStore = create(persist<Booking>((set) => ({
                 set({isFailedBookingsFetched: false, failedBookingsFetcheError: true, failedBookingsFetcheErrorMessage: res.message, failedBookings: []})
             }
         } catch (error) {
+            console.log(error);
             set({isFailedBookingsFetched: false, failedBookingsFetcheError: true, failedBookingsFetcheErrorMessage: "Unknown error, try again"})
         }
     }

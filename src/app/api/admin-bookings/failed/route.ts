@@ -1,7 +1,7 @@
 import { jwtSession } from "@/lib/auth/jwt-verify-session";
 import { db } from "@/lib/db/db";
 import { bookings, tourV2 } from "@/lib/schema/schema";
-import { and, eq } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 import { NextResponse } from "next/server";
 
 export async function GET(){
