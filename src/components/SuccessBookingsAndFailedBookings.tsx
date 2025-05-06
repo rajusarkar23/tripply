@@ -6,9 +6,15 @@ import {
   Card,
   CardBody,
   Divider,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
   Spinner,
   Tab,
   Tabs,
+  useDisclosure,
 } from "@heroui/react";
 import { useEffect, useState } from "react";
 
@@ -149,6 +155,135 @@ export default function SuccessBookingsAndFailedBookings() {
     return currentBookings;
   }
 
+  // show booking details modal
+  function ShowBookingDetailsModal({
+    index,
+    tourName,
+    date,
+    modalTitle,
+    category,
+    emailUsed,
+    paymentId,
+    totalCost,
+    totalPerson,
+    tourEnds,
+    tourStarts,
+  }: {
+    index: number;
+    tourName: string;
+    date: string;
+    modalTitle: string;
+    category: string;
+    emailUsed: string;
+    paymentId: string;
+    totalCost: number;
+    totalPerson: number;
+    tourStarts: string;
+    tourEnds: string;
+  }) {
+    const { isOpen, onOpen, onOpenChange } = useDisclosure();
+
+    return (
+      <>
+        <div
+          onClick={() => {
+            onOpen();
+          }}
+          className="flex justify-between hover:bg-gray-200 p-2 transition-all text-lg hover:cursor-pointer"
+        >
+          <div
+            className="flex justify-between w-44"
+            onClick={() => {
+              onOpen();
+            }}
+          >
+            <p className="font-semibold text-sm">{index}.</p>
+            <p className="font-semibold text-sm">{tourName}</p>
+          </div>
+          <div>
+            <p className="font-semibold text-sm">{date}</p>
+          </div>
+        </div>
+        <Modal
+          isDismissable={false}
+          isKeyboardDismissDisabled={true}
+          isOpen={isOpen}
+          onOpenChange={onOpenChange}
+          size="2xl"
+        >
+          <ModalContent>
+            {(onClose) => (
+              <>
+                <ModalHeader className="flex flex-col gap-1 text-blue-600">
+                  {modalTitle}
+                </ModalHeader>
+                <ModalBody>
+                  <p className="text-orange-600 font-semibold">
+                    Tour Name:{" "}
+                    <span className="text-gray-700 font-semibold text-sm">
+                      {tourName}
+                    </span>
+                  </p>
+                  <p className="text-orange-600 font-semibold">
+                    Tour Category:{" "}
+                    <span className="text-gray-700 font-semibold text-sm">
+                      {category}
+                    </span>
+                  </p>
+                  <p className="text-orange-600 font-semibold">
+                    Total Person:{" "}
+                    <span className="text-gray-700 font-semibold text-sm">
+                      {totalPerson}
+                    </span>
+                  </p>
+                  <p className="text-orange-600 font-semibold">
+                    Total Cost:{" "}
+                    <span className="text-gray-700 font-semibold text-sm">
+                      {totalCost}
+                    </span>
+                  </p>
+                  <p className="text-orange-600 font-semibold">
+                    Email Used:{" "}
+                    <span className="text-gray-700 font-semibold text-sm">
+                      {emailUsed}
+                    </span>
+                  </p>
+                  <p className="text-orange-600 font-semibold">
+                    Selected Starting Date:{" "}
+                    <span className="text-gray-700 font-semibold text-sm">
+                      {tourStarts}
+                    </span>
+                  </p>
+                  <p className="text-orange-600 font-semibold">
+                    Selected End Date:{" "}
+                    <span className="text-gray-700 font-semibold text-sm">
+                      {tourEnds}
+                    </span>
+                  </p>
+                  <p className="text-orange-600 font-semibold">
+                    Payment Id:{" "}
+                    <span className="text-gray-700 font-semibold text-sm">
+                      {typeof paymentId === "string" ? (
+                        <>{paymentId}</>
+                      ) : (
+                        <>Payment not done</>
+                      )}
+                    </span>
+                  </p>
+                </ModalBody>
+                <ModalFooter>
+                  <Button color="danger" variant="light" onPress={onClose}>
+                    Close
+                  </Button>
+                </ModalFooter>
+              </>
+            )}
+          </ModalContent>
+        </Modal>
+      </>
+    );
+  }
+
   return (
     <div className="flex justify-center items-center min-h-[90vh]">
       <div className="flex w-[600px] flex-col">
@@ -172,25 +307,22 @@ export default function SuccessBookingsAndFailedBookings() {
                   <div>
                     {getCurrentSuccessBookings().map((booking, index) => (
                       <>
-                        <div
-                          key={index}
-                          className="flex justify-between hover:bg-gray-200 p-2 transition-all text-lg hover:cursor-pointer"
-                        >
-                          <div className="flex justify-between w-44">
-                            <p className="font-semibold text-sm">
-                              {booking.index}.
-                            </p>
-                            <p className="font-semibold text-sm">
-                              {booking.tourName}
-                            </p>
-                          </div>
-                          <div>
-                            <p className="font-semibold text-sm">
-                              {dateFormatter.format(
-                                new Date(booking.bookingDate)
-                              )}
-                            </p>
-                          </div>
+                        <div key={index}>
+                          <ShowBookingDetailsModal
+                            date={dateFormatter.format(
+                              new Date(booking.bookingDate)
+                            )}
+                            index={booking.index}
+                            tourName={booking.tourName}
+                            modalTitle="Successfull Booking"
+                            category={booking.bookingCategory}
+                            emailUsed={booking.emailUsed}
+                            paymentId={booking.paymentid}
+                            totalCost={booking.totalCost}
+                            totalPerson={booking.totalPerson}
+                            tourEnds={booking.tourEndsOn}
+                            tourStarts={booking.tourStartsOn}
+                          />
                         </div>
                         <Divider />
                       </>
@@ -213,25 +345,22 @@ export default function SuccessBookingsAndFailedBookings() {
                   <div>
                     {getCurrentPageFailedBookings().map((booking, index) => (
                       <>
-                        <div
-                          key={index}
-                          className="flex justify-between hover:bg-gray-200 p-2 transition-all text-lg hover:cursor-pointer"
-                        >
-                          <div className="flex justify-between w-44">
-                            <p className="font-semibold text-sm">
-                              {booking.index}.
-                            </p>
-                            <p className="font-semibold text-sm">
-                              {booking.tourName}
-                            </p>
-                          </div>
-                          <div>
-                            <p className="font-semibold text-sm">
-                              {dateFormatter.format(
-                                new Date(booking.bookingDate)
-                              )}
-                            </p>
-                          </div>
+                        <div key={index}>
+                          <ShowBookingDetailsModal
+                            date={dateFormatter.format(
+                              new Date(booking.bookingDate)
+                            )}
+                            index={booking.index}
+                            tourName={booking.tourName}
+                            modalTitle="Failed Booking"
+                            category={booking.bookingCategory}
+                            emailUsed={booking.emailUsed}
+                            paymentId={booking.paymentid}
+                            totalCost={booking.totalCost}
+                            totalPerson={booking.totalPerson}
+                            tourEnds={booking.tourEndsOn}
+                            tourStarts={booking.tourStartsOn}
+                          />
                         </div>
                         <Divider />
                       </>
