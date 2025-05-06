@@ -6,12 +6,9 @@ import { usePathname } from "next/navigation";
 export default function AdminNavbar() {
   const pathname = usePathname();
 
-  const addPath = "/admin/add-new-tour";
   const addPathV2 = "/admin/add-new-tour-v2";
   const tours = "/admin/tours";
-  const successBookings = "/admin/booking";
   const bookings = "/admin/bookings";
-  const failedBookings = "/admin/failed-bookings";
 
   return (
     <div className="bg-white border-b-black/20 border shadow-md h-14 flex justify-between items-center px-4">
@@ -22,16 +19,6 @@ export default function AdminNavbar() {
       </div>
       <div className="space-x-2">
         <Link
-          href={"/admin/add-new-tour"}
-          className={`${
-            pathname === addPath
-              ? "font-bold text-white p-1  rounded-full px-2 transition-all bg-black"
-              : "font-bold text-black border p-1 rounded-full px-2 border-black/60 hover:bg-black hover:text-white transition-all"
-          }`}
-        >
-          Add new tour
-        </Link>
-        <Link
           href={"/admin/add-new-tour-v2"}
           className={`${
             pathname === addPathV2
@@ -39,7 +26,7 @@ export default function AdminNavbar() {
               : "font-bold text-black border p-1 rounded-full px-2 border-black/60 hover:bg-black hover:text-white transition-all"
           }`}
         >
-          Add new tour V2
+          Add new tour
         </Link>
         <Link
           href={"/admin/tours"}
@@ -51,16 +38,7 @@ export default function AdminNavbar() {
         >
           Tours
         </Link>
-        <Link
-          href={"/admin/booking"}
-          className={`${
-            pathname === successBookings
-              ? "font-bold text-white p-1  rounded-full px-2 transition-all bg-black"
-              : "font-bold text-black border p-1 rounded-full px-2 border-black/60 hover:bg-black hover:text-white transition-all"
-          }`}
-        >
-          Bookings
-        </Link>
+       
         <Link
           href={"/admin/bookings"}
           className={`${
@@ -69,17 +47,7 @@ export default function AdminNavbar() {
               : "font-bold text-black border p-1 rounded-full px-2 border-black/60 hover:bg-black hover:text-white transition-all"
           }`}
         >
-          Bookings V2
-        </Link>
-        <Link
-          href={"/admin/failed-bookings"}
-          className={`${
-            pathname === failedBookings
-              ? "font-bold text-white p-1  rounded-full px-2 transition-all bg-black"
-              : "font-bold text-black border p-1 rounded-full px-2 border-black/60 hover:bg-black hover:text-white transition-all"
-          }`}
-        >
-          Failed Bookings
+          Bookings
         </Link>
       </div>
     </div>
