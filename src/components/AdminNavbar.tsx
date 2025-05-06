@@ -7,7 +7,7 @@ export default function AdminNavbar() {
   const pathname = usePathname();
 
   const addPathV2 = "/admin/add-new-tour-v2";
-  const tours = "/admin/tours";
+  const allTours = "/admin/all-tours"
   const bookings = "/admin/bookings";
 
   return (
@@ -29,15 +29,16 @@ export default function AdminNavbar() {
           Add new tour
         </Link>
         <Link
-          href={"/admin/tours"}
+          href={"/admin/all-tours"}
           className={`${
-            pathname === tours
+            pathname === allTours
               ? "font-bold text-white p-1  rounded-full px-2 transition-all bg-black"
               : "font-bold text-black border p-1 rounded-full px-2 border-black/60 hover:bg-black hover:text-white transition-all"
           }`}
         >
-          Tours
+          All Tours
         </Link>
+      
        
         <Link
           href={"/admin/bookings"}
