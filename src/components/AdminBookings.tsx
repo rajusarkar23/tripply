@@ -24,7 +24,7 @@ interface Booking {
   isPaymentDone: boolean | null;
 }
 
-export default function AdminSuccessBookings() {
+export default function AdminSuccessFailedBookings() {
   const { bookings, fetchBookings } = useAdminTourStore() as {
     fetchBookings: () => void;
     bookings: Booking[];
@@ -59,7 +59,7 @@ export default function AdminSuccessBookings() {
         <h2 className="text-center text-3xl font-semibold text-green-950 bg-yellow-400">Successful Bookings</h2>
       </div>
        <div className="flex justify-center">
-      <div className="grid grid-cols-3 gap-2">
+      <div className="grid md:grid-cols-3 grid-cols-1 gap-2">
         {successBookings.map((successBooking, index) => (
           <div key={index}>
             <Card className="max-w-[400px] shadow-none border">

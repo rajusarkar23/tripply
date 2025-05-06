@@ -98,7 +98,7 @@ export default function ProcessBookingComp() {
           transition={{ delay: 0.8 }}
           className="flex justify-center"
         >
-          <Button className="w-full font-bold" color="primary" onPress={() => router.push("/bookings")}>
+          <Button className="w-full font-bold" color="primary" onPress={() => router.push("/booking")}>
             Go to bookings <ArrowRight size={20} />
           </Button>
         </motion.div>

@@ -1,10 +1,10 @@
-import AdminSuccessBookings from '@/components/AdminBookings'
+import SuccessBookingsAndFailedBookings from '@/components/SuccessBookingsAndFailedBookings'
 import React from 'react'
 
 const Bookings = () => {
   return (
     <div>
-        <AdminSuccessBookings />
+        <SuccessBookingsAndFailedBookings />
     </div>
   )
 }

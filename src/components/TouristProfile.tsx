@@ -118,7 +118,7 @@ export default function TouristProfile() {
                   Profile
                 </Link>
                 <Link
-                  href={"/bookings"}
+                  href={"/booking"}
                   className="hover:bg-gray-200 p-1 rounded transition-all duration-150 hover:px-2"
                 >
                   My Bookings

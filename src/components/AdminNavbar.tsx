@@ -9,7 +9,8 @@ export default function AdminNavbar() {
   const addPath = "/admin/add-new-tour";
   const addPathV2 = "/admin/add-new-tour-v2";
   const tours = "/admin/tours";
-  const successBookings = "/admin/bookings";
+  const successBookings = "/admin/booking";
+  const bookings = "/admin/bookings";
   const failedBookings = "/admin/failed-bookings";
 
   return (
@@ -51,7 +52,7 @@ export default function AdminNavbar() {
           Tours
         </Link>
         <Link
-          href={"/admin/bookings"}
+          href={"/admin/booking"}
           className={`${
             pathname === successBookings
               ? "font-bold text-white p-1  rounded-full px-2 transition-all bg-black"
@@ -59,6 +60,16 @@ export default function AdminNavbar() {
           }`}
         >
           Bookings
+        </Link>
+        <Link
+          href={"/admin/bookings"}
+          className={`${
+            pathname === bookings
+              ? "font-bold text-white p-1  rounded-full px-2 transition-all bg-black"
+              : "font-bold text-black border p-1 rounded-full px-2 border-black/60 hover:bg-black hover:text-white transition-all"
+          }`}
+        >
+          Bookings V2
         </Link>
         <Link
           href={"/admin/failed-bookings"}

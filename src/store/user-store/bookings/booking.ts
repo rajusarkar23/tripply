@@ -34,7 +34,7 @@ bookings: [],
 fetchBooking: async () => {
     try {
         set({isBookingDataFetchError: false, bookingDataFetchErrorMessage: ""})
-        const sendReq = await fetch("/api/user/bookings")
+        const sendReq = await fetch("/api/user/booking")
         const res = await sendReq.json()
         if (res.success) {
             set({bookings: res.bookings, isBookingsFetched: true})

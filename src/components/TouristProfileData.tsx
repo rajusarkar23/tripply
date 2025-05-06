@@ -409,7 +409,7 @@ export default function ShowTouristProfileData() {
           </div>
           <div className="mt-2">
             <Link
-              href="/bookings"
+              href="/booking"
               className="text-sm font-semibold text-blue-600 underline"
             >
               Looking for booking details?
