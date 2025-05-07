@@ -4,7 +4,7 @@ import { useUserStore } from "@/store/user-store/userStore";
 import { Avatar, Button, Divider, Skeleton } from "@heroui/react";
 import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { ChevronDown, LogIn } from "lucide-react";
+import { ArrowUpRight, ChevronDown, LogIn } from "lucide-react";
 import Link from "next/link";
 
 interface Profile {
@@ -102,36 +102,16 @@ export default function TouristProfile() {
             transition={{ duration: 0.15, ease: "easeOut" }}
             className="absolute right-0 mt-2 w-56 origin-top-right rounded-md bg-card shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none z-50"
           >
-            <div className="p-2 bg-white rounded">
-              <div className="px-2 py-3">
-                <p className="text-sm font-medium">Signed in as</p>
-                <p className="text-sm text-muted-foreground truncate">
-                  {profile.email}
-                </p>
-              </div>
-              <Divider />
-              <div className="py-1 flex flex-col text-sm ">
-                <Link
-                  href={"/my-account"}
-                  className="hover:bg-gray-200 p-1 rounded transition-all duration-150 hover:px-2"
-                >
-                  Profile
-                </Link>
-                <Link
-                  href={"/booking"}
-                  className="hover:bg-gray-200 p-1 rounded transition-all duration-150 hover:px-2"
-                >
-                  My Bookings
+            <div className="bg-white space-y-3 rounded">
+              <div className="hover:bg-slate-200 px-4 py-2">
+                <Link href={"/my-account"} className="hover:text-blue-700">
+                  <span className="font-semibold">Signed In as</span> <span className="flex">{profile.email}<ArrowUpRight/></span>
                 </Link>
               </div>
               <Divider />
-              <div className="py-1">
-                <Button
-                  className="w-full font-semibold"
-                  variant="solid"
-                  color="danger"
-                >
-                  Sign out
+              <div className="flex justify-center pb-3 px-4">
+                <Button className="w-full" variant="flat" color="danger">
+                  Logout
                 </Button>
               </div>
             </div>
