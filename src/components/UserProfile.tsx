@@ -370,48 +370,48 @@ export default function UserProfile() {
                   Booking Details
                 </ModalHeader>
                 <ModalBody>
-                  <div>
-                    <h4 className="font-semibold text-orange-600">Tour Name</h4>
-                    <p className="font-semibold text-black/75 capitalize">{tourName}</p>
+                  <div className="flex">
+                    <h4 className="font-semibold text-green-600">Tour Name:</h4>
+                    <p className="font-semibold text-black/7 capitalize ml-1">{tourName}</p>
                   </div>
                   <Divider />
-                  <div>
-                    <h4 className="font-semibold text-orange-600">
-                      Tour Category
+                  <div className="flex">
+                    <h4 className="font-semibold text-green-600">
+                      Tour Category:
                     </h4>
-                    <p className="font-semibold text-black/75 capitalize">
+                    <p className="font-semibold text-black capitalize ml-1">
                       {category}
                     </p>
                   </div>
                   <Divider />
-                  <div>
-                    <h4 className="font-semibold text-orange-600">Person Count</h4>
-                    <p className="font-semibold text-black/75">{personCount}</p>
+                  <div className="flex">
+                    <h4 className="font-semibold text-green-600">Person Count:</h4>
+                    <p className="font-semibold text-black ml-1">{personCount}</p>
                   </div>
                   <Divider />
-                  <div>
-                    <h4 className="font-semibold text-orange-600">Total Paid</h4>
-                    <p className="font-semibold text-black/75">${totalPaid}</p>
+                  <div className="flex">
+                    <h4 className="font-semibold text-green-600">Total Paid:</h4>
+                    <p className="font-semibold text-black ml-1">${totalPaid}</p>
                   </div>
                   <Divider />
-                  <div>
-                    <h4 className="font-semibold text-orange-600">Email Used</h4>
-                    <p className="font-semibold text-black/75">{emailUsed}</p>
+                  <div className="flex items-center">
+                    <h4 className="font-semibold text-green-600">Email Used:</h4>
+                    <p className="font-semibold text-black m-1">{emailUsed}</p>
                   </div>
                   <Divider />
-                  <div>
-                    <h4 className="font-semibold text-orange-600">Payment ID</h4>
-                    <p className="font-semibold text-black/75">{paymentId}</p>
+                  <div className="flex">
+                    <h4 className="font-semibold text-green-600">Payment ID:</h4>
+                    <p className="font-semibold text-black ml-1">{paymentId}</p>
                   </div>
                   <Divider />
-                  <div>
-                    <h4 className="font-semibold text-orange-600">Tour Starts On</h4>
-                    <p className="font-semibold text-black/75">{startDate}</p>
+                  <div className="flex">
+                    <h4 className="font-semibold text-green-600">Tour Starts On:</h4>
+                    <p className="font-semibold text-black ml-1">{startDate}</p>
                   </div>
                   <Divider />
-                  <div>
-                    <h4 className="font-semibold text-orange-600">Tour Ends On</h4>
-                    <p className="font-semibold text-black/75">{endDate}</p>
+                  <div className="flex">
+                    <h4 className="font-semibold text-green-600">Tour Ends On:</h4>
+                    <p className="font-semibold text-black ml-1">{endDate}</p>
                   </div>
                 </ModalBody>
                 <ModalFooter>
@@ -510,7 +510,7 @@ export default function UserProfile() {
             )}
           </Tab>
           <Tab key="bookings" title="Bookings" className="font-semibold">
-            <Card className="md:w-[480px] w-[350px]">
+            <Card className="md:w-[680px] w-[450px]">
               <CardBody>
                 <div>
                   {useBookingStore.getState().bookings.map.length === 0 && (
