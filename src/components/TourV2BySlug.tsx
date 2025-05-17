@@ -149,35 +149,6 @@ export default function TourV2BySlug() {
                     }}
                   >
                     <Tab key={"premium"} title="Premium">
-                      <div>
-                        <Accordion className="font-bold rounded text-green-600 bg-blue-100 transition-all">
-                          <AccordionItem
-                            aria-label="Premium Plan Includes"
-                            title="Premium Plan Includes"
-                          >
-                            <ul className="text-yellow-600/90 font-semibold text-sm">
-                              <div>
-                                <h4 className="text-blue-700 font-semibold">
-                                  <span className="text-emerald-600">
-                                    Premium
-                                  </span>{" "}
-                                  plan includes:
-                                </h4>
-                              </div>
-                              <li>Get personal service manager</li>
-                              <li>Get personal tour guide 24 x 7</li>
-                              <li>
-                                Private Transfers (luxury car with chauffeur)
-                              </li>
-                              <li>Free Room Upgrades (when available)</li>
-                              <li>
-                                Private Local Guides (expert historians,
-                                foodies, or adventure guides)
-                              </li>
-                            </ul>
-                          </AccordionItem>
-                        </Accordion>
-                      </div>
                       <div className="flex w-full max-w-[670px] mx-auto mt-4">
                         <h4 className="text-blue-700 font-bold">
                           Book premium class at ${premium_price} today!
@@ -187,7 +158,7 @@ export default function TourV2BySlug() {
                         <Input
                           label="Person count"
                           labelPlacement="outside"
-                          radius="full"
+                          radius="sm"
                           size="sm"
                           onChange={(e) => {
                             setTourists(Number(e.target.value));
@@ -197,7 +168,7 @@ export default function TourV2BySlug() {
                           label="Cost per head per night"
                           labelPlacement="outside"
                           value={premium_price.toString()}
-                          radius="full"
+                          radius="sm"
                           size="sm"
                         />
                         <DateRangePicker
@@ -205,7 +176,7 @@ export default function TourV2BySlug() {
                           label="Stay duration"
                           labelPlacement="outside"
                           size="sm"
-                          radius="full"
+                          radius="sm"
                           onChange={(e) => {
                             setEndDate(e!.end);
                             setStartDate(e!.start);
@@ -236,7 +207,7 @@ export default function TourV2BySlug() {
                           label="Your full name"
                           labelPlacement="outside"
                           type="text"
-                          radius="full"
+                          radius="sm"
                           size="sm"
                           onChange={(e) => {
                             setName(e.target.value);
@@ -246,12 +217,41 @@ export default function TourV2BySlug() {
                           label="Your email"
                           labelPlacement="outside"
                           type="email"
-                          radius="full"
+                          radius="sm"
                           size="sm"
                           onChange={(e) => {
                             setEmail(e.target.value);
                           }}
                         />
+                      </div>
+                      <div className="mt-6">
+                        <Accordion className="font-bold rounded text-green-600 bg-blue-100 transition-all">
+                          <AccordionItem
+                            aria-label="Premium Plan Includes"
+                            title="Premium Plan Includes"
+                          >
+                            <ul className="text-yellow-600/90 font-semibold text-sm">
+                              <div>
+                                <h4 className="text-blue-700 font-semibold">
+                                  <span className="text-emerald-600">
+                                    Premium
+                                  </span>
+                                  plan includes:
+                                </h4>
+                              </div>
+                              <li>Get personal service manager</li>
+                              <li>Get personal tour guide 24 x 7</li>
+                              <li>
+                                Private Transfers (luxury car with chauffeur)
+                              </li>
+                              <li>Free Room Upgrades (when available)</li>
+                              <li>
+                                Private Local Guides (expert historians,
+                                foodies, or adventure guides)
+                              </li>
+                            </ul>
+                          </AccordionItem>
+                        </Accordion>
                       </div>
                       <div className="flex justify-center items-center mt-6">
                         {canBeAccepted && (
@@ -273,7 +273,84 @@ export default function TourV2BySlug() {
                         setTourCategory("standard");
                       }}
                     >
-                      <div>
+                      <div className="flex w-full max-w-[670px] mx-auto mt-4">
+                        <h4 className="text-blue-700 font-bold">
+                          Book standard class at ${standard_price} today!
+                        </h4>
+                      </div>
+                      <div className="md:flex md:flex-row flex flex-col w-full max-w-[670px] mx-auto gap-5 font-semibold text-black/60">
+                        <Input
+                          label="Person count"
+                          labelPlacement="outside"
+                          radius="sm"
+                          size="sm"
+                          onChange={(e) => {
+                            setTourists(Number(e.target.value));
+                          }}
+                        />
+                        <Input
+                          label="Cost per head per night"
+                          labelPlacement="outside"
+                          value={standard_price.toString()}
+                          radius="sm"
+                          size="sm"
+                        />
+                        <DateRangePicker
+                          className="max-w-xs"
+                          label="Stay duration"
+                          labelPlacement="outside"
+                          size="sm"
+                          radius="sm"
+                          onChange={(e) => {
+                            setEndDate(e!.end);
+                            setStartDate(e!.start);
+                          }}
+                        />
+                      </div>
+                      <div className="w-full max-w-[670px] mx-auto my-4">
+                        {totalCost > 0 && (
+                          <Chip color="primary" size="md">
+                            <span className="font-bold">
+                              Book now at{" "}
+                              <span className="text-yellow-300">
+                                ${totalCost}
+                              </span>{" "}
+                            </span>
+                          </Chip>
+                        )}
+                      </div>
+                      <Divider className="w-full max-w-[670px] mx-auto" />
+
+                      <div className="w-full max-w-[670px] mx-auto mt-4">
+                        <h4 className="text-blue-700 font-bold">
+                          Your personal details:
+                        </h4>
+                      </div>
+                      <div className="md:flex md:flex-row flex flex-col w-full max-w-[670px] mx-auto gap-5 font-semibold text-black/60">
+                        <Input
+                          label="Your full name"
+                          labelPlacement="outside"
+                          type="text"
+                          radius="sm"
+                          size="sm"
+                          onChange={(e) => {
+                            setName(e.target.value);
+                          }}
+                        />
+                        <Input
+                          label="Your email"
+                          labelPlacement="outside"
+                          type="email"
+                          radius="sm"
+                          size="sm"
+                          onChange={(e) => {
+                            setEmail(e.target.value);
+                          }}
+                        />
+                      </div>
+
+
+  <div className="mt-6">
                         <Accordion className="font-bold rounded text-green-600 bg-blue-100 transition-all">
                           <AccordionItem
                             aria-label="Standard Plan Include"
@@ -307,82 +384,6 @@ export default function TourV2BySlug() {
                             </ul>
                           </AccordionItem>
                         </Accordion>
-                      </div>
-
-                      <div className="flex w-full max-w-[670px] mx-auto mt-4">
-                        <h4 className="text-blue-700 font-bold">
-                          Book standard class at ${standard_price} today!
-                        </h4>
-                      </div>
-                      <div className="md:flex md:flex-row flex flex-col w-full max-w-[670px] mx-auto gap-5 font-semibold text-black/60">
-                        <Input
-                          label="Person count"
-                          labelPlacement="outside"
-                          radius="full"
-                          size="sm"
-                          onChange={(e) => {
-                            setTourists(Number(e.target.value));
-                          }}
-                        />
-                        <Input
-                          label="Cost per head per night"
-                          labelPlacement="outside"
-                          value={standard_price.toString()}
-                          radius="full"
-                          size="sm"
-                        />
-                        <DateRangePicker
-                          className="max-w-xs"
-                          label="Stay duration"
-                          labelPlacement="outside"
-                          size="sm"
-                          radius="full"
-                          onChange={(e) => {
-                            setEndDate(e!.end);
-                            setStartDate(e!.start);
-                          }}
-                        />
-                      </div>
-                      <div className="w-full max-w-[670px] mx-auto my-4">
-                        {totalCost > 0 && (
-                          <Chip color="primary" size="md">
-                            <span className="font-bold">
-                              Book now at{" "}
-                              <span className="text-yellow-300">
-                                ${totalCost}
-                              </span>{" "}
-                            </span>
-                          </Chip>
-                        )}
-                      </div>
-                      <Divider className="w-full max-w-[670px] mx-auto" />
-
-                      <div className="w-full max-w-[670px] mx-auto mt-4">
-                        <h4 className="text-blue-700 font-bold">
-                          Your personal details:
-                        </h4>
-                      </div>
-                      <div className="md:flex md:flex-row flex flex-col w-full max-w-[670px] mx-auto gap-5 font-semibold text-black/60">
-                        <Input
-                          label="Your full name"
-                          labelPlacement="outside"
-                          type="text"
-                          radius="full"
-                          size="sm"
-                          onChange={(e) => {
-                            setName(e.target.value);
-                          }}
-                        />
-                        <Input
-                          label="Your email"
-                          labelPlacement="outside"
-                          type="email"
-                          radius="full"
-                          size="sm"
-                          onChange={(e) => {
-                            setEmail(e.target.value);
-                          }}
-                        />
                       </div>
                       <div className="flex justify-center items-center mt-6">
                         {canBeAccepted && (
