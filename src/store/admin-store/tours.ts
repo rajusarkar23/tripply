@@ -9,6 +9,8 @@ interface TourArr {
         premium: number,
         standard: number
     }
+    slug: string,
+    createdOn: string
 }
 
 // final interface

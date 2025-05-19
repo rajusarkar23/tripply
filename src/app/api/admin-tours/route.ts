@@ -18,7 +18,9 @@ export async function GET(){
         const getTourByadminId = await db.select({
                 imageUrl: tourV2.mainBackImage,
                 placeName: tourV2.placeName,
-                pricing: tourV2.tourPricing
+                pricing: tourV2.tourPricing,
+                slug: tourV2.slug,
+                createdOn: tourV2.createdAt 
         }).from(tourV2).where(eq(tourV2.createdBy, idFromCookie))
 
         if (getTourByadminId.length === 0) {

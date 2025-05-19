@@ -1,15 +1,23 @@
 "use client";
 
 import { useTours } from "@/store/admin-store/tours";
-import { Card, CardBody, CardHeader } from "@heroui/react";
+import {
+  Button,
+  Card,
+  CardBody,
+  CardFooter,
+  CardHeader,
+  Image,
+} from "@heroui/react";
 import { Spinner } from "@heroui/spinner";
-import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function ShowAllTours() {
   const [loading, setLoading] = useState<boolean>(false);
+  const router = useRouter()
 
-  const { fetchTours, tours } = useTours();
+  const { fetchTours } = useTours();
 
   useEffect(() => {
     (async () => {
@@ -17,59 +25,78 @@ export default function ShowAllTours() {
       await fetchTours();
       setLoading(false);
     })();
-
-
-    console.log(typeof tours.map(tour => tour.pricing));
-    
   }, []);
 
-  return (
-    <div>
-        <h3 className="text-center text-4xl font-bold bg-blue-400 text-white">All tours</h3>
-
-    <div className="py-10">
-      {loading && useTours.getState().tours.length === 0 ? (
-          <div className="flex justify-center items-center">
-          <Spinner />
-        </div>
-      ) : (
-          <div className="md:grid md:grid-cols-3 flex flex-col justify-center items-center max-w-2xl mx-auto space-y-2">
-          {useTours.getState().tours.map((tour, index) => (
-              <div className="" key={index}>
-              <Card className="w-52" radius="none">
-                <CardHeader>
-                  <Image
-                    src={tour.imageUrl}
-                    alt="tour_image"
-                    width={200}
-                    height={150}
-                    className="rounded"
-                    />
-                </CardHeader>
-                <CardBody>
-                  <p className="font-semibold text-gray-700 text-lg">
-                    {tour.placeName}
-                  </p>
-                  <div>
-                    {typeof tour.pricing === "object"? (
-                        <>
-                        <p className="text-sm font-semibold">Standard Price: {tour.pricing.standard}</p>
-                        <p className="text-sm font-semibold">Standard Price: {tour.pricing.premium}</p>{" "}
-                      </>
-                    ) : (
-                        <>
-                        <p>Standard Price: null</p>
-                        <p>Standard Price: null</p>{" "}
-                      </>
-                    )}
-                  </div>
-                </CardBody>
-              </Card>
-            </div>
-          ))}
-        </div>
-      )}
-    </div>
+  if (loading && useTours.getState().tours.length === 0) {
+    return (
+      <div className="flex justify-center items-center min-h-[90vh]">
+        <Spinner />
       </div>
+    )
+  }
+
+
+  const dateFormatter = new Intl.DateTimeFormat("en-us", {
+    dateStyle: "full"
+  })
+
+  return (
+    <div className="bg-default-200 min-h-screen">
+      <h3 className="text-center text-4xl font-bold bg-blue-400 text-white">
+        All tours
+      </h3>
+
+      <div className="flex gap-4 justify-center p-2">
+        {useTours.getState().tours.map((tour, index) => (
+          <div className="w-96">
+            <Card
+              isFooterBlurred
+              className="w-full h-[300px] col-span-12 sm:col-span-7 shadow-xl"
+              key={index}
+            >
+              <CardHeader className="absolute z-10 top-1 flex-col items-start">
+                <p className="text-tiny text-white/60 uppercase font-bold">
+                  {dateFormatter.format(new Date(tour.createdOn))}
+                </p>
+                <h4 className="text-white/90 font-medium text-xl">
+                  {tour.placeName}
+                </h4>
+              </CardHeader>
+              <Image
+                removeWrapper
+                alt="Relaxing app background"
+                className="z-0 w-full h-full object-cover"
+                src={tour.imageUrl}
+              />
+              <CardFooter className="absolute bg-black/40 bottom-0 z-10 border-t-1 border-default-600 dark:border-default-100">
+                <div className="flex flex-grow gap-2 items-center">
+                  <div className="flex flex-col">
+                    <p className="text-tiny text-white/60">
+                      Premium Pricing: {tour.pricing.premium}
+                    </p>
+                    <p className="text-tiny text-white/60">
+                      Standard Pricing: {tour.pricing.standard}
+                    </p>
+                  </div>
+                </div>
+                <div className="space-x-1">
+
+                 <Button radius="full" size="sm"  color="default" className="font-semibold"
+                 onPress={() => {
+                    router.push(`/tourv2/${tour.slug}`)
+                 }}
+                 >
+                  View
+                </Button>
+                <Button radius="full" size="sm" variant="ghost" color="danger" className="border-none text-default-50 bg-danger-500/70 font-semibold">
+                  Delete
+                </Button>
+                </div>
+              </CardFooter>
+            </Card>
+          </div>
+        ))}
+      </div>
+    </div>
   );
 }
