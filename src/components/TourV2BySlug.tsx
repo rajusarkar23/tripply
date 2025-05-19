@@ -225,7 +225,7 @@ export default function TourV2BySlug() {
                         />
                       </div>
                       <div className="mt-6">
-                        <Accordion className="font-bold rounded text-green-600 bg-blue-100 transition-all">
+                        <Accordion className="font-bold rounded text-green-600 bg-default-100 transition-all">
                           <AccordionItem
                             aria-label="Premium Plan Includes"
                             title="Premium Plan Includes"
@@ -349,9 +349,8 @@ export default function TourV2BySlug() {
                         />
                       </div>
 
-
-  <div className="mt-6">
-                        <Accordion className="font-bold rounded text-green-600 bg-blue-100 transition-all">
+                      <div className="mt-6">
+                        <Accordion className="font-bold rounded text-green-600 bg-default-100 transition-all">
                           <AccordionItem
                             aria-label="Standard Plan Include"
                             title="Standard Plan Include"

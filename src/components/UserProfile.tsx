@@ -510,7 +510,7 @@ export default function UserProfile() {
             )}
           </Tab>
           <Tab key="bookings" title="Bookings" className="font-semibold">
-            <Card className="md:w-[680px] w-[450px]">
+            <Card className="md:w-[680px] w-[350px]">
               <CardBody>
                 <div>
                   {useBookingStore.getState().bookings.map.length === 0 && (
@@ -527,7 +527,7 @@ export default function UserProfile() {
                         {useBookingStore
                           .getState()
                           .bookings.map((booking, index) => (
-                            <div key={index} className="bg-gray-200/70">
+                            <div key={index} className="bg-default-100">
                               <div>
                                 <BookingDetails
                                   bookingDate={booking.bookingDate}
