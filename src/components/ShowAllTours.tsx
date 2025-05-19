@@ -4,7 +4,6 @@ import { useTours } from "@/store/admin-store/tours";
 import {
   Button,
   Card,
-  CardBody,
   CardFooter,
   CardHeader,
   Image,
@@ -52,11 +51,10 @@ export default function ShowAllTours() {
 
       <div className="flex gap-4 justify-center p-2">
         {useTours.getState().tours.map((tour, index) => (
-          <div className="w-96">
+          <div className="w-96" key={index}>
             <Card
               isFooterBlurred
               className="w-full h-[300px] col-span-12 sm:col-span-7 shadow-xl"
-              key={index}
             >
               <CardHeader className="absolute z-10 top-1 flex-col items-start">
                 <p className="text-tiny text-white/60 uppercase font-bold">
