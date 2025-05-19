@@ -10,14 +10,15 @@ import {
   Image,
 } from "@heroui/react";
 import { Spinner } from "@heroui/spinner";
+import { Loader } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function ShowAllTours() {
   const [loading, setLoading] = useState<boolean>(false);
-  const router = useRouter()
+  const router = useRouter();
 
-  const { fetchTours } = useTours();
+  const { fetchTours, removeTour } = useTours();
 
   useEffect(() => {
     (async () => {
@@ -32,19 +33,22 @@ export default function ShowAllTours() {
       <div className="flex justify-center items-center min-h-[90vh]">
         <Spinner />
       </div>
-    )
+    );
   }
 
-
   const dateFormatter = new Intl.DateTimeFormat("en-us", {
-    dateStyle: "full"
-  })
+    dateStyle: "full",
+  });
 
   return (
     <div className="bg-default-200 min-h-screen">
       <h3 className="text-center text-4xl font-bold bg-blue-400 text-white">
         All tours
       </h3>
+
+      <div>
+        {loading && <Loader className="animate-spin"/>}
+      </div>
 
       <div className="flex gap-4 justify-center p-2">
         {useTours.getState().tours.map((tour, index) => (
@@ -80,17 +84,35 @@ export default function ShowAllTours() {
                   </div>
                 </div>
                 <div className="space-x-1">
+                  <Button
+                    radius="full"
+                    size="sm"
+                    color="default"
+                    className="font-semibold"
+                    onPress={() => {
+                      router.push(`/tourv2/${tour.slug}`);
+                    }}
+                  >
+                    View
+                  </Button>
+                  <Button
+                    radius="full"
+                    size="sm"
+                    variant="ghost"
+                    color="danger"
+                    className="border-none text-default-50 bg-danger-500/70 font-semibold"
+                    onPress={() => {
+                      const filter = useTours
+                        .getState()
+                        .tours.filter((_, i) => i !== index);
 
-                 <Button radius="full" size="sm"  color="default" className="font-semibold"
-                 onPress={() => {
-                    router.push(`/tourv2/${tour.slug}`)
-                 }}
-                 >
-                  View
-                </Button>
-                <Button radius="full" size="sm" variant="ghost" color="danger" className="border-none text-default-50 bg-danger-500/70 font-semibold">
-                  Delete
-                </Button>
+                      console.log(filter);
+
+                      removeTour({ index: index, slug: tour.slug });
+                    }}
+                  >
+                    Delete
+                  </Button>
                 </div>
               </CardFooter>
             </Card>

@@ -50,7 +50,7 @@ export default function ToursById() {
       const response = await res.json();
 
       if (response.success === true) {
-        router.push("/admin/tours");
+        router.push("/admin/all-tours");
       } else {
         console.log(response);
       }
