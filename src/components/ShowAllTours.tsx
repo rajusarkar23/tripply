@@ -35,9 +35,9 @@ export default function ShowAllTours() {
     );
   }
 
-  const dateFormatter = new Intl.DateTimeFormat("en-us", {
-    dateStyle: "full",
-  });
+  // const dateFormatter = new Intl.DateTimeFormat("en-us", {
+  //   dateStyle: "full",
+  // });
 
   return (
     <div className="bg-default-200 min-h-screen">
