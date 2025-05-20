@@ -58,7 +58,12 @@ export default function ShowAllTours() {
             >
               <CardHeader className="absolute z-10 top-1 flex-col items-start">
                 <p className="text-tiny text-white/60 uppercase font-bold">
-                  {(new Date(tour.createdOn)).toLocaleString("en-US", {timeZone: "UTC"})}
+                  {(new Date(tour.createdOn)).toLocaleString("en-US", {
+                    weekday: "short",
+                    month: "short",
+                    day: "2-digit",
+                    year: "numeric",
+                    timeZone: "UTC"})}
                 </p>
                 <h4 className="text-white/90 font-medium text-xl">
                   {tour.placeName}
